@@ -9,6 +9,7 @@
 */
 typedef struct spaceship {
   double x, y;
+  double teta;
   double vx, vy;
   double fx, fy;
   //adicionar aqui um ponteiro para uma imagem?
@@ -25,7 +26,6 @@ void spc_init(spaceship * s);
   Desaloca a memoria da spaceship
 */
 void spc_destroy(spaceship * s);
-
 
 /*
   Atualiza a posicao da nave, apos terem passado dt segundos

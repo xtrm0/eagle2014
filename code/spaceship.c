@@ -25,5 +25,5 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
   Desenha a nave no ecra id;
 */
 void spc_draw(spaceship * s, int id) {
-  
+
 }
