@@ -12,7 +12,7 @@ typedef struct spaceship {
   double vx, vy;
   double fx, fy;
   //adicionar aqui um ponteiro para uma imagem?
-};
+} spaceship;
 
 
 
