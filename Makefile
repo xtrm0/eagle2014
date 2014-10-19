@@ -1,25 +1,27 @@
+#TODO: Tirar o g para modo release
+FLAGS=-c
+LNFLAGS=-Wall
+LNLIBS=-lg2 -lm
+IDIR=include
+ODIR=objects
+CDIR=code
+OBJECTS: main.o menu.o consoleutil.o spaceship.o view.o geometry.o
+
 all: eagle2014
 
-eagle2014: objects/main.o objects/menu.o objects/consoleutil.o objects/spaceship.o objects/view.o objects/geometry.o
-	gcc -Wall objects/main.o objects/menu.o objects/consoleutil.o objects/spaceship.o objects/view.o objects/geometry.o -lg2 -o eagle2014
+debug: 
+	rm -f objects/*.o eagle2014
+debug: FLAGS += -DDEBUG -g
+debug: LNGLAGS += -DDEBUG -g
+debug: eagle2014
+	clear
+	gdb ./eagle2014
 
-objects/main.o:
-	gcc -c main.c -o objects/main.o
+eagle2014: $(OBJECTS)
+	gcc $(LNFLAGS) $(OBJECTS) $(LNLIBS) -o eagle2014
 
-objects/view.o:
-	gcc -c code/view.c -o objects/view.o
-
-objects/menu.o:
-	gcc -c code/menu.c -o objects/menu.o
-
-objects/geometry.o:
-	gcc -c code/geometry.c -o objects/geometry.o
-
-objects/consoleutil.o:
-	gcc -c code/consoleutil.c -o objects/consoleutil.o
-
-objects/spaceship.o:
-	gcc -c code/spaceship.c -o objects/spaceship.o
+$(ODIR)/%.o: $(CDIR)/%.c
+	gcc $(FLAGS) $< -o $(ODIR)/$@ 
 
 clean:
 	rm objects/*.o eagle2014

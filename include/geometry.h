@@ -14,16 +14,19 @@
   Um ponto em 2d, sera uma lista de tamanho 4:
     p2d = {2, x, y, e}; //e is the basis os the system: (x/e,y/e,1) = (x,y,e)
     //We need a base to allow normalization of coordinates
+  É de notar que apesar de o primeiro valor de p2d ser um double, ele não deve ser guardado como double, mas sim com a representacao de size_t
+  de modo a que guarde uma posicao numa array
 
 */
 //TODO: Transformar todas as funcoes para usarem point?
-typedef struct point {
-  unsigned long long n;
-  double * u;
-} point;
+typedef size_t ind; //usamos isto para posteriormente pormos alguns defines aqui para garantir que o tamanho de double e de ind sao iguais
+#define ITD(x) *((double *)&x)
+#define DTI(x) ((ind *)x)[0]
 
-double * cross3d_(double * a, double * b, double * s);
-double * _cross3d_(double * a, double * b);
+double * point2d(double x, double y, double e, double * s);
+double * _point2d(double x, double y, double e);
+double * cross3d(double * a, double * b, double * s);
+double * _cross3d(double * a, double * b);
 double dot(double * a, double * b);
 double * rotate2d(double * p, double rad, double * s);
 double * _rotate2d(double * p, double rad);
