@@ -17,7 +17,7 @@ int main(void) {
   spaceship * s;
   camera2d * c;
   v = view_init(800, 600);
-  c = c2d_init(800, 600, 0, 0);
+  c = c2d_init(800, 600, 100,-100, 400, 300, 100, 100);
   s = spc_init(100, 200);
   spc_draw(s,c,v);
   view_flush(v);

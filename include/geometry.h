@@ -27,7 +27,6 @@ typedef struct polygon {
     //pop: O(1)
     //Qualquer transformacao geometrica: O(n)
   ind size;
-  ind dim;
   ind max_size;
   double * pts;
 } polygon;
@@ -35,32 +34,19 @@ typedef struct polygon {
 
 
 /* Funcoes para trabalhar com vetores a n dimensoes: */
-double * point2d(double x, double y, double e, double * s);
-double * _point2d(double x, double y, double e);
-
-double * cross3d(double * a, double * b, double * s);
-double * _cross3d(double * a, double * b);
+double * point(double x, double y, double * s);
+double * _point(double x, double y);
 
 double dot(double * a, double * b);
 
-double * rotate2d(double * p, double rad, double * s);
-double * _rotate2d(double * p, double rad);
+double * rotate(double * p, double rad, double * s);
+double * _rotate(double * p, double rad);
 
-double * rotate2d_p(double * p, double rad, double * origin, double * s, double * aux);
-double * _rotate2d_p(double * p, double rad, double * origin);
+double * rotate_p(double * p, double rad, double * origin, double * s, double * aux);
+double * _rotate_p(double * p, double rad, double * origin);
 
-double * scale2d(double * p, double * s, double fx, double fy);
-double * _scale2d(double * p, double fx, double fy);
-
-/*
-TODO:@alcapone implementar isto. O scale2d é só um patch temporario para 2 dimensoes.
-Mas implementa so quando tornar os pontos de tamanha n+1, em vez de n+2
-Queremos isto para n dimensoes
-double * scale(double * p, double * f);
-double * _scale(double * p, double * f);
-double * scale_p(double * p, double * f, double * origin);
-double * _scale_p(double * p, double * f, double * origin);
-*/
+double * hadamart(double * p, double *, double *);
+double * _hadamart(double * p, double *, double *);
 
 double * translate(double * p, double * T, double *s);
 double * _translate(double * p, double * T);
@@ -80,8 +66,8 @@ double * _normalize(double * p); //Transforma as coordenadas de um ponto em (n,x
   em que os p2d tem todos a entrada [0] igual
   Nenhuma das operacoes com poligonos usara o malloc, excepto o polygon, o polygon_push e o poly_to_g2poly
 */
-//Cria um poligono a n dimensoes
-polygon * poly(ind);
+
+polygon * poly();
 //Liberta a memoria de um poligono
 void poly_destroy(polygon *);
 /*
@@ -91,22 +77,17 @@ void poly_destroy(polygon *);
 */
 polygon * poly_push(polygon *, double *);
 /*
-  Transforma um poligono bidimensional num g2poly
-*/
-double * poly_to_g2poly(polygon *);
-
-/*
   Roda um poligono
 */
-polygon * poly_rotate2d(polygon *, double);
-polygon * poly_rotate2d_p(polygon *, double, double *);
+polygon * poly_rotate(polygon *, double);
+//TODO: polygon * poly_rotate_p(polygon *, double, double *);
 /*
   Translaciona um poligono
 */
 polygon * poly_translate(polygon *, double *);
 
 /*
-double ** poly_scale2d();
+double ** poly_scale();
 double ** poly_simetric();
 double ** poly_normalize();
 */
@@ -126,18 +107,18 @@ double ** poly_normalize();
 */
 typedef struct camera2d {
   //tamanho da camara no referencial da view
-  double W, H;
+  double dim[2];
   //posicao da camara no referencial da view
-  double X, Y;
+  double pos[2];
   //tamanho da view num referencial de pixeis (referencial do virtual device)
-  double w, h;
+  double vdim[2];
   //posicao da view num referencial de pixeis (referencial do virtual device)
-  double x, y;
+  double vpos[2];
 
 } camera2d;
 
 
-camera2d * c2d_init(double,double,double,double);
+camera2d * c2d_init(double,double,double,double,double,double,double,double);
 void c2d_destroy(camera2d *);
 
 
