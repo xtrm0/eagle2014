@@ -1,7 +1,5 @@
 #include "../include/menu.h"
 #include "../include/spaceship.h"
-#define _DEBUG
-
 
 #ifndef _DEBUG
 

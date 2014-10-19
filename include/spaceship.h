@@ -1,5 +1,6 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
+#include "geometry.h"
 #include "view.h"
 #include <errno.h>
 #include <stdio.h>

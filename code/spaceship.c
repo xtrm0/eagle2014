@@ -24,26 +24,32 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
 
 }
 
+
 void spc_draw(spaceship * s, camera2d * c, view * v) {
   //ja vamos a rotacoes. Inicialmente vamos so mapear a posicao
   int i;
-  double g2p[8]; //estas variaveis sao automaticas e portanto a memoria e automaticamente libertada
-  double p[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}; //um truque que inicializa todos os valores de p[4][4] com 0
-  for (i=0; i<4; i++) {
-    printf("%lf", p[i][0]);
-    point2d(0,0,1,&p[0]);
-  }
+  double * g2p;
+  polygon * pol;
+  double p[4][4] = {{0}};
+  double aux[4] = {0};
 
-  //trasforma a array de pontos ortograficos em pontos reconhecidos pela g2
-  for (i=0; i<4; i++) {
-    normalize(p[i]);
-    g2p[i*2] = p[i][1];
-    g2p[i*2+1] = p[i][2];
-  }
+  point2d(s->x, s->z, 1.0, aux);
+  point2d(0.0,0.0,  1.0, p[0]);
+  point2d(0.0,s->h, 1.0, p[1]);
+  point2d(s->w,s->h,1.0, p[2]);
+  point2d(s->w,0.0, 1.0, p[3]);
 
-  g2_filled_rectangle(v->id, s->x, s->z, s->x+s->w, s->z+s->h);
-  //g2_filled_polygon(v->id, 4, g2p);
+  pol = poly(2);
+  for (i=0; i<4; i++)
+    poly_push(pol, p[i]);
 
+  poly_rotate2d(pol, s->rot);
+  //Agora e preciso desenha-la no referencial da camara e de seguida no da view
+
+  poly_translate(pol, aux);
+
+  g2p = poly_to_g2poly(pol);
+  g2_filled_polygon(v->id, pol->size, g2p);
   //TODO:# Desenha o poligono que representa a nave, ja transformado, dentro das bounding da camera:
   //camera_filled_polygon(c->id, v->id, 4, points);
 }
