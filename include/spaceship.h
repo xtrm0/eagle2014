@@ -8,6 +8,8 @@
 #include <string.h>
 #include <g2.h>
 #include <g2_X11.h>
+//METADE DO LADO DO HEXAGONO:
+#define HEXRAD 15.0
 
 /*
     Representa uma nave espacial
@@ -18,6 +20,11 @@ typedef struct spaceship {
   double rot;
   double vx, vy;
   double fx, fy;
+
+  ind npart;
+  polygon ** parts;
+  int * colors;
+  int * fillpart;
   //adicionar aqui um ponteiro para uma imagem?
 } spaceship;
 
@@ -26,7 +33,12 @@ typedef struct spaceship {
 /*
   Aloca memoria para a spaceship e cria-a
 */
-spaceship * spc_init(double,double);
+spaceship * spc_init(double,double,double, view *);
+/*
+  Carrega o modelo da nave espacial
+  TODO: Carregar de um ficheiro?
+*/
+void spc_init_model(spaceship *, view *);
 
 /*
   Desaloca a memoria da spaceship

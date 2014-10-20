@@ -10,6 +10,7 @@
 
 /*
   Estrutura que representa uma janela que esta a ser mostrada ao utilizador
+  Esta janela implementa double buffering atravez dos metodos begin e end
   (W,H): Dimensoes da janela
   id: Id da janela a desenhar, alocada no init pela libg2
 */
@@ -21,7 +22,8 @@ typedef struct view {
 
 view * view_init(int,int);
 void view_destroy(view *);
-void view_flush(view * v);
+void view_begin(view * v);
+void view_end(view * v);
 //TODO: void map2d(view * c, camera * p, double p[4], double r[4]);
 
 

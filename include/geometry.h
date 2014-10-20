@@ -76,6 +76,17 @@ void poly_destroy(polygon *);
   Se o ponto tiver dimensoes superiores a do poligono copia so as primeiras dimensoes ate ficar igual a do poligono
 */
 polygon * poly_push(polygon *, double *);
+
+void poly_pop(polygon *);
+/*
+Nao liberta memoria
+*/
+polygon * poly_clear(polygon *);
+/*
+O clean garante a libertacao da memoria
+*/
+polygon * poly_clean(polygon *);
+
 /*
   Roda um poligono
 */
@@ -91,7 +102,9 @@ double ** poly_scale();
 double ** poly_simetric();
 double ** poly_normalize();
 */
-
+polygon * poly_allocate(polygon * s, ind sz);
+polygon * poly_copy(polygon * s, polygon * d);
+polygon * _poly_copy(polygon * s);
 
 /*
   TODO: As projecoes sao feitas sem ter em conta ratio x,y,

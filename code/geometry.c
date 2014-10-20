@@ -148,6 +148,47 @@ void poly_destroy(polygon * s) {
   free(s);
 }
 
+polygon * poly_allocate(polygon * s, ind sz) {
+  double * d;
+  if (sz <= s->max_size) return s;
+  while (sz > (s->max_size *= 2));
+  d = malloc(sizeof(double) * s->max_size * 2);
+  memcpy(d, s->pts, sizeof(double) * s->size * 2);
+  free(s->pts);
+  s->pts = d;
+  return s;
+}
+
+polygon * poly_copy(polygon * s, polygon * d) {
+  if (d->max_size < s->size) poly_allocate(d, s->size);
+  d->size = s->size;
+  memcpy(d->pts, s->pts, sizeof(double) * s->size * 2);
+  return d;
+}
+
+polygon * _poly_copy(polygon * s) {
+  polygon * d = malloc(sizeof(polygon));
+  d->size = s->size;
+  d->max_size = s->max_size;
+  d->pts = malloc(sizeof(double) * s->max_size * 2);
+  memcpy(d->pts, s->pts, sizeof(double) * s->size * 2);
+  return d;
+}
+
+polygon * poly_clear(polygon * s) { //Nao fazemos o free, para poupar espaco
+  s->size=0;
+}
+
+polygon * poly_clean(polygon * s) {
+  poly_destroy(s);
+  s = poly();
+}
+
+void poly_pop(polygon * s) {
+  if (s->size > 0)
+    s->size = s->size-1;
+}
+
 polygon * poly_push(polygon * s, double * p) {
   ind i;
   double * d;

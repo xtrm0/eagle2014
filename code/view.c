@@ -13,6 +13,7 @@ view * view_init(int w, int h) {
   v->id = g2_open_vd();
   g2_attach(v->id, v->dev);
   g2_set_auto_flush(v->id, 0);
+  g2_clear_palette(v->dev);
   return v;
 }
 
@@ -20,6 +21,9 @@ void view_destroy(view * v) {
   free(v);
 }
 
-void view_flush(view * v) {
+void view_begin(view * v) {
+  //atualmente isto nao faz nada :P
+}
+void view_end(view * v) {
   g2_flush(v->id);
 }
