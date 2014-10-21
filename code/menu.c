@@ -1,5 +1,9 @@
 #include "../include/menu.h"
 
+void clearbuffer() {
+  while(getchar()!='\n');
+}
+
 int menu(void) {
   char opcao;
 
@@ -17,6 +21,7 @@ int menu(void) {
     case '0':
       return 1;
     case '1':
+      
       break;
     case '2':
       break;

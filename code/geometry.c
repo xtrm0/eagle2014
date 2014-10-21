@@ -113,10 +113,10 @@ double * project(double * p, camera2d * c, double * s) {
   double aux3[2] = {0,0};
   //P = P - CAMERA.POSITION
   simetric(c->pos, aux1);
-  translate(p, aux1, aux1);
+  translate(p, aux1, aux2);
 
   //P = P * CAMERA.DIMENSIONS
-  hadamart(aux1, c->dim, aux1);
+  hadamart(aux2, c->dim, aux1);
 
   //P = P / SCREEN.DIMENSIONS
   inverse(c->vdim, aux2);
@@ -137,8 +137,8 @@ POLYGON FUNCTIONS
 
 polygon * poly() {
   polygon * s = malloc(sizeof(polygon));
-  s->size = (ind)0;
-  s->max_size = (ind)1;
+  s->size = 0;
+  s->max_size = 1;
   s->pts = malloc(sizeof(double)*2);
   return s;
 }
@@ -148,7 +148,7 @@ void poly_destroy(polygon * s) {
   free(s);
 }
 
-polygon * poly_allocate(polygon * s, ind sz) {
+polygon * poly_allocate(polygon * s, size_t sz) {
   double * d;
   if (sz <= s->max_size) return s;
   while (sz > (s->max_size *= 2));
@@ -190,7 +190,7 @@ void poly_pop(polygon * s) {
 }
 
 polygon * poly_push(polygon * s, double * p) {
-  ind i;
+  size_t i;
   double * d;
   if (s->max_size==s->size) {
     s->max_size = s->max_size * 2;
@@ -206,7 +206,7 @@ polygon * poly_push(polygon * s, double * p) {
 }
 
 polygon * poly_rotate(polygon * s, double rot) {
-  ind i;
+  size_t i;
   for (i=0; i < s->size; i++)
     rotate(s->pts + 2*i, rot, s->pts + 2*i);
   return s;
@@ -215,14 +215,14 @@ polygon * poly_rotate(polygon * s, double rot) {
 //TODO: polygon * poly_rotate2d_p(polygon *, double, double *);
 
 polygon * poly_translate(polygon * s, double * T) {
-  ind i;
+  size_t i;
   for (i=0; i < s->size; i++)
     translate(s->pts + 2*i, T, s->pts + 2*i);
   return s;
 }
 
 polygon * poly_project(polygon * p, camera2d *c, polygon * s) {
-  ind i;
+  size_t i;
   for (i=0; i < p->size; i++)
     project(p->pts + 2*i, c, s->pts + 2*i);
   return s;
@@ -258,7 +258,7 @@ camera2d * c2d_init(double w, double h, double x, double y, double W, double H, 
   c->dim[0]=w;
   c->dim[1]=h;
   c->pos[0]=x;
-  c->pos[1]=x;
+  c->pos[1]=y;
   c->vdim[0]=W;
   c->vdim[1]=H;
   c->vpos[0]=X;

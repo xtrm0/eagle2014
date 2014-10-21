@@ -7,6 +7,9 @@
 #include <g2.h>
 #include <g2_X11.h>
 #include "geometry.h"
+#define COLOR_BLACK 0
+#define COLOR_WHITE 1
+#define COLOR_GUI   2
 
 /*
   Estrutura que representa uma janela que esta a ser mostrada ao utilizador
@@ -17,10 +20,11 @@
 typedef struct view {
   int W, H;
   int id, dev;
+  char * name;
 } view;
 
 
-view * view_init(int,int);
+view * view_init(int,int,char *);
 void view_destroy(view *);
 void view_begin(view * v);
 void view_end(view * v);

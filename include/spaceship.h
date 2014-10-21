@@ -19,9 +19,10 @@ typedef struct spaceship {
   double x, z;
   double rot;
   double vx, vy;
-  double fx, fy;
+  double fr, ft; //Isto e em percentagem em relacao as forcas maximas
+  double mass_tara, mass_comb;
 
-  ind npart;
+  size_t npart;
   polygon ** parts;
   int * colors;
   int * fillpart;

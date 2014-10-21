@@ -8,26 +8,22 @@
 
 
 /*
-  Vamos definir vetores como uma lista de tamanho n+2. Em que a[0] nos diz o tamanho do vetor e a[1]...a[n] as coordenadas do vetor e a[n+1] a unidade do vetor
-  Um ponto em 2d, sera uma lista de tamanho 4.
-    p2d = {2, x, y, e}; //e is the base of the system: (x/e,y/e,1) = (x,y,e)
-    //We need a base to allow normalization of coordinates
-  É de notar que apesar de o primeiro valor de p2d ser um double, ele não deve ser guardado como double, mas sim com a representacao de size_t
-  de modo a que guarde uma posicao numa array
+  Um ponto e um double pt[2]:
+    pt[0] := coordenada x;
+    pt[1] := coordenada y;
 */
 
 //TODO: Transformar todas as funcoes para usarem point?
-typedef size_t ind; //usamos isto para posteriormente pormos alguns defines aqui para garantir que o tamanho de double e de ind sao iguais
 #define ITD(x) *((double *)&x)
-#define DTI(x) ((ind *)x)[0]
+#define DTI(x) ((size_t *)x)[0]
 typedef struct polygon {
   //Isto e basicamente uma implementacao de uma array de tamanho variavel
   //Complexidades:
     //push: O(1+)
     //pop: O(1)
     //Qualquer transformacao geometrica: O(n)
-  ind size;
-  ind max_size;
+  size_t size;
+  size_t max_size;
   double * pts;
 } polygon;
 
@@ -102,12 +98,12 @@ double ** poly_scale();
 double ** poly_simetric();
 double ** poly_normalize();
 */
-polygon * poly_allocate(polygon * s, ind sz);
+polygon * poly_allocate(polygon * s, size_t sz);
 polygon * poly_copy(polygon * s, polygon * d);
 polygon * _poly_copy(polygon * s);
 
 /*
-  TODO: As projecoes sao feitas sem ter em conta ratio x,y,
+  TODO: As projecoes sao feitas sem ter em conta manter o aspect ratio do x,y
   TODO: Corrigir isto
 */
 
@@ -115,17 +111,17 @@ polygon * _poly_copy(polygon * s);
 /*
   Estrutura que representa uma camara bidimensional, para o qual imagens sao desenhadas.
   Esta camara contem internamente a implementacao de um screen, e serve apenas para guardar dados sobre referenciais
-  (W, H): Width and Height of the camera
-  (X, Y): Position of the bottom left corner of the camera
+
+  Values:
+    dim: dimensoes x, y da camara no refencial da lua (unidades SI)
+    pos: posicoes x, y da camara no referancial da lua (unidades SI)
+    vdim: dimensoes x,y da camara no referencial do virtual device (pixeis)
+    vpos: posicoes x,y da camara no referncial do virtual device (pixeis)
 */
 typedef struct camera2d {
-  //tamanho da camara no referencial da view
   double dim[2];
-  //posicao da camara no referencial da view
   double pos[2];
-  //tamanho da view num referencial de pixeis (referencial do virtual device)
   double vdim[2];
-  //posicao da view num referencial de pixeis (referencial do virtual device)
   double vpos[2];
 
 } camera2d;

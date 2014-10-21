@@ -4,7 +4,7 @@ LNLIBS=-lg2 -lm
 IDIR=include
 ODIR=objects
 CDIR=code
-OBJECTS= main.o menu.o consoleutil.o spaceship.o view.o geometry.o
+OBJECTS= main.o button.o menu.o cockpit.o spaceship.o view.o geometry.o
 OBJECTSPATH = $(patsubst %,$(ODIR)/%,$(OBJECTS))
 .PHONY: all clean debug
 
@@ -37,6 +37,4 @@ eagle2014: $(OBJECTSPATH)
 	gcc $(LNFLAGS) $(OBJECTSPATH) $(LNLIBS) -o eagle2014
 
 $(ODIR)/%.o: $(CDIR)/%.c
-	gcc $(FLAGS) $< -o $@ 
-
-
+	gcc $(FLAGS) $< -o $@

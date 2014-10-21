@@ -6,7 +6,6 @@ spaceship * spc_init(double x, double z, double rot, view * v) {
     printf("(3x23) Erro detetado: Memory Access Error!");
     exit(ENOMEM);
   }
-
   memset(s,0,sizeof(spaceship));
   s->x = x;
   s->z = z;
@@ -45,9 +44,9 @@ void spc_destroy(spaceship * s) {
   free(s);
 }
 
-
 void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento
-  s->x += 1;
+  printf("dt:%lf, x: %lf\n",dt, s->x);
+  s->x += 100*dt;
 }
 
 
@@ -60,10 +59,10 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   pol = poly();
 
   for (i=0; i<s->npart; i++) {
-//    printf("%d\n", s->colors[i]);
     poly_copy(s->parts[i], pol);
     poly_rotate(pol, s->rot);
     poly_translate(pol, aux);
+    //TODO: Podemos deixar de usar camaras, e passar a definir o referncial do virtual device, diretamente para o g2 (E uma questao de altera a linha a seguir: )
     poly_project(pol, c, pol);
     g2_pen(v->id, s->colors[i]);
     if (s->fillpart[i]) {
