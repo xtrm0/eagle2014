@@ -12,6 +12,12 @@ spaceship * spc_init(double x, double z, double rot, view * v) {
   s->w = 20.0;
   s->h = 20.0;
   s->rot = rot;
+  s->mass_tara = 1000.0;
+  s->mass_comb = 100.0;
+  s->h_len=0;
+  s->h_max=1;
+  s->hist = malloc(sizeof(double *)*1);
+  s->hist[0] = malloc(sizeof(double)*7);
   spc_init_model(s, v);
   return s;
 }
@@ -38,15 +44,54 @@ void spc_init_model(spaceship * s, view *v) {
   point(+HEXRAD*2, 0.0,                p); poly_push(pol, p);
   point(+HEXRAD,   -sqrt(3.0)*HEXRAD,  p); poly_push(pol, p);
   s->parts[0] = pol;
+
 }
 
 void spc_destroy(spaceship * s) {
   free(s);
 }
 
+/*
+  Estamos a usar o metodo de integracao Velocity Verlet:
+    http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
+  Temos um erro proporcional a O(dt^2) que e bastante baixo. Se quisessemos diminuir este erro (o que nao seria justificavel para um jogo),
+  podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessário e custoso em termos de cpu.
+*/
+/*
+  De modo a evitar mensagens como "Houston, we have a problem" decidimos impedir que os astronautas treinassem a aterragem com modelos fisico incorretos, efetuando a seguinte corrreção ao pdf:
+    Da equação da conservação extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
+*/
 void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento
   printf("dt:%lf, x: %lf\n",dt, s->x);
-  s->x += 100*dt;
+  double ax0, az0, aa0;
+  double fx, fz;
+  double mass = s->mass_tara + s->mass_comb;
+  //1) Calcula a(t), I(t):
+  s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD; //Deviamos usar uma constante k: (2/5)<k<(2/3) em vez de 2/5,
+  ax0 = -N_TAU_T*s->ft*sin(s->rot)/mass;
+  az0 = N_TAU_T*s->ft*cos(s->rot)/mass-N_G;
+  aa0 = N_TAU_R*s->fr*HEXRAD/s->I;
+  //pois o peso nao esta uniformemente distruibuida pela nave (que ja agora tambem nao e uma esfera) a massa centra-se nas bordas da nave
+
+  //2) Caclcula (x,y,rot)(t+dt):
+  s->rot = s->rot + s->va*dt + 0.5*aa0*dt*dt;
+  s->x   = s->x   + s->vx*dt + 0.5*ax0*dt*dt;
+  s->z   = s->z   + s->vz*dt + 0.5*az0*dt*dt;
+
+  //3) Calcula a(t+dt) e I(t+dt): serve so para calcular v(t+dt) e w(t+dt);
+  s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD;
+  //aqui atualizar ax1, az1 e aa1;
+
+  //4) Calcula v(t+dt), w(t+dt):
+  s->rot  = s->va   + (aa0 + N_TAU_R*s->fr*HEXRAD/s->I)/2.0*dt;
+  s->vz   = s->vz   + (az0 + N_TAU_T*s->ft*cos(s->rot)/mass-N_G)/2.0*dt;
+  s->vx   = s->vx   + (ax0 - N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
+
+
+  printf("x:%lf, z: %lf, rot: %lf, vx: %lf, vz: %lf\n", s->x, s->z, s->rot, s->vx, s->vz);
+  printf("ft:%lf, fr: %lf, mass: %lf, tau_R: %lf, tau_t: %lf\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
+  printf("%lf, %lf, %lf, %lf\n", N_TAU_T, s->ft, cos(s->rot), mass);
+  printf("%lf\n", az0);
 }
 
 
@@ -71,5 +116,12 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
       g2_polygon(v->id, pol->size, pol->pts);
     }
   }
+
+}
+
+
+
+
+void spc_add_hist(spaceship * s, double dt) {
 
 }

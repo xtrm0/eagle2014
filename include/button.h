@@ -14,7 +14,7 @@ void btn_destroy();
 
 void btn_draw(button *, view *);
 
-int is_pressed(button*, double x, double y);
+int btn_hover(button*, double x, double y);
 
 
 

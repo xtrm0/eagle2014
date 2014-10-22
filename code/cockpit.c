@@ -31,6 +31,8 @@ void draw_gui(spaceship * s, view * v) {
   char str[20];
   g2_pen(v->id, COLOR_GUI);
   g2_filled_rectangle(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 7*COCK_PAD_VERT, COCK_SECOND_LEFT-1, v->H);
+  g2_filled_rectangle(v->id, COCK_SECOND_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 7*COCK_PAD_VERT, COCK_SECOND_LEFT-1, v->H);
+
 
   g2_pen(v->id, COLOR_BLACK);
   //g2_set_font_size(v->id, COCK_FONT_SIZE); Tiramos porque nunca mudamos a font size
@@ -46,7 +48,7 @@ void draw_gui(spaceship * s, view * v) {
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 3*COCK_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m/s", s->vx);
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 4*COCK_PAD_VERT, str);
-  sprintf(str, "%5.2lf" " m/s", s->vy);
+  sprintf(str, "%5.2lf" " m/s", s->vz);
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 5*COCK_PAD_VERT, str);
   sprintf(str, "%5.2lf" " kg", s->mass_comb);
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 6*COCK_PAD_VERT, str);
@@ -67,14 +69,19 @@ int cockpit_loop() {
   double deltatime, sleeptime;
   double fps = 60.0;
   double revfps = 1.0/fps;
+  double * mouse_x, * mouse_y;
+  int * mouse_button;
   int runapp;
 
 
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(100, 100, 0, 0, 150, 150, 800-150, 300-150);
-  s = spc_init(100, 200, 0.0, v);
+  s = spc_init(100, 200, 0.2, v);
   btn_more = btn_init(400, 150, 80, 30, COLOR_BLACK, "More", 20.0, COLOR_WHITE);
   btn_less = btn_init(500, 150, 80, 30, COLOR_BLACK, "Less", 20.0, COLOR_WHITE);
+  mouse_x = malloc(sizeof(double));
+  mouse_y = malloc(sizeof(double));
+  mouse_button = malloc(sizeof(int));
   gui_init(v);
   runapp = 1;
 
@@ -84,9 +91,29 @@ int cockpit_loop() {
     deltatime = (((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec) - ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec));
     //printf("%lf\n", deltatime);
 
+    //Parte de input:
+      g2_query_pointer(v->dev, mouse_x, mouse_y, mouse_button);
+      printf("mouse state: %lf, %lf, %d\n", *mouse_x, *mouse_y, *mouse_button);
     //Parte de logica:
       //atualiza a nave:
       spc_update_pos(s,deltatime);
+
+      //atualiza a forca:
+      if (*mouse_button != 0) {
+        if(btn_hover(btn_more,*mouse_x,*mouse_y)) {
+          s->ft+=0.25*deltatime;
+        }
+        if(btn_hover(btn_less,*mouse_x,*mouse_y)) {
+          s->ft-=0.25*deltatime;
+        }
+      }
+
+      //garante que a forca esta dentro do intervalo 0,1;
+      if (s->fr<0) s->fr=0;
+      if (s->fr>1) s->fr=1;
+      if (s->ft<0) s->ft=0;
+      if (s->ft>1) s->ft=1;
+
       //garante que a camara esta solidaria com a nave:
       c->pos[0] = s->x - 100;
       c->pos[1] = s->z - 75;
@@ -94,7 +121,8 @@ int cockpit_loop() {
     //Parte grafica
     view_begin(v); //Garante que existe uma janela
       draw_gui(s,v); //Atualiza o text na gui
-
+      btn_draw(btn_more, v);
+      btn_draw(btn_less, v);
       //Desenha o container da camara da nave
       g2_pen(v->id, COLOR_BLACK);
       g2_filled_rectangle(v->id, c->vpos[0], c->vpos[1], c->vpos[0] + c->vdim[0], c->vpos[1] + c->vdim[1]);
@@ -117,7 +145,7 @@ int cockpit_loop() {
        tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8); //TODO: ISTO DEVIA SER 10e9, mas por algum motivo so da bem quando ponho 10e8. Temos de investigar
        nanosleep(&tsleep, &trem);
     }
-
   }
+  //save_simulation(s);
   return 0;
 }

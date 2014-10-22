@@ -11,22 +11,37 @@
 //METADE DO LADO DO HEXAGONO:
 #define HEXRAD 15.0
 
+#define N_TAU_R 10000.0
+#define N_TAU_T 100000.0
+#define N_BETA_R 1.0
+#define N_BETA_T 1.0
+#define N_G 9.8
+
 /*
     Representa uma nave espacial
 */
 typedef struct spaceship {
+  //Parte para desenhar para o ecra:
   double w, h;
   double x, z;
   double rot;
-  double vx, vy;
+  double vx, vz, va; //w significa velocidade angular
   double fr, ft; //Isto e em percentagem em relacao as forcas maximas
   double mass_tara, mass_comb;
+  double I;
 
+  //Parte do historico para guardar para ficheiro:
+  size_t h_len;
+  size_t h_max;
+  double ** hist;
+  char * fileout;
+
+  //Parte grafica
   size_t npart;
   polygon ** parts;
   int * colors;
   int * fillpart;
-  //adicionar aqui um ponteiro para uma imagem?
+  //Por aqui um ponteiro para uma imagem
 } spaceship;
 
 
@@ -56,7 +71,7 @@ void spc_update_pos(spaceship * s, double dt); //TODO: adicionar uma estrutura a
 */
 void spc_draw(spaceship * s, camera2d * c, view * v);
 
-
+void spc_add_hist(spaceship * s, double dt);
 
 
 
