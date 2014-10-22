@@ -16,6 +16,7 @@
 #define N_BETA_R 1.0
 #define N_BETA_T 1.0
 #define N_G 9.8
+#define FT 10.0
 
 /*
     Representa uma nave espacial
