@@ -28,11 +28,12 @@ void spc_init_model(spaceship * s, view *v) {
   polygon * pol;
   double p[2]= {0}; //isto inicializa a {0,0}
 
-  s->npart = 1; //TODO: edit this to add more parts
+  s->npart = 5; //TODO: edit this to add more parts
   s->parts = malloc(sizeof(polygon *) * s->npart);
   s->fillpart = malloc(sizeof(int) * s->npart);
   s->colors = malloc(sizeof(int) * s->npart);
   /* Spacecraft Head (hexagon) */
+
 
   s->colors[0] = g2_ink(v->dev, 1.0, 0.5, 1.0);
   s->fillpart[0] = 1;
@@ -45,6 +46,56 @@ void spc_init_model(spaceship * s, view *v) {
   point(+HEXRAD,   -sqrt(3.0)*HEXRAD,  p); poly_push(pol, p);
   s->parts[0] = pol;
 
+<<<<<<< HEAD
+=======
+  /* Spacecraft Left Leg */
+
+  s->colors[1] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->fillpart[1] = 1;
+  pol = poly();
+  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(-3.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(-(0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
+  point(-2*HEXRAD,                      (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
+  point(-2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(-HEXRAD,                        (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  s->parts[1] = pol;
+
+  /* Spacecraft Right Leg */
+
+  s->colors[2] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->fillpart[2] = 1;
+  pol = poly();
+  point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(3.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point((0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
+  point(2*HEXRAD,                      (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
+  point(2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(HEXRAD,                        (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  s->parts[2] = pol;
+
+
+  /* Spacecraft Combustion Centre */
+
+  s->colors[3] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->fillpart[3] = 1;
+  pol = poly();
+  point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(-0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
+  point(0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
+  s->parts[3] = pol;
+
+  /* Combustion */
+
+  s->colors[4] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->fillpart[4] = 1;
+  pol = poly();
+  point(0.0,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
+  point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
+  s->parts[4] = pol;
+
+>>>>>>> ffaabac7daecbf97317c5454eafc46207a0af887
 }
 
 void spc_destroy(spaceship * s) {
