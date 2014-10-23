@@ -197,10 +197,19 @@ void spc_add_hist(spaceship * s, double dt) {
 }
 
 void spc_save_to_file(spaceship * s) {
-  //TODO:@ALCapas
-  size_t i;
-
-  for (i=0; i<s->h_len; i++) {
-    //pass
-  }
+	size_t i;
+	FILE *fileout;
+	fileout = fopen ("vooLunarCorrente.txt", "w");	
+	for (i=0; i<s->h_len; i++) {
+	fprintf(fileout, "<%lf> [s] ", s->hist[i][0]);
+	fprintf(fileout, "<%lf> [m] ", s->hist[i][1]);
+	fprintf(fileout, "<%lf> [m] ", s->hist[i][2]);
+	fprintf(fileout, "<%lf> [m/s] ", s->hist[i][3]);
+	fprintf(fileout, "<%lf> [m/s] ", s->hist[i][4]);
+	fprintf(fileout, "<%lf> [graus] ", s->hist[i][5]);
+	fprintf(fileout, "<%lf> [kg]\n", s->hist[i][6]);
+	}
+	 
+	fclose(fileout);
+ 
 }

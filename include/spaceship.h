@@ -15,7 +15,7 @@
 #define N_TAU_T 100000.0
 #define N_BETA_R 1.0
 #define N_BETA_T 1.0
-#define N_G 9.8
+#define N_G 1.622
 #define N_PI 3.1415926535
 #define FT 10.0
 
