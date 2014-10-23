@@ -38,7 +38,7 @@ typedef struct spaceship {
   double fr, ft; //Isto e em percentagem em relacao as forcas maximas
   double mass_tara, mass_comb;
   double I;
-
+  polygon * colision_shape;
   //Parte do historico para guardar para ficheiro:
   size_t h_len;
   size_t h_max;

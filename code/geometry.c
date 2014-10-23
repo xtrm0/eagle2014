@@ -229,6 +229,37 @@ polygon * poly_project(polygon * p, camera2d *c, polygon * s) {
   return s;
 }
 
+/*
+ * 
+ * 	Colision detection
+ * 
+ */
+
+//O(1)
+int lineseg_colide(double * p1, double * p2, double * p3, double * p4) {
+	//verificar se sao paralelas:
+	
+	//verificar se sao verticais ou horizontais:
+	
+	//obter o ponto de colisao: TODO:@AlCapas
+	
+	//Ver se esta dentro dos dois retangulos:
+}
+
+//O(n)
+int poly_colide_lineseg(polygon * s, double * p1, double * p2) {	
+	size_t i; 
+	for (i=0; i < s->size-1; i++) {
+		if (lineseg_colide(p1,p2,p->pts+(2*i), p->pts[2*(i+1)])) {
+			return 1;
+		}
+	} 
+	if (lineseg_colide(p1,p2,p->pts,pts->pts+2*i) 
+		return 1;
+	return 0;
+}
+
+
 #ifdef DEBUG
 void dump_pol(polygon * pol) {
   int i,j;

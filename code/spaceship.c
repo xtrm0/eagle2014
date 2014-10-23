@@ -92,6 +92,20 @@ void spc_init_model(spaceship * s, view *v) {
   point(0.0,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
   s->parts[4] = pol;
+  
+  
+  /*
+   * Colision detection shape
+   */
+   
+  s->colision_shape = poly();
+  point(-2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
+  point(2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
+  point( HEXRAD*2, 0.0,                p); poly_push(s->colision_shape, p);
+  point( HEXRAD,   +sqrt(3.0)*HEXRAD,  p); poly_push(s->colision_shape, p);
+  point(-HEXRAD,   +sqrt(3.0)*HEXRAD,  p); poly_push(s->colision_shape, p);
+  point(-HEXRAD*2, 0.0,                p); poly_push(s->colision_shape, p);
+  
 }
 
 void spc_destroy(spaceship * s) {

@@ -102,6 +102,8 @@ double ** poly_normalize();
 polygon * poly_allocate(polygon * s, size_t sz);
 polygon * poly_copy(polygon * s, polygon * d);
 polygon * _poly_copy(polygon * s);
+int lineseg_colide(double * p1, double * p2, double * p3, double * p4);
+int poly_colide_lineseg(polygon * s, double * p1, double * p2);
 
 /*
   TODO: As projecoes sao feitas sem ter em conta manter o aspect ratio do x,y
