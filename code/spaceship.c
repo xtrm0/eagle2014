@@ -135,11 +135,12 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
 
   //Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave
   spc_add_hist(s, dt);
-
+/*
   printf("x:%lf, z: %lf, rot: %lf, vx: %lf, vz: %lf\n", s->x, s->z, s->rot, s->vx, s->vz);
   printf("ft:%lf, fr: %lf, mass: %lf, tau_R: %lf, tau_t: %lf\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
   printf("%lf, %lf, %lf, %lf\n", N_TAU_T, s->ft, cos(s->rot), mass);
-  printf("%lf\n", az0);
+  printf("%lf || %lf || %lf\n", ax0, az0, aa0);
+  */
 }
 
 
@@ -194,6 +195,7 @@ void spc_add_hist(spaceship * s, double dt) {
 }
 
 void spc_save_to_file(spaceship * s) {
+  //TODO:@ALCapas
   size_t i;
 
   for (i=0; i<s->h_len; i++) {

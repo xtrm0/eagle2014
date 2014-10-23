@@ -11,17 +11,20 @@
   Um ponto e um double pt[2]:
     pt[0] := coordenada x;
     pt[1] := coordenada y;
-*/
+
 
 //TODO: Transformar todas as funcoes para usarem point?
+*/
 #define ITD(x) *((double *)&x)
 #define DTI(x) ((size_t *)x)[0]
 typedef struct polygon {
-  //Isto e basicamente uma implementacao de uma array de tamanho variavel
-  //Complexidades:
-    //push: O(1+)
-    //pop: O(1)
-    //Qualquer transformacao geometrica: O(n)
+/*
+  Isto e basicamente uma implementacao de uma array de tamanho variavel
+  Complexidades:
+    push: O(1+)
+    pop: O(1)
+    Qualquer transformacao geometrica: O(n)
+*/
   size_t size;
   size_t max_size;
   double * pts;
@@ -49,10 +52,6 @@ double * _translate(double * p, double * T);
 
 double * simetric(double * p, double * s);
 double * _simetric(double * p);
-
-double * normalize(double * p); //Transforma as coordenadas de um ponto em (n,x,y,...,1)
-double * _normalize(double * p); //Transforma as coordenadas de um ponto em (n,x,y,...,1)
-
 
 
 /* Funcoes para trabalhar com poligonos (conjuntos de n pontos a duas dimensoes)*/

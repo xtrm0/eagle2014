@@ -1,6 +1,7 @@
-FLAGS=-c
+FLAGS=-c 
 LNFLAGS=-Wall
 LNLIBS=-lg2 -lm
+CC = gcc -fdiagnostics-color=auto
 IDIR=include
 ODIR=objects
 CDIR=code
@@ -34,7 +35,7 @@ clean:
 
 
 eagle2014: $(OBJECTSPATH)
-	gcc $(LNFLAGS) $(OBJECTSPATH) $(LNLIBS) -o eagle2014
+	$(CC) $(LNFLAGS) $(OBJECTSPATH) $(LNLIBS) -o eagle2014
 
 $(ODIR)/%.o: $(CDIR)/%.c
-	gcc $(FLAGS) $< -o $@
+	$(CC) $(FLAGS) $< -o $@

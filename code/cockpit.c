@@ -31,7 +31,7 @@ void draw_gui(spaceship * s, view * v) {
   char str[20];
   g2_pen(v->id, COLOR_GUI);
   g2_filled_rectangle(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 7*COCK_PAD_VERT, COCK_SECOND_LEFT-1, v->H);
-  g2_filled_rectangle(v->id, COCK_SECOND_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 7*COCK_PAD_VERT, COCK_SECOND_LEFT-1, v->H);
+  g2_filled_rectangle(v->id, COCK_SECOND_LEFT + 30, v->H - COCK_TOP - 7*COCK_PAD_VERT, v->W, v->H);
 
 
   g2_pen(v->id, COLOR_BLACK);
@@ -40,7 +40,7 @@ void draw_gui(spaceship * s, view * v) {
 
 
   //Lado direito das labels:
-  sprintf(str, "%5.2lf" " º", s->rot);
+  sprintf(str, "%5.2lf" " \xb0", s->rot); //Aqui tivemos de usar o valor em hexadecimal, porque o nosso editor de texto estava a guardar o caracter latino º
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 1*COCK_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m", s->z);
   g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 2*COCK_PAD_VERT, str);
@@ -146,6 +146,6 @@ int cockpit_loop() {
        nanosleep(&tsleep, &trem);
     }
   }
-  //save_simulation(s);
+  spc_save_to_file(s);
   return 0;
 }
