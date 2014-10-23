@@ -16,10 +16,18 @@
 #define N_BETA_R 1.0
 #define N_BETA_T 1.0
 #define N_G 9.8
+#define N_PI 3.1415926535
 #define FT 10.0
 
 /*
     Representa uma nave espacial
+*/
+/*
+  Estamos a guardar o historico para memoria por questoes de performance (nao mantemos o ficheiro aberto durante 10 minutos :P):
+    Tamanho da array:
+      7*FPS*TIME*8 bytes
+    Se fps = 60 e TIME = 600 (10 minutos)
+    Entao ocupamos aprox. 1.922 megabytes de memoria, o que e muito aceitavel (2016000 bytes)
 */
 typedef struct spaceship {
   //Parte para desenhar para o ecra:
@@ -74,7 +82,7 @@ void spc_draw(spaceship * s, camera2d * c, view * v);
 
 void spc_add_hist(spaceship * s, double dt);
 
-
+void spc_save_to_file(spaceship *);
 
 
 #endif

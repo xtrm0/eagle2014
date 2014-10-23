@@ -28,14 +28,14 @@ void spc_init_model(spaceship * s, view *v) {
   polygon * pol;
   double p[2]= {0}; //isto inicializa a {0,0}
 
-  s->npart = 5; 
+  s->npart = 5;
   s->parts = malloc(sizeof(polygon *) * s->npart);
   s->fillpart = malloc(sizeof(int) * s->npart);
-  s->colors = malloc(sizeof(int) * s->npart);
+  s->colors = malloc(sizeof(int) * s->npart); //Usámos o programa gpick para tirar as cores a partir do pdf
+
   /* Spacecraft Head (hexagon) */
 
-
-  s->colors[0] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->colors[0] = g2_ink(v->dev, 0.6, 0.4, 0.8); //#9966CC
   s->fillpart[0] = 1;
   pol = poly();
   point(-HEXRAD,   -sqrt(3.0)*HEXRAD,  p); poly_push(pol, p);
@@ -48,7 +48,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Left Leg */
 
-  s->colors[1] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->colors[1] = g2_ink(v->dev, 0, 0, 0); //#00000
   s->fillpart[1] = 1;
   pol = poly();
   point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
@@ -61,7 +61,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Right Leg */
 
-  s->colors[2] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->colors[2] = g2_ink(v->dev, 0, 0, 0); //#000000
   s->fillpart[2] = 1;
   pol = poly();
   point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
@@ -75,7 +75,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Combustion Centre */
 
-  s->colors[3] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->colors[3] = g2_ink(v->dev, (7*16+1)/255.0, (9*16+14)/255.0, (12*16+14)/255.0); //#9193CE
   s->fillpart[3] = 1;
   pol = poly();
   point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
@@ -86,7 +86,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Combustion */
 
-  s->colors[4] = g2_ink(v->dev, 1.0, 0.5, 1.0);
+  s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); //#FF6633
   s->fillpart[4] = 1;
   pol = poly();
   point(0.0,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
@@ -127,13 +127,14 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
 
   //3) Calcula a(t+dt) e I(t+dt): serve so para calcular v(t+dt) e w(t+dt);
   s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD;
-  //aqui atualizar ax1, az1 e aa1;
 
   //4) Calcula v(t+dt), w(t+dt):
-  s->rot  = s->va   + (aa0 + N_TAU_R*s->fr*HEXRAD/s->I)/2.0*dt;
-  s->vz   = s->vz   + (az0 + N_TAU_T*s->ft*cos(s->rot)/mass-N_G)/2.0*dt;
-  s->vx   = s->vx   + (ax0 - N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
+  s->va = s->va + (aa0 + N_TAU_R*s->fr*HEXRAD/s->I)/2.0*dt;
+  s->vz = s->vz + (az0 + N_TAU_T*s->ft*cos(s->rot)/mass-N_G)/2.0*dt;
+  s->vx  = s->vx + (ax0 +-N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
 
+  //Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave
+  spc_add_hist(s, dt);
 
   printf("x:%lf, z: %lf, rot: %lf, vx: %lf, vz: %lf\n", s->x, s->z, s->rot, s->vx, s->vz);
   printf("ft:%lf, fr: %lf, mass: %lf, tau_R: %lf, tau_t: %lf\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
@@ -168,7 +169,34 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
 
 
 
-
 void spc_add_hist(spaceship * s, double dt) {
+  size_t i;
+  double ** d;
+  if (s->h_max==s->h_len) {
+    s->h_max = s->h_max * 2;
+    d = malloc(sizeof(double *) * s->h_max); //Podiamos evitar o malloc usando uma array de pontos, mas a complexidade mantinha-se O(1+),
+    //, a unica diferenca e que diminuiamos a constante
+    for (i=0; i<s->h_len; i++)
+      d[i] = s->hist[i];
+    free(s->hist);
+    s->hist = d;
+  }
 
+  s->hist[s->h_len] = malloc(sizeof(double)*7);
+  s->hist[s->h_len][0] = dt;
+  s->hist[s->h_len][1] = s->x;
+  s->hist[s->h_len][2] = s->z;
+  s->hist[s->h_len][3] = s->vx;
+  s->hist[s->h_len][4] = s->vz;
+  s->hist[s->h_len][5] = s->rot * 90.0 / 2*N_PI;
+  s->hist[s->h_len][6] = s->mass_comb;
+  s->h_len++;
+}
+
+void spc_save_to_file(spaceship * s) {
+  size_t i;
+
+  for (i=0; i<s->h_len; i++) {
+    //pass
+  }
 }
