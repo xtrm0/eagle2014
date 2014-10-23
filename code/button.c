@@ -1,10 +1,12 @@
 #include "../include/button.h"
-button * btn_init(double x,double y,double w, double h,int color,char * text, double fsz, int fcolor){
+button * btn_init(double x,double y,double w, double h, double left, double bottom, int color,char * text, double fsz, int fcolor){
   button * btn = malloc(sizeof(button));
   btn->x = x;
   btn->y = y;
   btn->w = w;
   btn->h = h;
+  btn->left = left;
+  btn->bottom = bottom;
   btn->color = color;
   btn->text = text;
   btn->fsz = fsz;
@@ -23,7 +25,7 @@ void btn_draw(button * btn, view * v) {
   g2_filled_rectangle(v->id, btn->x, btn->y, btn->x+btn->w, btn->y+btn->h);
   g2_pen(v->id, btn->fcolor);
   g2_set_font_size(v->id, btn->fsz);
-  g2_string(v->id, btn->x + 20, btn->y + (btn->h - btn->fsz)/2.0, btn->text);
+  g2_string(v->id, btn->x + btn->left, btn->y + btn->bottom, btn->text);
 }
 
 int btn_hover(button * btn, double x, double y) {

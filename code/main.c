@@ -16,6 +16,9 @@ int main(void) {
   cockpit_loop();
   printf("Press a key to continue");
   getchar();
+  modograph ("exemplo.txt");
+  printf("Press a key to continue");
+  getchar();
   return 0;
 }
 

@@ -3,12 +3,13 @@
 #include "../include/view.h"
 typedef struct button {
   double x, y, w, h;
+  double left, bottom;
   int color, fcolor;
   char * text;
   double fsz;
 } button;
 
-button * btn_init(double,double,double,double,int,char *,double,int);
+button * btn_init(double,double,double,double,double,double,int,char *,double,int);
 
 void btn_destroy();
 

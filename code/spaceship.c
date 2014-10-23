@@ -51,7 +51,7 @@ void spc_init_model(spaceship * s, view *v) {
   s->colors[1] = g2_ink(v->dev, 0, 0, 0); //#00000
   s->fillpart[1] = 1;
   pol = poly();
-  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
+  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD+0.01,              p); poly_push(pol, p);
   point(-3.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
   point(-(0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
   point(-2*HEXRAD,                      (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
@@ -109,7 +109,7 @@ void spc_destroy(spaceship * s) {
     Da equação da conservação extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
 */
 void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento
-  printf("dt:%lf, x: %lf\n",dt, s->x);
+  //printf("dt:%lf, x: %lf\n",dt, s->x);
   double ax0, az0, aa0;
   double fx, fz;
   double mass = s->mass_tara + s->mass_comb;
@@ -120,7 +120,7 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
   aa0 = N_TAU_R*s->fr*HEXRAD/s->I;
   //pois o peso nao esta uniformemente distruibuida pela nave (que ja agora tambem nao e uma esfera) a massa centra-se nas bordas da nave
 
-  //2) Caclcula (x,y,rot)(t+dt):
+  //2) Calcula (x,y,rot)(t+dt):
   s->rot = s->rot + s->va*dt + 0.5*aa0*dt*dt;
   s->x   = s->x   + s->vx*dt + 0.5*ax0*dt*dt;
   s->z   = s->z   + s->vz*dt + 0.5*az0*dt*dt;
@@ -133,6 +133,8 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
   s->vz = s->vz + (az0 + N_TAU_T*s->ft*cos(s->rot)/mass-N_G)/2.0*dt;
   s->vx  = s->vx + (ax0 +-N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
 
+  //normaliza a rotacao:
+  s->rot = fmod(s->rot, 2*N_PI); //Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar
   //Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave
   spc_add_hist(s, dt);
 /*
@@ -189,7 +191,7 @@ void spc_add_hist(spaceship * s, double dt) {
   s->hist[s->h_len][2] = s->z;
   s->hist[s->h_len][3] = s->vx;
   s->hist[s->h_len][4] = s->vz;
-  s->hist[s->h_len][5] = s->rot * 90.0 / 2*N_PI;
+  s->hist[s->h_len][5] = s->rot * 180.0 / (N_PI);
   s->hist[s->h_len][6] = s->mass_comb;
   s->h_len++;
 }

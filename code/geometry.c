@@ -107,6 +107,7 @@ double * _inverse(double * p) {
 }
 
 //TODO: Otimizar isto
+//TODO: Quase de certeza que isto esta certo, mas voltar a fazer as contas
 double * project(double * p, camera2d * c, double * s) {
   double aux1[2] = {0,0};
   double aux2[2] = {0,0};
@@ -116,10 +117,10 @@ double * project(double * p, camera2d * c, double * s) {
   translate(p, aux1, aux2);
 
   //P = P * CAMERA.DIMENSIONS
-  hadamart(aux2, c->dim, aux1);
+  hadamart(aux2, c->vdim, aux1);
 
   //P = P / SCREEN.DIMENSIONS
-  inverse(c->vdim, aux2);
+  inverse(c->dim, aux2);
   hadamart(aux1, aux2, aux3);
 
   //P = P + SCREEN.POSITION
@@ -228,7 +229,7 @@ polygon * poly_project(polygon * p, camera2d *c, polygon * s) {
   return s;
 }
 
-#ifdef DEBUF
+#ifdef DEBUG
 void dump_pol(polygon * pol) {
   int i,j;
   printf("\n====================\nPOLYGON DUMP\n====================\n");
