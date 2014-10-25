@@ -230,43 +230,44 @@ polygon * poly_project(polygon * p, camera2d *c, polygon * s) {
 }
 
 /*
- * 
+ *
  * 	Colision detection
- * 
+ *
  */
 
 //O(1)
 int lineseg_colide(double * p1, double * p2, double * p3, double * p4) {
-	//verificar se sao paralelas:
-	
-	//verificar se sao verticais ou horizontais:
-	
-	//obter o ponto de colisao: TODO:@AlCapas
-	
-	//Ver se esta dentro dos dois retangulos:
+	double a1, a2, a3, a4;
+  a1 = (p2[0] - p1[0])*(p3[1] - p2[1]) - (p2[1] - p1[1])*(p3[0] - p2[0]);
+  a2 = (p2[0] - p1[0])*(p4[1] - p2[1]) - (p2[1] - p1[1])*(p4[0] - p2[0]);
+  a3 = (p4[0] - p3[0])*(p1[1] - p4[1]) - (p4[1] - p3[1])*(p1[0] - p4[0]);
+  a4 = (p4[0] - p3[0])*(p2[1] - p4[1]) - (p4[1] - p3[1])*(p2[0] - p4[0]);
+  if ((a1>0 && a2>0) || (a1<0 && a2<0) || (a3>0 && a4>0) || (a3<0 && a4<0))
+    return 0;
+  return 1;
 }
 
 //O(n)
-int poly_colide_lineseg(polygon * s, double * p1, double * p2) {	
-	size_t i; 
+int poly_colide_lineseg(polygon * s, double * p1, double * p2) {
+	size_t i;
 	for (i=0; i < s->size-1; i++) {
-		if (lineseg_colide(p1,p2,p->pts+(2*i), p->pts[2*(i+1)])) {
+		if (lineseg_colide(p1,p2,s->pts+(2*i), s->pts + 2*i+2)) {
 			return 1;
 		}
-	} 
-	if (lineseg_colide(p1,p2,p->pts,pts->pts+2*i) 
+	}
+	if (lineseg_colide(p1,p2,s->pts,s->pts+2*i))
 		return 1;
 	return 0;
 }
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 void dump_pol(polygon * pol) {
   int i,j;
   printf("\n====================\nPOLYGON DUMP\n====================\n");
   for (i=0; i<pol->size; i++) {
     for (j=0; j<2; j++) {
-      printf("%lf ", pol->pts[i*4+j]);
+      printf("%lf ", pol->pts[i*2+j]);
     }
     printf("\n");
   }

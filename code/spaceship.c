@@ -92,12 +92,12 @@ void spc_init_model(spaceship * s, view *v) {
   point(0.0,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
   s->parts[4] = pol;
-  
-  
+
+
   /*
    * Colision detection shape
    */
-   
+
   s->colision_shape = poly();
   point(-2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
   point(2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
@@ -105,7 +105,7 @@ void spc_init_model(spaceship * s, view *v) {
   point( HEXRAD,   +sqrt(3.0)*HEXRAD,  p); poly_push(s->colision_shape, p);
   point(-HEXRAD,   +sqrt(3.0)*HEXRAD,  p); poly_push(s->colision_shape, p);
   point(-HEXRAD*2, 0.0,                p); poly_push(s->colision_shape, p);
-  
+
 }
 
 void spc_destroy(spaceship * s) {
@@ -122,7 +122,9 @@ void spc_destroy(spaceship * s) {
   De modo a evitar mensagens como "Houston, we have a problem" decidimos impedir que os astronautas treinassem a aterragem com modelos fisico incorretos, efetuando a seguinte corrreção ao pdf:
     Da equação da conservação extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
 */
-void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento
+void spc_update_pos(spaceship * s, double dt) {
+  //TODO: fazer as colisoes aqui
+  //TODO: fazer integracao por pedacos
   //printf("dt:%lf, x: %lf\n",dt, s->x);
   double ax0, az0, aa0;
   double fx, fz;
@@ -161,18 +163,23 @@ void spc_update_pos(spaceship * s, double dt) { //TODO: adicionar uma estrutura 
 
 
 void spc_draw(spaceship * s, camera2d * c, view * v) {
-  //ja vamos a rotacoes. Inicialmente vamos so mapear a posicao
   int i;
   polygon * pol;
   double aux[2] = {0};
   point(s->x, s->z, aux);
   pol = poly();
 
+  poly_copy(s->colision_shape, pol);
+  poly_rotate(pol, s->rot);
+  poly_translate(pol, aux);
+  poly_project(pol, c, pol);
+  g2_pen(v->id, COLOR_RED);
+  g2_polygon(v->id, pol->size, pol->pts);
+
   for (i=0; i<s->npart; i++) {
     poly_copy(s->parts[i], pol);
     poly_rotate(pol, s->rot);
     poly_translate(pol, aux);
-    //TODO: Podemos deixar de usar camaras, e passar a definir o referncial do virtual device, diretamente para o g2 (E uma questao de altera a linha a seguir: )
     poly_project(pol, c, pol);
     g2_pen(v->id, s->colors[i]);
     if (s->fillpart[i]) {
@@ -191,8 +198,7 @@ void spc_add_hist(spaceship * s, double dt) {
   double ** d;
   if (s->h_max==s->h_len) {
     s->h_max = s->h_max * 2;
-    d = malloc(sizeof(double *) * s->h_max); //Podiamos evitar o malloc usando uma array de pontos, mas a complexidade mantinha-se O(1+),
-    //, a unica diferenca e que diminuiamos a constante
+    d = malloc(sizeof(double *) * s->h_max);
     for (i=0; i<s->h_len; i++)
       d[i] = s->hist[i];
     free(s->hist);
@@ -213,17 +219,18 @@ void spc_add_hist(spaceship * s, double dt) {
 void spc_save_to_file(spaceship * s) {
 	size_t i;
 	FILE *fileout;
-	fileout = fopen ("vooLunarCorrente.txt", "w");	
+	fileout = fopen ("vooLunarCorrente.txt", "w");
+  double realtime=0;
+  fprintf(fileout, "%lf [kg]\n", s->mass_tara);
+  fprintf(fileout, FILE_HEADLINE);
 	for (i=0; i<s->h_len; i++) {
-	fprintf(fileout, "<%lf> [s] ", s->hist[i][0]);
-	fprintf(fileout, "<%lf> [m] ", s->hist[i][1]);
-	fprintf(fileout, "<%lf> [m] ", s->hist[i][2]);
-	fprintf(fileout, "<%lf> [m/s] ", s->hist[i][3]);
-	fprintf(fileout, "<%lf> [m/s] ", s->hist[i][4]);
-	fprintf(fileout, "<%lf> [graus] ", s->hist[i][5]);
-	fprintf(fileout, "<%lf> [kg]\n", s->hist[i][6]);
+  	fprintf(fileout, "%9.3lf", realtime += s->hist[i][0]);
+  	fprintf(fileout, "%14.3lf", s->hist[i][1]);
+  	fprintf(fileout, "%14.3lf", s->hist[i][2]);
+  	fprintf(fileout, "%14.3lf", s->hist[i][3]);
+  	fprintf(fileout, "%14.3lf", s->hist[i][4]);
+  	fprintf(fileout, "%18.3lf", s->hist[i][5]);
+  	fprintf(fileout, "%14.3lf\n", s->hist[i][6]);
 	}
-	 
 	fclose(fileout);
- 
 }

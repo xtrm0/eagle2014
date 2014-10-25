@@ -14,9 +14,7 @@ int main(void) {
 
 int main(void) {
   cockpit_loop();
-  printf("Press a key to continue");
-  getchar();
-  modograph ("exemplo.txt");
+  modo_graph ("vooLunarCorrente.txt");
   printf("Press a key to continue");
   getchar();
   return 0;

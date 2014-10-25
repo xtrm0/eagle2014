@@ -19,10 +19,13 @@ view * view_init(int w, int h, char * name) {
   g2_ink(v->dev, 0.0, 0.0, 0.0); //0 #000000
   g2_ink(v->dev, 1.0, 1.0, 1.0); //1 #FFFFFF
   g2_ink(v->dev, 1.0, 0.8, 0.6); //2 #FFCC99
+  g2_ink(v->dev, 1.0, 0.0, 0.0); //2 #FF0000
   return v;
 }
 
 void view_destroy(view * v) {
+  g2_close(v->dev);
+  g2_close(v->id);
   free(v);
 }
 
