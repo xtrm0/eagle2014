@@ -4,6 +4,5 @@ VERSAO INTERMEDIA:
 	+ Corrigir libertacao de memoria (faltam muitos free)
 	+ Por ficheiro de bitmap para enviar para o X11X
 	+ Transicoes entre janelas e menu principal
-	+ Apresentar warnings no menu principal
+	+ Blindar o programa
 	+ Por tudo em modo ansi C89 (nao usar // para comentarios)
-	+ Por eixos no modo de ver o grafico

@@ -11,6 +11,7 @@
 #define COLOR_WHITE 1
 #define COLOR_GUI   2
 #define COLOR_RED   3
+#define COLOR_MOON  4
 /*
   Estrutura que representa uma janela que esta a ser mostrada ao utilizador
   Esta janela implementa double buffering atravez dos metodos begin e end
@@ -32,7 +33,7 @@ void view_end(view * v);
 
 
 
-//ESTES DEFINES FORAM COPIADOS DE X11/X.h
+//ESTES DEFINES FORAM COPIADOS DE <X11/X.h> e representam os valores possiveis para o teclado
 #define NoEventMask			0L
 #define KeyPressMask			(1L<<0)
 #define KeyReleaseMask			(1L<<1)
@@ -58,7 +59,7 @@ void view_end(view * v);
 #define FocusChangeMask			(1L<<21)
 #define PropertyChangeMask		(1L<<22)
 #define ColormapChangeMask		(1L<<23)
-#define OwnerGrabButtonMask		(1L<<24) 
+#define OwnerGrabButtonMask		(1L<<24)
 
 
 #endif

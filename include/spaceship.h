@@ -1,8 +1,9 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
-#include "defines.h"
-#include "geometry.h"
-#include "view.h"
+#include "../include/defines.h"
+#include "../include/geometry.h"
+#include "../include/view.h"
+#include "../include/surface.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,6 +32,8 @@
     Entao ocupamos aprox. 1.922 megabytes de memoria, o que e muito aceitavel (2016000 bytes)
 */
 typedef struct spaceship {
+  //Parte em relacao a inicializacao:
+  int initialized;
   //Parte para desenhar para o ecra:
   double w, h;
   double x, z;
@@ -40,11 +43,11 @@ typedef struct spaceship {
   double mass_tara, mass_comb;
   double I;
   polygon * colision_shape;
+  surface * moon;
   //Parte do historico para guardar para ficheiro:
   size_t h_len;
   size_t h_max;
   double ** hist;
-  char * fileout;
 
   //Parte grafica
   size_t npart;
@@ -59,7 +62,7 @@ typedef struct spaceship {
 /*
   Aloca memoria para a spaceship e cria-a
 */
-spaceship * spc_init(double,double,double, view *);
+spaceship * spc_init(double,double,double);
 /*
   Carrega o modelo da nave espacial
   TODO: Carregar de um ficheiro?

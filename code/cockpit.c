@@ -79,10 +79,10 @@ void draw_gui(spaceship * s, camera2d * c, view * v) {
 
 }
 
-int cockpit_loop() {
+int modo_cockpit(spaceship * s) {
   struct timespec tstart, tend, tsleep, trem;
+  void * tmp;
   view * v;
-  spaceship * s;
   camera2d * c;
   button * btn_more_t, * btn_less_t, * btn_more_r, * btn_less_r;
   button * btn_pause, * btn_play, * btn_exit;
@@ -92,8 +92,9 @@ int cockpit_loop() {
   double fps = 60.0;
   double revfps = 1.0/fps;
   double * mouse_x, * mouse_y;
-  double floor0[2]= {-1000.0, 0};
-  double floor1[2]= {1000.0, 0};
+  double floor0[2]= {-10000.0, 0};
+  double floor1[2]= {10000.0, 0};
+  double tmpp[4]={0,0,10,0};
   double floor0_p[2];
   double floor1_p[2];
   int * mouse_button;
@@ -103,7 +104,18 @@ int cockpit_loop() {
 
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(150, 150, 0, 0, 150, 150, 800-150, 300-150);
-  s = spc_init(100, 15000, 0.0, v);
+  if(!(s->initialized)) {
+    tmp = s;
+    s = spc_init(0, 50, 0.0);
+    free((spaceship *) tmp);
+    sfc_add_point(s->moon, floor0);
+    sfc_add_point(s->moon, floor1);
+    sfc_add_point(s->moon, tmpp);
+    sfc_add_point(s->moon, tmpp+2);
+    sfc_add_lp(s->moon, 1);
+    printf("W: Dados inicias não definidos - usando valores predifinidos!\n");
+  }
+  spc_init_model(s, v);
   btn_more_r  = btn_init(COCK_SECOND_LEFT + 160, v->H - COCK_TOP - 1.25*COCK_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, ">", 20.0, COLOR_WHITE);
   btn_less_r  = btn_init(COCK_SECOND_LEFT + 120, v->H - COCK_TOP - 1.25*COCK_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, "<", 20.0, COLOR_WHITE);
   btn_more_t  = btn_init(COCK_SECOND_LEFT + 120, v->H - COCK_TOP - 2.25*COCK_PAD_VERT, 30, 30, 10, 10, COLOR_BLACK, "+", 20.0, COLOR_WHITE);
@@ -198,9 +210,9 @@ int cockpit_loop() {
       g2_filled_rectangle(v->id, c->vpos[0]+1, c->vpos[1]+1, c->vpos[0] + c->vdim[0]-2, c->vpos[1] + c->vdim[1]-2);
       //TODO: Adicionar aqui algum efeito bonito
 
+      //Desenha o chao:
+      sfc_draw(s->moon,c,v);
       //Desenha a nave, rodada (neste modo o referencial da camara é solidário com o da nave):
-      project(floor0, c, floor0_p);
-      project(floor1, c, floor1_p);
       g2_pen(v->id, COLOR_BLACK);
       g2_line(v->id,floor0_p[0],floor0_p[1],floor1_p[0],floor1_p[1]);
       spc_draw(s,c,v);

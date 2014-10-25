@@ -1,12 +1,14 @@
 #include "../include/spaceship.h"
 
-spaceship * spc_init(double x, double z, double rot, view * v) {
+spaceship * spc_init(double x, double z, double rot) {
   spaceship * s = (spaceship *)malloc(sizeof(spaceship));
   if (s == NULL) {
     printf("(3x23) Erro detetado: Memory Access Error!");
     exit(ENOMEM);
   }
   memset(s,0,sizeof(spaceship));
+  s->initialized = 0;
+  s->moon = sfc_init();
   s->x = x;
   s->z = z;
   s->w = 20.0;
@@ -18,7 +20,6 @@ spaceship * spc_init(double x, double z, double rot, view * v) {
   s->h_max=1;
   s->hist = malloc(sizeof(double *)*1);
   s->hist[0] = malloc(sizeof(double)*7);
-  spc_init_model(s, v);
   return s;
 }
 
@@ -51,12 +52,12 @@ void spc_init_model(spaceship * s, view *v) {
   s->colors[1] = g2_ink(v->dev, 0, 0, 0); //#00000
   s->fillpart[1] = 1;
   pol = poly();
-  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD+0.01,              p); poly_push(pol, p);
-  point(-3.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
-  point(-(0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
-  point(-2*HEXRAD,                      (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
-  point(-2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
-  point(-HEXRAD,                        (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(-1.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD+0.01,               p); poly_push(pol, p);
+  point(-3.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD,                    p); poly_push(pol, p);
+  point(-(0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+  point(-2*HEXRAD,                         (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+  point(-2*HEXRAD,                         (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(-HEXRAD,                           (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
   s->parts[1] = pol;
 
   /* Spacecraft Right Leg */
@@ -64,12 +65,12 @@ void spc_init_model(spaceship * s, view *v) {
   s->colors[2] = g2_ink(v->dev, 0, 0, 0); //#000000
   s->fillpart[2] = 1;
   pol = poly();
-  point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
-  point(3.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
-  point((0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
-  point(2*HEXRAD,                      (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,  p); poly_push(pol, p);
-  point(2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
-  point(HEXRAD,                        (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(1.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD,                    p); poly_push(pol, p);
+  point(3.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD,                    p); poly_push(pol, p);
+  point((0.85+3.0*sqrt(3.0)/16)*HEXRAD,   (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+  point(2*HEXRAD,                         (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+  point(2*HEXRAD,                         (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+  point(HEXRAD,                           (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
   s->parts[2] = pol;
 
 
@@ -78,9 +79,9 @@ void spc_init_model(spaceship * s, view *v) {
   s->colors[3] = g2_ink(v->dev, (7*16+1)/255.0, (9*16+14)/255.0, (12*16+14)/255.0); //#9193CE
   s->fillpart[3] = 1;
   pol = poly();
-  point(1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
-  point(-1.0/4.0*HEXRAD,                -sqrt(3.0)*HEXRAD,              p); poly_push(pol, p);
-  point(-0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
+  point(1.0/4.0*HEXRAD,                    -sqrt(3.0)*HEXRAD,                           p); poly_push(pol, p);
+  point(-1.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD,                           p); poly_push(pol, p);
+  point(-0.5*HEXRAD,                       (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   point(0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   s->parts[3] = pol;
 
@@ -89,7 +90,7 @@ void spc_init_model(spaceship * s, view *v) {
   s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); //#FF6633
   s->fillpart[4] = 1;
   pol = poly();
-  point(0.0,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
+  point(0.0,                                          (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,                                        p); poly_push(pol, p);
   point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
   s->parts[4] = pol;
 
@@ -99,7 +100,7 @@ void spc_init_model(spaceship * s, view *v) {
    */
 
   s->colision_shape = poly();
-  point(-2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
+  point(-2*HEXRAD,                     (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
   point(2*HEXRAD,                      (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(s->colision_shape, p);
   point( HEXRAD*2, 0.0,                p); poly_push(s->colision_shape, p);
   point( HEXRAD,   +sqrt(3.0)*HEXRAD,  p); poly_push(s->colision_shape, p);
@@ -168,14 +169,14 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   double aux[2] = {0};
   point(s->x, s->z, aux);
   pol = poly();
-
+/*
   poly_copy(s->colision_shape, pol);
   poly_rotate(pol, s->rot);
   poly_translate(pol, aux);
   poly_project(pol, c, pol);
   g2_pen(v->id, COLOR_RED);
   g2_polygon(v->id, pol->size, pol->pts);
-
+*/
   for (i=0; i<s->npart; i++) {
     poly_copy(s->parts[i], pol);
     poly_rotate(pol, s->rot);

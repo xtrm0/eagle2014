@@ -31,10 +31,9 @@ int graph_load_points_from_file (char *nome, graph * g) {
   g->data = poly();
   fscanf(fin, "%lf [kg]\n", &massa);
   fscanf(fin, FILE_HEADLINE);
-  printf("%lf\n", massa);
   while (feof(fin)==0) {
     fscanf(fin,"%lf %lf %lf %lf %lf %lf %lf\n", &tempo, &x, &z, &vx, &vz, &atitude, &combustivel);
-//    printf("%lf %lf %lf %lf %lf %lf %lf\n", tempo, x, z, vx, vz, atitude, combustivel);
+//  printf("%lf %lf %lf %lf %lf %lf %lf\n", tempo, x, z, vx, vz, atitude, combustivel);
     point(tempo,z,p); poly_push(g->data, p);
     g->max_x = max(g->max_x, p[0]);
     g->min_x = min(g->min_x, p[0]);
@@ -82,10 +81,11 @@ int graph_draw(graph * g) {
     poly_copy(g->data, pol);
     poly_project(pol, g->c, pol);
 //    dump_pol(pol);
-    g2_poly_line(g->v->id, pol->size, pol->pts); //TODO: Descobrir qual o melhor tipo de metodo para desenhar isto: se com poly_line, se com spline
+    //TODO: Descobrir qual o melhor tipo de metodo para desenhar isto: pois podemos usar so pontos em vez de retas
+    g2_poly_line(g->v->id, pol->size, pol->pts);
 
     //desenha escala:
-    //TODO: Para graficos generalizados, a escala fica incorreta, mas para graficos so positivos funciona
+    //TODO: Para graficos generalizados, a escala nao fica muito bonita, mas para graficos so positivos funciona exatamente como esperado
     g2_pen(g->v->id, g->axisv_color);
     g2_set_font_size(g->v->id, 12);
     sum[0]=g->min_x;
@@ -132,7 +132,7 @@ void modo_graph(char * filename) {
   g = graph_init(800,800,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
   graph_load_points_from_file (filename, g);
-  printf(" Done\n");
+  printf(" Loaded %ld points!\n", g->data->size);
   graph_draw(g);
   getchar();
 }
