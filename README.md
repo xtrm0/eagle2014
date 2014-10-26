@@ -3,7 +3,9 @@ eagle2014
 
 A 2d lunar landing simulator made for our programming class.
 
+=========
 Projeto realizado por:
+
 Numero:_________80816; Nome:Diogo_Gonçalves; Mestrado:_MEAer;
 Numero:_________81861; Nome:__Afonso_Tinoco; Mestrado:_MEAer;
 
