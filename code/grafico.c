@@ -21,10 +21,12 @@ graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color
 }
 
 void graph_destroy(graph * g){
-  poly_destroy(g->data);
-  c2d_destroy(g->c);
-  view_destroy(g->v);
-  free(g);
+  if(g!=NULL) {
+    poly_destroy(g->data);
+    c2d_destroy(g->c);
+    view_destroy(g->v);
+    free(g);
+  }
 }
 
 int graph_load_points_from_file (char *nome, graph * g) {

@@ -65,7 +65,7 @@ void spc_init_model(spaceship * s, view *v) {
   polygon * pol;
   double p[2]= {0}; //isto inicializa a {0,0}
 
-  s->npart = 5;
+  s->npart = 4;
   s->parts = malloc(sizeof(polygon *) * s->npart);
   s->fillpart = malloc(sizeof(int) * s->npart);
   s->colors = malloc(sizeof(int) * s->npart);
@@ -123,7 +123,7 @@ void spc_init_model(spaceship * s, view *v) {
   point(0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   s->parts[3] = pol;
 
-  /* Combustion */
+  /* Combustion
 
   s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); //#FF6633
   s->fillpart[4] = 1;
@@ -132,6 +132,7 @@ void spc_init_model(spaceship * s, view *v) {
   point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
   s->parts[4] = pol;
 
+  */
 
   /*
    * Colision detection shape
@@ -148,24 +149,33 @@ void spc_init_model(spaceship * s, view *v) {
 }
 
 void spc_destroy(spaceship * s) {
-  //TODO: completar isto
   size_t i;
-  for (i=0; i<s->h_len; i++)
-    free(s->hist[i]);
-  free(s->hist);
-  sfc_destroy(s->moon);
-  free(s);
+  if (s!=NULL) {
+    sfc_destroy(s->moon);
+    poly_destroy(s->colision_shape);
+    if (s->colors!=NULL)
+      free(s->colors);
+    if (s->fillpart!=NULL)
+      free(s->fillpart);
+    if (s->parts!=NULL) {
+      for (i=0; i<s->npart; i++)
+        poly_destroy(s->parts[i]);
+      free(s->parts);
+    }
+    if (s->hist!=NULL) {
+      for (i=0; i<s->h_len; i++)
+        free(s->hist[i]);
+      free(s->hist);
+    }
+    free(s);
+  }
 }
 
 /*
   Estamos a usar o metodo de integracao Velocity Verlet:
     http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
   Temos um erro proporcional a O(dt^2) que e bastante baixo. Se quisessemos diminuir este erro (o que nao seria justificavel para um jogo),
-  podiamos recorrer � integracao tendo por base mais termos anteriores, mas isso seria desnecess�rio e custoso em termos de cpu.
-*/
-/*
-  De modo a evitar mensagens como "Houston, we have a problem" decidimos impedir que os astronautas treinassem a aterragem com modelos fisico incorretos, efetuando a seguinte corrre��o ao pdf:
-    Da equa��o da conserva��o extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
+  podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessecário e custoso em termos de ciclos do processador.
 */
 void spc_update_pos(spaceship * s, double dt) {
   //TODO: fazer as colisoes aqui
@@ -213,6 +223,7 @@ void spc_update_pos(spaceship * s, double dt) {
 void spc_draw(spaceship * s, camera2d * c, view * v) {
   int i;
   polygon * pol;
+  double p[2] = {0};
   double aux[2] = {0};
   point(s->x, s->z, aux);
   pol = poly();
@@ -237,7 +248,36 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
       g2_polygon(v->id, pol->size, pol->pts);
     }
   }
+  //Pontos variaveis com o tempo (chamas):
+  /*Chama vertical*/
+  poly_clear(pol);
+  point(0.0,                       (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD-20*s->ft,      p); poly_push(pol, p);
+  point(-0.25*HEXRAD*(1+s->ft),               (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,      p); poly_push(pol, p);
+  point(0.25*HEXRAD*(1+s->ft),                (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,      p); poly_push(pol, p);
+  poly_rotate(pol, s->rot);
+  poly_translate(pol, aux);
+  poly_project(pol, c, pol);
+  g2_pen(v->id, COLOR_COMB_T);
+  g2_filled_polygon(v->id, pol->size, pol->pts);
 
+  /* Chamas horizontais */
+  poly_clear(pol);
+  if (s->fr >= 0) {
+    point(-2*HEXRAD,                         (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+    point(-2*HEXRAD,                         (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+    point(-(2+sin(s->fr*N_PI/2.0))*HEXRAD,   (-2*sqrt(3.0)+9.0/50.0+0.5)*HEXRAD,     p); poly_push(pol, p);
+  } else {
+    point(2*HEXRAD,                         (-2*sqrt(3.0)+9.0/25.0+0.5)*HEXRAD,   p); poly_push(pol, p);
+    point(2*HEXRAD,                         (-2*sqrt(3.0)+0.5)*HEXRAD,            p); poly_push(pol, p);
+    point((2+sin(-s->fr*N_PI/2.0))*HEXRAD,   (-2*sqrt(3.0)+9.0/50.0+0.5)*HEXRAD,     p); poly_push(pol, p);
+  }
+  poly_rotate(pol, s->rot);
+  poly_translate(pol, aux);
+  poly_project(pol, c, pol);
+  g2_pen(v->id, COLOR_COMB_R);
+  g2_filled_polygon(v->id, pol->size, pol->pts);
+
+  poly_destroy(pol);
 }
 
 

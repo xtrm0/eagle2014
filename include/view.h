@@ -12,6 +12,8 @@
 #define COLOR_GUI   2
 #define COLOR_RED   3
 #define COLOR_MOON  4
+#define COLOR_COMB_T 5
+#define COLOR_COMB_R 6
 /*
   Estrutura que representa uma janela que esta a ser mostrada ao utilizador
   Esta janela implementa double buffering atravez dos metodos begin e end
@@ -34,7 +36,10 @@ void view_end(view * v);
 
 
 
-//ESTES DEFINES FORAM COPIADOS DE <X11/X.h> e representam os valores possiveis para o teclado
+/*
+Estes defines foram copiados <X11/X.h> e representam os valores possiveis para bitmasks do mouse_button devolvido pelo g2_query_pointer( que basicamente chama uma funcao do x11)
+É possível que noutro pc estes defines tenham valores diferentes, se se estiver a usar uma versão modificada do X11, mas acho que isso é improvável
+*/
 #define NoEventMask			0L
 #define KeyPressMask			(1L<<0)
 #define KeyReleaseMask			(1L<<1)

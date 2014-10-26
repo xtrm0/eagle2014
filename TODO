@@ -1,7 +1,6 @@
 VERSAO INTERMEDIA:
-+++	+ nao fazer free nos destroy caso apontem para NULL
 +++	+ Por valores fisicos corretos
-+++	+ Desenhar cauda da spaceship (chama) e chamas laterais
+
 
 TESTING
 +++	+ Testar leitura de texto em todo o lado

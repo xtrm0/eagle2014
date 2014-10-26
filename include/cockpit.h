@@ -13,7 +13,7 @@
   TODO: Mudar os nomes das variaveis
 */
 #define COCKPIT_FONT_SIZE 20
-#define COCKPIT_TOP  10
+#define COCKPIT_TOP  0
 #define COCKPIT_LEFT 50
 #define COCKPIT_PAD_VERT (COCKPIT_FONT_SIZE + 20)
 #define COCKPIT_PAD_HORZ 20
@@ -38,7 +38,7 @@ int modo_cockpit(spaceship * s);
 
 
 //desenha o texto e o background da interface grafica
-void draw_gui();
+void draw_gui(spaceship * s, camera2d * c, view * v, int res);
 
 
 #endif

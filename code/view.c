@@ -20,13 +20,17 @@ view * view_init(int w, int h, char * name) {
   g2_ink(v->dev, 1.0, 0.8, 0.6); //2 #FFCC99
   g2_ink(v->dev, 1.0, 0.0, 0.0); //3 #FF0000
   g2_ink(v->dev, 0.8, 0.4, 0.2); //4 #CC6633
+  g2_ink(v->dev, 1.0, 0.4, 0.2); //5 #FF6633
+  g2_ink(v->dev, 0.05, 0.75, 0.91); //5 diamond blue
   return v;
 }
 
 void view_destroy(view * v) {
-  g2_close(v->dev);
-  g2_close(v->id);
-  free(v);
+  if (v!=NULL) {
+    g2_close(v->dev);
+    g2_close(v->id);
+    free(v);
+  }
 }
 
 void view_begin(view * v) {

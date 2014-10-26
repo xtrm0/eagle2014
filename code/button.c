@@ -18,8 +18,11 @@ button * btn_init(double x,double y,double w, double h, double left, double bott
 }
 
 void btn_destroy(button * btn) {
-  free(btn->text);
-  free(btn);
+  if (btn!=NULL) {
+    if (btn->text!=NULL)
+      free(btn->text);
+    free(btn);
+  }
 }
 
 void btn_draw(button * btn, view * v) {

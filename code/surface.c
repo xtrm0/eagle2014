@@ -12,9 +12,12 @@ surface * sfc_init() {
 }
 
 void sfc_destroy(surface * s) {
-  poly_destroy(s->arr);
-  free(s->l_points);
-  free(s);
+  if (s!=NULL) {
+    poly_destroy(s->arr);
+    if (s->l_points!=NULL)
+      free(s->l_points);
+    free(s);
+  }
 }
 
 surface * _sfc_copy(surface * a) {

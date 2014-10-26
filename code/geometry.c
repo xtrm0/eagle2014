@@ -150,8 +150,11 @@ polygon * poly() {
 }
 
 void poly_destroy(polygon * s) {
-  free(s->pts);
-  free(s);
+  if (s!=NULL) {
+    if(s->pts!=NULL)
+      free(s->pts);
+    free(s);
+  }
 }
 
 polygon * poly_allocate(polygon * s, size_t sz) {
@@ -184,7 +187,7 @@ polygon * _poly_copy(polygon * s) {
   return d;
 }
 
-polygon * poly_clear(polygon * s) { //Nao fazemos o free, para poupar espaco
+polygon * poly_clear(polygon * s) { //Nao fazemos o free, para poupar tempo
   s->size=0;
   return s;
 }
@@ -311,7 +314,8 @@ camera2d * c2d_init(double w, double h, double x, double y, double W, double H, 
   return c;
 }
 void c2d_destroy(camera2d * c) {
-  free(c);
+  if (c!=NULL)
+    free(c);
 }
 
 

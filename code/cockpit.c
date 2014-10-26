@@ -1,6 +1,6 @@
 #include "../include/cockpit.h"
 
-void draw_gui(spaceship * s, camera2d * c, view * v) {
+void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
   char str[20];
   g2_pen(v->id, COLOR_GUI);
 
@@ -15,6 +15,7 @@ void draw_gui(spaceship * s, camera2d * c, view * v) {
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 4*COCKPIT_PAD_VERT, "Velocidade x:");
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 5*COCKPIT_PAD_VERT, "Velocidade z:");
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 6*COCKPIT_PAD_VERT, "Combustivel:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 7*COCKPIT_PAD_VERT, "Aterragem:");
 
   g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
   g2_string(v->id, COCKPIT_SECOND_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "F :");
@@ -45,6 +46,18 @@ void draw_gui(spaceship * s, camera2d * c, view * v) {
   sprintf(str, "%3.2lf" " %%", s->ft * 100);
   g2_string(v->id, COCKPIT_SECOND_LEFT + 30, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, str);
 
+  switch(res) {
+    case 0:
+    sprintf(str, "Em progresso...");
+    break;
+    case 1:
+    sprintf(str, "Desastre");
+    break;
+    case 2:
+    sprintf(str, "SUCESSO!!");
+    break;
+  }
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 7*COCKPIT_PAD_VERT, str);
 }
 
 int modo_cockpit(spaceship * s) {
@@ -77,7 +90,7 @@ int modo_cockpit(spaceship * s) {
   if(!(s->initialized)) {
     fprintf(stderr, "W: Dados inicias não definidos - usando valores predifinidos!\n");
     tmp = s;
-    s = spc_init(0, 44.4, 0.0);
+    s = spc_init(0, 150, 0.0);
     free((spaceship *) tmp);
     sfc_add_point(s->moon, floor0);
     sfc_add_point(s->moon, tmpp);
@@ -187,7 +200,7 @@ int modo_cockpit(spaceship * s) {
       g2_pen(v->id, COLOR_BLACK);
       g2_filled_rectangle(v->id, c->vpos[0], c->vpos[1], c->vpos[0] + c->vdim[0], c->vpos[1] + c->vdim[1]);
       g2_pen(v->id, COLOR_WHITE);
-      g2_filled_rectangle(v->id, c->vpos[0]+1, c->vpos[1]+1, c->vpos[0] + c->vdim[0]-2, c->vpos[1] + c->vdim[1]-2);
+      g2_filled_rectangle(v->id, c->vpos[0]+4, c->vpos[1]+4, c->vpos[0] + c->vdim[0]-3, c->vpos[1] + c->vdim[1]-4);
       //TODO: Adicionar aqui algum efeito bonito
 
       //Desenha o chao:
@@ -197,7 +210,7 @@ int modo_cockpit(spaceship * s) {
       g2_line(v->id,floor0_p[0],floor0_p[1],floor1_p[0],floor1_p[1]);
       spc_draw(s,c,v);
 
-      draw_gui(s,c,v); //Atualiza o text na gui
+      draw_gui(s,c,v,resultado); //Atualiza o text na gui
       btn_draw(btn_more_r, v);
       btn_draw(btn_less_r, v);
       btn_draw(btn_more_t, v);
@@ -243,5 +256,6 @@ int modo_cockpit(spaceship * s) {
   free(mouse_button);
   c2d_destroy(c);
   poly_destroy(pol);
+  spc_destroy(s);
   return 0;
 }
