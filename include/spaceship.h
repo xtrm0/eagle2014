@@ -13,6 +13,7 @@
 //METADE DO LADO DO HEXAGONO:
 #define HEXRAD 15.0
 
+//Constantes fisicas:
 #define N_TAU_R 10000.0
 #define N_TAU_T 100000.0
 #define N_BETA_R 1.0
@@ -20,6 +21,12 @@
 #define N_G 1.622
 #define N_PI 3.1415926535
 #define FT 10.0
+
+//Constantes de aterragem
+//5 graus:
+#define MAXROT 0.0872664626
+#define LAND_MAXVZ 0.1
+#define LAND_MAXVX 0.05
 
 /*
     Representa uma nave espacial
@@ -54,7 +61,7 @@ typedef struct spaceship {
   polygon ** parts;
   int * colors;
   int * fillpart;
-  //Por aqui um ponteiro para uma imagem
+  /* Nao estamos a usar um png porque a imagem da spaceship e tao simples que nao faz sentido */
 } spaceship;
 
 
@@ -68,6 +75,8 @@ spaceship * spc_init(double,double,double);
   TODO: Carregar de um ficheiro?
 */
 void spc_init_model(spaceship *, view *);
+
+spaceship * _spc_copy(spaceship * a);
 
 /*
   Desaloca a memoria da spaceship
@@ -87,6 +96,15 @@ void spc_draw(spaceship * s, camera2d * c, view * v);
 void spc_add_hist(spaceship * s, double dt);
 
 void spc_save_to_file(spaceship *);
+
+/*
+  indica se a posicao atual da spaceship s e um local de aterragem seguro, e se encontra consoante as especificacoes do pdf
+  devolve:
+    0 em aterragem segura dentro de uma zona segura
+    1 em aterragem perigosa
+    2 em aterragem segura fora de pontos de alunagem
+*/
+int spc_unsafe_landing(spaceship * s);
 
 
 #endif

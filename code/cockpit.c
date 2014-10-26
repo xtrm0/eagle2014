@@ -8,42 +8,42 @@ void draw_gui(spaceship * s, camera2d * c, view * v) {
   g2_filled_rectangle(v->id, 0, 0, c->vpos[0]-1, v->H-1);
   g2_filled_rectangle(v->id, c->vpos[0], 0, v->W, c->vpos[1]-1);
   g2_pen(v->id, COLOR_BLACK);
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 1*COCK_PAD_VERT, "Atitude:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 2*COCK_PAD_VERT, "Altitude:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 3*COCK_PAD_VERT, "Distancia Horizontal:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 4*COCK_PAD_VERT, "Velocidade x:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 5*COCK_PAD_VERT, "Velocidade z:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 6*COCK_PAD_VERT, "Combustivel:");
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "Atitude:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, "Altitude:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 3*COCKPIT_PAD_VERT, "Distancia Horizontal:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 4*COCKPIT_PAD_VERT, "Velocidade x:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 5*COCKPIT_PAD_VERT, "Velocidade z:");
+  g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 6*COCKPIT_PAD_VERT, "Combustivel:");
 
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
-  g2_string(v->id, COCK_SECOND_LEFT, v->H - COCK_TOP - 1*COCK_PAD_VERT, "F :");
-  g2_string(v->id, COCK_SECOND_LEFT, v->H - COCK_TOP - 2*COCK_PAD_VERT, "F :");
-  g2_set_font_size(v->id, COCK_FONT_SIZE/1.4);
-  g2_string(v->id, COCK_SECOND_LEFT + 8, v->H - COCK_TOP - 1*COCK_PAD_VERT - 8, "r");
-  g2_string(v->id, COCK_SECOND_LEFT + 8, v->H - COCK_TOP - 2*COCK_PAD_VERT - 8, "m");
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  g2_string(v->id, COCKPIT_SECOND_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "F :");
+  g2_string(v->id, COCKPIT_SECOND_LEFT, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, "F :");
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE/1.4);
+  g2_string(v->id, COCKPIT_SECOND_LEFT + 8, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT - 8, "r");
+  g2_string(v->id, COCKPIT_SECOND_LEFT + 8, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT - 8, "m");
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
 
   g2_pen(v->id, COLOR_BLACK);
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
 
   //Lado direito das labels:
   sprintf(str, "%5.2lf" " \xb0", s->rot*180.0/(N_PI)); //Aqui tivemos de usar o valor em hexadecimal, porque o nosso editor de texto estava a guardar o caracter latino º
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 1*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m", s->z);
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 2*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m", s->x);
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 3*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 3*COCKPIT_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m/s", s->vx);
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 4*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 4*COCKPIT_PAD_VERT, str);
   sprintf(str, "%5.2lf" " m/s", s->vz);
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 5*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 5*COCKPIT_PAD_VERT, str);
   sprintf(str, "%5.2lf" " kg", s->mass_comb);
-  g2_string(v->id, COCK_LEFT + COCK_HSPACE + COCK_PAD_HORZ, v->H - COCK_TOP - 6*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_LEFT + COCKPIT_HSPACE + COCKPIT_PAD_HORZ, v->H - COCKPIT_TOP - 6*COCKPIT_PAD_VERT, str);
   sprintf(str, "%3.2lf" " %%", s->fr * 100);
-  g2_string(v->id, COCK_SECOND_LEFT + 30, v->H - COCK_TOP - 1*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_SECOND_LEFT + 30, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, str);
   sprintf(str, "%3.2lf" " %%", s->ft * 100);
-  g2_string(v->id, COCK_SECOND_LEFT + 30, v->H - COCK_TOP - 2*COCK_PAD_VERT, str);
+  g2_string(v->id, COCKPIT_SECOND_LEFT + 30, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, str);
 
 }
 
@@ -62,33 +62,34 @@ int modo_cockpit(spaceship * s) {
   double * mouse_x, * mouse_y;
   double floor0[2]= {-10000.0, 0};
   double floor1[2]= {10000.0, 0};
-  double tmpp[4]={0,0,10,0};
+  double tmpp[4]={-100,0,100,0};
   double floor0_p[2];
   double floor1_p[2];
   unsigned int * mouse_button;
   int runapp = 0;
   int resultado = 0;
   int mouse_last = 0, mouse_click=0;
+  int landing_site;
 
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(150, 150, 0, 0, 150, 150, 800-150, 300-150);
 
   if(!(s->initialized)) {
+    fprintf(stderr, "W: Dados inicias não definidos - usando valores predifinidos!\n");
     tmp = s;
-    s = spc_init(0, 50, 0.0);
+    s = spc_init(0, 44.4, 0.0);
     free((spaceship *) tmp);
     sfc_add_point(s->moon, floor0);
-    sfc_add_point(s->moon, floor1);
     sfc_add_point(s->moon, tmpp);
     sfc_add_point(s->moon, tmpp+2);
+    sfc_add_point(s->moon, floor1);
     sfc_add_lp(s->moon, 1);
-    printf("W: Dados inicias não definidos - usando valores predifinidos!\n");
   }
   spc_init_model(s, v);
-  btn_more_r  = btn_init(COCK_SECOND_LEFT + 160, v->H - COCK_TOP - 1.25*COCK_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, ">", 20.0, COLOR_WHITE);
-  btn_less_r  = btn_init(COCK_SECOND_LEFT + 120, v->H - COCK_TOP - 1.25*COCK_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, "<", 20.0, COLOR_WHITE);
-  btn_more_t  = btn_init(COCK_SECOND_LEFT + 120, v->H - COCK_TOP - 2.25*COCK_PAD_VERT, 30, 30, 10, 10, COLOR_BLACK, "+", 20.0, COLOR_WHITE);
-  btn_less_t  = btn_init(COCK_SECOND_LEFT + 160, v->H - COCK_TOP - 2.25*COCK_PAD_VERT, 30, 30, 12, 10, COLOR_BLACK, "-", 20.0, COLOR_WHITE);
+  btn_more_r  = btn_init(COCKPIT_SECOND_LEFT + 160, v->H - COCKPIT_TOP - 1.25*COCKPIT_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, ">", 20.0, COLOR_WHITE);
+  btn_less_r  = btn_init(COCKPIT_SECOND_LEFT + 120, v->H - COCKPIT_TOP - 1.25*COCKPIT_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, "<", 20.0, COLOR_WHITE);
+  btn_more_t  = btn_init(COCKPIT_SECOND_LEFT + 120, v->H - COCKPIT_TOP - 2.25*COCKPIT_PAD_VERT, 30, 30, 10, 10, COLOR_BLACK, "+", 20.0, COLOR_WHITE);
+  btn_less_t  = btn_init(COCKPIT_SECOND_LEFT + 160, v->H - COCKPIT_TOP - 2.25*COCKPIT_PAD_VERT, 30, 30, 12, 10, COLOR_BLACK, "-", 20.0, COLOR_WHITE);
   btn_pause = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Pause", 20.0, COLOR_WHITE);
   btn_play = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Start", 20.0, COLOR_WHITE);
   btn_exit = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Sair", 20.0, COLOR_WHITE);
@@ -123,28 +124,35 @@ int modo_cockpit(spaceship * s) {
         poly_rotate(pol, s->rot);
         poly_translate(pol, aux);
         if(poly_colide_lineseg(pol, floor0, floor1)) {
-          if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz > LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX) {
-            resultado = 1;
-            printf("Alunagem completa sem sucesso.\n");
-          } else {
-            resultado = 2;
-            printf("A missão foi um sucesso.\n");
+          switch (spc_unsafe_landing(s)) {
+            case 0:
+              resultado = 2;
+              printf("A missão foi um sucesso.\n");
+              break;
+            case 1:
+              resultado = 1;
+              printf("Alunagem completa sem sucesso (pois nao respeita as regras de aterragem).\n");
+              break;
+            case 2:
+              resultado = 1;
+              printf("Alunagem completa sem sucesso (pois aterrou fora de um ponto de alunagem).\n");
+              break;
           }
         }
 
         //atualiza a forca:
         if ((*mouse_button) & Button1MotionMask) {
           if(btn_hover(btn_more_t,*mouse_x,*mouse_y)) {
-            s->ft+=0.25*deltatime;
+            s->ft+=0.20*deltatime;
           }
           if(btn_hover(btn_less_t,*mouse_x,*mouse_y)) {
-            s->ft-=0.25*deltatime;
+            s->ft-=0.20*deltatime;
           }
           if(btn_hover(btn_more_r,*mouse_x,*mouse_y)) {
-            s->fr+=0.25*deltatime;
+            s->fr+=0.10*deltatime;
           }
           if(btn_hover(btn_less_r,*mouse_x,*mouse_y)) {
-            s->fr-=0.25*deltatime;
+            s->fr-=0.10*deltatime;
           }
         }
 

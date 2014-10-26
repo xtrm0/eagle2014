@@ -22,6 +22,44 @@ spaceship * spc_init(double x, double z, double rot) {
   return s;
 }
 
+spaceship * _spc_copy(spaceship * a) {
+  size_t i;
+  if (a==NULL) return NULL;
+  spaceship * s = (spaceship *)malloc(sizeof(spaceship));
+  TESTMEM(s);
+  memset(s,0,sizeof(spaceship));
+  memcpy(s, a, sizeof(spaceship));
+  if (a->colors!=NULL) {
+    s->colors = malloc(sizeof(int)*s->npart);
+    TESTMEM(s->colors);
+    memcpy(s->colors,a->colors,sizeof(int)*s->npart);
+  }
+  if (a->fillpart!=NULL) {
+    s->fillpart = malloc(sizeof(int)*s->npart);
+    TESTMEM(s->fillpart);
+    memcpy(s->fillpart,a->fillpart,sizeof(int)*s->npart);
+  }
+  if (a->moon!=NULL)
+    s->moon = _sfc_copy(a->moon);
+  if (a->colision_shape!=NULL)
+    s->colision_shape = _poly_copy(a->colision_shape);
+  if (a->parts!=NULL) {
+    s->parts = malloc(sizeof(polygon *)*s->npart);
+    TESTMEM(s->parts);
+    for (i=0; i<a->npart; i++) {
+      s->parts[i] = _poly_copy(a->parts[i]);
+    }
+  }
+  s->hist = malloc(sizeof(double *) * a->h_max);
+  TESTMEM(s->hist);
+  for (i=0; i<a->h_len; i++) {
+    s->hist[i] = malloc(sizeof(double)*7);
+    TESTMEM(s->hist[i]);
+    memcpy(s->hist[i],a->hist[i],sizeof(double)*7);
+  }
+  return s;
+}
+
 void spc_init_model(spaceship * s, view *v) {
   //TODO: passar a ler a nave de um ficheiro, em vez de ser daqui
   polygon * pol;
@@ -110,6 +148,7 @@ void spc_init_model(spaceship * s, view *v) {
 }
 
 void spc_destroy(spaceship * s) {
+  //TODO: completar isto
   size_t i;
   for (i=0; i<s->h_len; i++)
     free(s->hist[i]);
@@ -122,11 +161,11 @@ void spc_destroy(spaceship * s) {
   Estamos a usar o metodo de integracao Velocity Verlet:
     http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
   Temos um erro proporcional a O(dt^2) que e bastante baixo. Se quisessemos diminuir este erro (o que nao seria justificavel para um jogo),
-  podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessário e custoso em termos de cpu.
+  podiamos recorrer � integracao tendo por base mais termos anteriores, mas isso seria desnecess�rio e custoso em termos de cpu.
 */
 /*
-  De modo a evitar mensagens como "Houston, we have a problem" decidimos impedir que os astronautas treinassem a aterragem com modelos fisico incorretos, efetuando a seguinte corrreção ao pdf:
-    Da equação da conservação extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
+  De modo a evitar mensagens como "Houston, we have a problem" decidimos impedir que os astronautas treinassem a aterragem com modelos fisico incorretos, efetuando a seguinte corrre��o ao pdf:
+    Da equa��o da conserva��o extraimos d/dt (L) = F_r * R <=> d/dt (I*w) = F_r * R
 */
 void spc_update_pos(spaceship * s, double dt) {
   //TODO: fazer as colisoes aqui
@@ -228,11 +267,28 @@ void spc_add_hist(spaceship * s, double dt) {
   s->h_len++;
 }
 
+/*
+  Isto funciona apenas para o modo 2, e tem complexidade O(n_pontos_alunagem), o que aceitavel visto que so e executada 1 vez no fim das simulacoes
+  Para o modo 5, temos de melhorar a surface: Vamos fazer esta funcao ser O(log(n_pontos_alunagem), usando algum estrutura que o permita (iex: kd-tree));
+*/
+int spc_unsafe_landing(spaceship * s) {
+  size_t i;
+  if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz < -LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX)
+    return 1; //pois nao cumpre as especificacoes
+  for (i=0; i<s->moon->l_size; i++) {
+    if (s->moon->arr->pts[s->moon->l_points[i]*2] + 2*HEXRAD < s->x && s->moon->arr->pts[s->moon->l_points[i]*2+2] > s->x -2*HEXRAD) return 0;
+  }
+  return 2;
+}
+
 void spc_save_to_file(spaceship * s) {
 	size_t i;
 	FILE *fileout;
-	fileout = fopen ("vooLunarCorrente.txt", "w");
   double realtime=0;
+	if ((fileout = fopen ("vooLunarCorrente.txt", "w")) == NULL) {
+    fprintf(stderr, "E: Não foi possível abrir o ficheiro 'vooLunarCorrente.txt'\n");
+    return;
+  }
   fprintf(fileout, "%lf [kg]\n", s->mass_tara);
   fprintf(fileout, FILE_HEADLINE);
 	for (i=0; i<s->h_len; i++) {

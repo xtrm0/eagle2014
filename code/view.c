@@ -30,7 +30,13 @@ void view_destroy(view * v) {
 }
 
 void view_begin(view * v) {
-  //TODO: verificar se a janela existe mesmo
+  //TODO:
+  /*
+    Esta funcao vai servir para verificar se a janela para onde vamos desenhar ainda existe, ou se foi fechada pelo utilizador.
+    Caso tenha sido fechada, podemos fazer 1 de duas coisas (a definir):
+      1) Acabar o programa e mostrar um erro
+      2) Voltar a imprimir a janela e imprimir um warning
+  */
 }
 void view_end(view * v) {
   g2_flush(v->id);

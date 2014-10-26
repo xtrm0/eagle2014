@@ -28,23 +28,51 @@ void graph_destroy(graph * g){
 }
 
 int graph_load_points_from_file (char *nome, graph * g) {
-  //TODO: Verificar se o ficheiro existe e e possivel de ser lido e imprimir warning
-  double massa, tempo, x, z, vx, vz, atitude, combustivel;
-  FILE * fin = fopen(nome, "r");
+  double massa=0, tempo, x, z, vx, vz, atitude, combustivel;
+  char tmp;
+  FILE * fin;
   double p[2]= {0};
+  char line[301]; //estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2
+  if ((fin = fopen(nome, "r")) == NULL) {
+    fprintf(stderr, "E: Não foi possível abrir o ficheiro");
+    return 1;
+  }
   poly_destroy(g->data);
   g->data = poly();
-  fscanf(fin, "%lf [kg]\n", &massa);
-  fscanf(fin, FILE_HEADLINE);
-  while (feof(fin)==0) {
-    fscanf(fin,"%lf %lf %lf %lf %lf %lf %lf\n", &tempo, &x, &z, &vx, &vz, &atitude, &combustivel);
-//  printf("%lf %lf %lf %lf %lf %lf %lf\n", tempo, x, z, vx, vz, atitude, combustivel);
+  fgets(line, 300, fin);
+  if (line[strlen(line)-1]!='\n') {
+    fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
+    while(fgetc(fin)!='\n');
+  }
+  if (sscanf(line, "%lf [kg]%*[ \n\t]%c", &massa, &tmp)!=1) {
+      fprintf(stderr, "W: Problema ao ler a massa a partir do ficheiro (percebemos: %lf kg)\n", massa);
+  }
+  fgets(line, 300, fin);
+  if (line[strlen(line)-1]!='\n') {
+    fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
+    while(fgetc(fin)!='\n');
+  }
+  if (strcmp(line, FILE_HEADLINE)){
+    fprintf(stderr, "W: A linha de coluna nao se encontra igual à do programa!\n");
+  }
+  while (fgets(line, 300, fin)) {
+    if (line[strlen(line)-1]!='\n') {
+      fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
+      while(fgetc(fin)!='\n');
+      continue;
+    }
+    if (sscanf(line,"%lf %lf %lf %lf %lf %lf %lf%*[ \n\t]%c", &tempo, &x, &z, &vx, &vz, &atitude, &combustivel, &tmp)!=7) {
+      fprintf(stderr, "W: Linha invalida na leitura do ficheiro\n");
+      continue;
+    }
+
     point(tempo,z,p); poly_push(g->data, p);
     g->max_x = max(g->max_x, p[0]);
     g->min_x = min(g->min_x, p[0]);
     g->max_y = max(g->max_y, p[1]);
     g->min_y = min(g->min_y, p[1]);
   }
+  fclose(fin);
   //Ordena os pontos por tempo, para evitar casos em que estes nao estejam por ordem:
   qsort(g->data->pts, g->data->size, sizeof(double)*2, double_increasing);
   return 0;
@@ -137,10 +165,14 @@ void modo_graph(char * filename) {
   graph * g;
   g = graph_init(800,800,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
-  graph_load_points_from_file (filename, g);
+  if (graph_load_points_from_file (filename, g)) {
+    graph_destroy(g);
+    return;
+  }
   printf(" Loaded %ld points!\n", g->data->size);
   graph_draw(g);
-  getchar(); //caso o programa seja iniciado por algo tipo echo 3 | eagle2014, garante que nao fecha a janela ate se premir ctrl+c
+  printf("Carregue nalguma tecla para fechar o gráfico...\n");
+  getchar();
 
   graph_destroy(g);
 }

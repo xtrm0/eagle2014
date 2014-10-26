@@ -20,6 +20,8 @@ surface * sfc_init();
 
 void sfc_destroy(surface *);
 
+surface * _sfc_copy(surface * a);
+
 void sfc_add_point(surface * s, double * p);
 
 void sfc_add_lp(surface * s, size_t index);

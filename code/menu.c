@@ -132,6 +132,7 @@ void read_data_spec(spaceship * s) {
 
 int menu(spaceship * s) {
   char opcao, c;
+  spaceship * d;
   printf("\nSelecione uma opção:\n");
   printf("1. Especificação dos dados do módulo e das condições iniciais do voo.\n");
   printf("2. Simulação do voo em modo de “cockpit”.\n");
@@ -156,7 +157,8 @@ int menu(spaceship * s) {
       read_data_spec(s);
       break;
     case '2':
-      modo_cockpit(s);
+      d = _spc_copy(s);
+      modo_cockpit(d);
       break;
     case '3':
       modo_graph("vooLunarCorrente.txt");

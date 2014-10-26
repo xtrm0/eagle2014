@@ -17,6 +17,18 @@ void sfc_destroy(surface * s) {
   free(s);
 }
 
+surface * _sfc_copy(surface * a) {
+  surface * s = malloc(sizeof(surface));
+  TESTMEM(s);
+  s->arr = _poly_copy(a->arr);
+  s->l_size = a->l_size;
+  s->l_max_size = a->l_max_size;
+  s->l_points = malloc(sizeof(size_t)*s->l_max_size);
+  TESTMEM(s->l_points);
+  memcpy(s->l_points, a->l_points, a->l_size*sizeof(size_t));
+  return s;
+}
+
 void sfc_add_point(surface * s, double * p) {
   poly_push(s->arr, p);
 }

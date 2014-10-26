@@ -5,23 +5,20 @@
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>
-//5 graus:
-#define MAXROT 0.0872664626
-#define LAND_MAXVZ 0.1
-#define LAND_MAXVX 0.05
+
 
 /*
   Estamos a usar muitos defines para facilitar fazer alteracoes no design
   Não tem problema as somas, porque o gcc substitui por um so valor inteiro ao compilar
   TODO: Mudar os nomes das variaveis
 */
-#define COCK_FONT_SIZE 20
-#define COCK_TOP  10
-#define COCK_LEFT 50
-#define COCK_PAD_VERT (COCK_FONT_SIZE + 20)
-#define COCK_PAD_HORZ 20
-#define COCK_HSPACE 180
-#define COCK_SECOND_LEFT 400
+#define COCKPIT_FONT_SIZE 20
+#define COCKPIT_TOP  10
+#define COCKPIT_LEFT 50
+#define COCKPIT_PAD_VERT (COCKPIT_FONT_SIZE + 20)
+#define COCKPIT_PAD_HORZ 20
+#define COCKPIT_HSPACE 180
+#define COCKPIT_SECOND_LEFT 400
 
 
 /*
