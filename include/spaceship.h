@@ -10,10 +10,10 @@
 #include <string.h>
 #include <g2.h>
 #include <g2_X11.h>
-//METADE DO LADO DO HEXAGONO:
+/*METADE DO LADO DO HEXAGONO: */
 #define HEXRAD 15.0
 
-//Constantes fisicas:
+/*Constantes fisicas: */
 #define N_TAU_R 10000.0
 #define N_TAU_T 100000.0
 #define N_BETA_R 1.0
@@ -22,8 +22,8 @@
 #define N_PI 3.1415926535
 #define FT 10.0
 
-//Constantes de aterragem
-//5 graus:
+/*Constantes de aterragem */
+/*5 graus: */
 #define MAXROT 0.0872664626
 #define LAND_MAXVZ 0.1
 #define LAND_MAXVX 0.05
@@ -39,24 +39,24 @@
     Entao ocupamos aprox. 1.922 megabytes de memoria, o que e muito aceitavel (2016000 bytes)
 */
 typedef struct spaceship {
-  //Parte em relacao a inicializacao:
+  /*Parte em relacao a inicializacao: */
   int initialized;
-  //Parte para desenhar para o ecra:
+  /*Parte para desenhar para o ecra: */
   double w, h;
   double x, z;
   double rot;
-  double vx, vz, va; //w significa velocidade angular
-  double fr, ft; //Isto e em percentagem em relacao as forcas maximas
+  double vx, vz, va; /*w significa velocidade angular */
+  double fr, ft; /*Isto e em percentagem em relacao as forcas maximas */
   double mass_tara, mass_comb;
   double I;
   polygon * colision_shape;
   surface * moon;
-  //Parte do historico para guardar para ficheiro:
+  /*Parte do historico para guardar para ficheiro: */
   size_t h_len;
   size_t h_max;
   double ** hist;
 
-  //Parte grafica
+  /*Parte grafica */
   size_t npart;
   polygon ** parts;
   int * colors;
@@ -86,7 +86,7 @@ void spc_destroy(spaceship * s);
 /*
   Atualiza a posicao da nave, apos terem passado dt segundos
 */
-void spc_update_pos(spaceship * s, double dt); //TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento
+void spc_update_pos(spaceship * s, double dt); /*TODO: adicionar uma estrutura aos argumentos para verificar colisoes com os vertices no movimento */
 
 /*
   Desenha a nave no ecra id;

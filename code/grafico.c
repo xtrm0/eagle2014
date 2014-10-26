@@ -34,7 +34,7 @@ int graph_load_points_from_file (char *nome, graph * g) {
   char tmp;
   FILE * fin;
   double p[2]= {0};
-  char line[301]; //estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2
+  char line[301]; /*estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2 */
   if ((fin = fopen(nome, "r")) == NULL) {
     fprintf(stderr, "E: Não foi possível abrir o ficheiro");
     return 1;
@@ -47,7 +47,7 @@ int graph_load_points_from_file (char *nome, graph * g) {
     while(fgetc(fin)!='\n');
   }
   if (sscanf(line, "%lf [kg]%*[ \n\t]%c", &massa, &tmp)!=1) {
-      fprintf(stderr, "W: Problema ao ler a massa a partir do ficheiro (percebemos: %lf kg)\n", massa);
+      fprintf(stderr, "W: Problema ao ler a massa a partir do ficheiro (percebemos: %f kg)\n", massa);
   }
   fgets(line, 300, fin);
   if (line[strlen(line)-1]!='\n') {
@@ -75,13 +75,13 @@ int graph_load_points_from_file (char *nome, graph * g) {
     g->min_y = min(g->min_y, p[1]);
   }
   fclose(fin);
-  //Ordena os pontos por tempo, para evitar casos em que estes nao estejam por ordem:
+  /*Ordena os pontos por tempo, para evitar casos em que estes nao estejam por ordem: */
   qsort(g->data->pts, g->data->size, sizeof(double)*2, double_increasing);
   return 0;
 }
 
 void graph_draw(graph * g) {
-  //atualiza a camara pos e dim, para ter as dimensoes do ecra
+  /*atualiza a camara pos e dim, para ter as dimensoes do ecra */
   polygon * pol;
   double O[2]={0}, p1[2]={0}, p2[2]={0}, p3[2]={0}, p4[2]={0};
   double sum[2]={0};
@@ -96,11 +96,11 @@ void graph_draw(graph * g) {
 
 
   view_begin(g->v);
-    //desenha o background:
+    /*desenha o background: */
     g2_pen(g->v->id, g->b_color);
     g2_filled_rectangle(g->v->id, 0, 0, g->v->W, g->v->H);
 
-    //desenha os eixos:
+    /*desenha os eixos: */
     g2_pen(g->v->id, g->axisl_color);
 
     point(0,0,O); project(O,g->c,O);
@@ -113,14 +113,14 @@ void graph_draw(graph * g) {
     g2_line(g->v->id, p2[0],p2[1],p3[0],p3[1]);
     g2_filled_triangle(g->v->id, p3[0]-5, p3[1], p3[0]+5, p3[1], p3[0], p3[1]+14);
 
-    //desenha os pontos:
+    /*desenha os pontos: */
     g2_pen(g->v->id, g->p_color);
     poly_copy(g->data, pol);
     poly_project(pol, g->c, pol);
     g2_poly_line(g->v->id, pol->size, pol->pts);
 
-    //desenha escala:
-    //TODO: Para graficos generalizados, a escala nao fica muito bonita, mas para graficos so positivos funciona exatamente como esperado
+    /*desenha escala: */
+    /*TODO: Para graficos generalizados, a escala nao fica muito bonita, mas para graficos so positivos funciona exatamente como esperado */
     g2_pen(g->v->id, g->axisv_color);
     g2_set_font_size(g->v->id, 12);
     sum[0]=g->min_x;
@@ -143,7 +143,7 @@ void graph_draw(graph * g) {
       g2_string(g->v->id, tmp[0]-8-6*strlen(str),tmp[1]-4, str);
     }
 
-    //desenha nomes dos eixos:
+    /*desenha nomes dos eixos: */
     g2_pen(g->v->id, g->axisn_color);
     g2_set_font_size(g->v->id, 12);
     g2_string(g->v->id, O[0]-10, O[1]-10, "O");

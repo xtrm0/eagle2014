@@ -37,7 +37,7 @@ int modo_cockpit(spaceship * s);
 
 
 
-//desenha o texto e o background da interface grafica
+/*desenha o texto e o background da interface grafica */
 void draw_gui(spaceship * s, camera2d * c, view * v, int res);
 
 

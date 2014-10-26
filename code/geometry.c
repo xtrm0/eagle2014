@@ -1,7 +1,7 @@
 #include "../include/geometry.h"
-//WARNING: all functions starting with _ allocate memory for the result and may not dealocate it
+/*WARNING: all functions starting with _ allocate memory for the result and may not dealocate it */
 
-//TODO: Check if malloc returns errors!!!
+/*TODO: Check if malloc returns errors!!! */
 
 double * point(double x, double y, double * s) {
   s[0] = x;
@@ -109,24 +109,24 @@ double * _inverse(double * p) {
   return s;
 }
 
-//TODO: Otimizar isto
-//TODO: Quase de certeza que isto esta certo, mas voltar a fazer as contas
+/*TODO: Otimizar isto */
+/*TODO: Quase de certeza que isto esta certo, mas voltar a fazer as contas */
 double * project(double * p, camera2d * c, double * s) {
   double aux1[2] = {0,0};
   double aux2[2] = {0,0};
   double aux3[2] = {0,0};
-  //P = P - CAMERA.POSITION
+  /*P = P - CAMERA.POSITION */
   simetric(c->pos, aux1);
   translate(p, aux1, aux2);
 
-  //P = P * CAMERA.DIMENSIONS
+  /*P = P * CAMERA.DIMENSIONS */
   hadamart(aux2, c->vdim, aux1);
 
-  //P = P / SCREEN.DIMENSIONS
+  /*P = P / SCREEN.DIMENSIONS */
   inverse(c->dim, aux2);
   hadamart(aux1, aux2, aux3);
 
-  //P = P + SCREEN.POSITION
+  /*P = P + SCREEN.POSITION */
   translate(aux3, c->vpos, s);
   return s;
 }
@@ -187,7 +187,7 @@ polygon * _poly_copy(polygon * s) {
   return d;
 }
 
-polygon * poly_clear(polygon * s) { //Nao fazemos o free, para poupar tempo
+polygon * poly_clear(polygon * s) { /*Nao fazemos o free, para poupar tempo */
   s->size=0;
   return s;
 }
@@ -227,7 +227,7 @@ polygon * poly_rotate(polygon * s, double rot) {
   return s;
 }
 
-//TODO: polygon * poly_rotate2d_p(polygon *, double, double *);
+/*TODO: polygon * poly_rotate2d_p(polygon *, double, double *); */
 
 polygon * poly_translate(polygon * s, double * T) {
   size_t i;
@@ -249,7 +249,7 @@ polygon * poly_project(polygon * p, camera2d *c, polygon * s) {
  *
  */
 
-//O(1)
+/*O(1) */
 int lineseg_colide(double * p1, double * p2, double * p3, double * p4) {
 	double a1, a2, a3, a4;
   a1 = (p2[0] - p1[0])*(p3[1] - p2[1]) - (p2[1] - p1[1])*(p3[0] - p2[0]);
@@ -261,7 +261,7 @@ int lineseg_colide(double * p1, double * p2, double * p3, double * p4) {
   return 1;
 }
 
-//O(n)
+/*O(n) */
 int poly_colide_lineseg(polygon * s, double * p1, double * p2) {
 	size_t i;
 	for (i=0; i < s->size-1; i++) {
@@ -281,7 +281,7 @@ void dump_pol(polygon * pol) {
   printf("\n====================\nPOLYGON DUMP\n====================\n");
   for (i=0; i<pol->size; i++) {
     for (j=0; j<2; j++) {
-      printf("%lf ", pol->pts[i*2+j]);
+      printf("%f ", pol->pts[i*2+j]);
     }
     printf("\n");
   }

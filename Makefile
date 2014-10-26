@@ -1,7 +1,7 @@
-FLAGS=-c
+FLAGS=-c -Wall
 LNFLAGS=-Wall
 LNLIBS=-lg2 -lm
-CC = gcc -fdiagnostics-color=auto
+CC = gcc -fdiagnostics-color=auto -pedantic -ansi
 IDIR=include
 ODIR=objects
 CDIR=code

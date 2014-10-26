@@ -24,8 +24,9 @@ spaceship * spc_init(double x, double z, double rot) {
 
 spaceship * _spc_copy(spaceship * a) {
   size_t i;
+  spaceship * s;
   if (a==NULL) return NULL;
-  spaceship * s = (spaceship *)malloc(sizeof(spaceship));
+  s = (spaceship *)malloc(sizeof(spaceship));
   TESTMEM(s);
   memset(s,0,sizeof(spaceship));
   memcpy(s, a, sizeof(spaceship));
@@ -61,9 +62,9 @@ spaceship * _spc_copy(spaceship * a) {
 }
 
 void spc_init_model(spaceship * s, view *v) {
-  //TODO: passar a ler a nave de um ficheiro, em vez de ser daqui
+  /*TODO: passar a ler a nave de um ficheiro, em vez de ser daqui */
   polygon * pol;
-  double p[2]= {0}; //isto inicializa a {0,0}
+  double p[2]= {0}; /*isto inicializa a {0,0} */
 
   s->npart = 4;
   s->parts = malloc(sizeof(polygon *) * s->npart);
@@ -74,7 +75,7 @@ void spc_init_model(spaceship * s, view *v) {
   TESTMEM(s->colors);
   /* Spacecraft Head (hexagon) */
 
-  s->colors[0] = g2_ink(v->dev, 0.6, 0.4, 0.8); //#9966CC
+  s->colors[0] = g2_ink(v->dev, 0.6, 0.4, 0.8); /*#9966CC */
   s->fillpart[0] = 1;
   pol = poly();
   point(-HEXRAD,   -sqrt(3.0)*HEXRAD,  p); poly_push(pol, p);
@@ -87,7 +88,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Left Leg */
 
-  s->colors[1] = g2_ink(v->dev, 0, 0, 0); //#00000
+  s->colors[1] = g2_ink(v->dev, 0, 0, 0); /*#00000 */
   s->fillpart[1] = 1;
   pol = poly();
   point(-1.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD+0.01,               p); poly_push(pol, p);
@@ -100,7 +101,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Right Leg */
 
-  s->colors[2] = g2_ink(v->dev, 0, 0, 0); //#000000
+  s->colors[2] = g2_ink(v->dev, 0, 0, 0); /*#000000 */
   s->fillpart[2] = 1;
   pol = poly();
   point(1.0/4.0*HEXRAD,                   -sqrt(3.0)*HEXRAD,                    p); poly_push(pol, p);
@@ -114,7 +115,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Spacecraft Combustion Centre */
 
-  s->colors[3] = g2_ink(v->dev, (7*16+1)/255.0, (9*16+14)/255.0, (12*16+14)/255.0); //#9193CE
+  s->colors[3] = g2_ink(v->dev, (7*16+1)/255.0, (9*16+14)/255.0, (12*16+14)/255.0); /*#9193CE */
   s->fillpart[3] = 1;
   pol = poly();
   point(1.0/4.0*HEXRAD,                    -sqrt(3.0)*HEXRAD,                           p); poly_push(pol, p);
@@ -125,7 +126,7 @@ void spc_init_model(spaceship * s, view *v) {
 
   /* Combustion
 
-  s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); //#FF6633
+  s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); #FF6633
   s->fillpart[4] = 1;
   pol = poly();
   point(0.0,                                          (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,                                        p); poly_push(pol, p);
@@ -178,8 +179,8 @@ void spc_destroy(spaceship * s) {
   podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessecário e custoso em termos de ciclos do processador.
 */
 void spc_update_pos(spaceship * s, double dt) {
-  //TODO: fazer as colisoes aqui
-  //printf("dt:%lf, x: %lf\n",dt, s->x);
+  /*TODO: fazer as colisoes aqui */
+  /*printf("dt:%f, x: %f\n",dt, s->x); */
   double ax0, az0, aa0;
   double mass = s->mass_tara + s->mass_comb;
   /*
@@ -187,41 +188,41 @@ void spc_update_pos(spaceship * s, double dt) {
     No entanto, nao o vamos fazer pois 1/60 de segundo e suficiente para a precisao utilizada
     Talvez na versao o final o facamos
   */
-  //1) Calcula a(t), I(t):
-  s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD; //Deviamos usar uma constante k: (2/5)<k<(2/3) em vez de 2/5,
+  /*1) Calcula a(t), I(t): */
+  s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD; /*Deviamos usar uma constante k: (2/5)<k<(2/3) em vez de 2/5, */
   ax0 = -N_TAU_T*s->ft*sin(s->rot)/mass;
   az0 = N_TAU_T*s->ft*cos(s->rot)/mass-N_G;
   aa0 = N_TAU_R*s->fr*HEXRAD/s->I;
-  //pois o peso nao esta uniformemente distruibuida pela nave (que ja agora tambem nao e uma esfera) a massa centra-se nas bordas da nave
+  /*pois o peso nao esta uniformemente distruibuida pela nave (que ja agora tambem nao e uma esfera) a massa centra-se nas bordas da nave */
 
-  //2) Calcula (x,y,rot)(t+dt):
+  /*2) Calcula (x,y,rot)(t+dt): */
   s->rot = s->rot + s->va*dt + 0.5*aa0*dt*dt;
   s->x   = s->x   + s->vx*dt + 0.5*ax0*dt*dt;
   s->z   = s->z   + s->vz*dt + 0.5*az0*dt*dt;
 
-  //3) Calcula a(t+dt) e I(t+dt): serve so para calcular v(t+dt) e w(t+dt);
+  /*3) Calcula a(t+dt) e I(t+dt): serve so para calcular v(t+dt) e w(t+dt); */
   s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD;
 
-  //4) Calcula v(t+dt), w(t+dt):
+  /*4) Calcula v(t+dt), w(t+dt): */
   s->va = s->va + (aa0 + N_TAU_R*s->fr*HEXRAD/s->I)/2.0*dt;
   s->vz = s->vz + (az0 + N_TAU_T*s->ft*cos(s->rot)/mass-N_G)/2.0*dt;
   s->vx  = s->vx + (ax0 +-N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
 
-  //normaliza a rotacao:
-  s->rot = fmod(s->rot, 2*N_PI); //Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar
-  //Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave
+  /*normaliza a rotacao: */
+  s->rot = fmod(s->rot, 2*N_PI); /*Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar */
+  /*Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave */
   spc_add_hist(s, dt);
 /*
-  printf("x:%lf, z: %lf, rot: %lf, vx: %lf, vz: %lf\n", s->x, s->z, s->rot, s->vx, s->vz);
-  printf("ft:%lf, fr: %lf, mass: %lf, tau_R: %lf, tau_t: %lf\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
-  printf("%lf, %lf, %lf, %lf\n", N_TAU_T, s->ft, cos(s->rot), mass);
-  printf("%lf || %lf || %lf\n", ax0, az0, aa0);
+  printf("x:%f, z: %f, rot: %f, vx: %f, vz: %f\n", s->x, s->z, s->rot, s->vx, s->vz);
+  printf("ft:%f, fr: %f, mass: %f, tau_R: %f, tau_t: %f\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
+  printf("%f, %f, %f, %f\n", N_TAU_T, s->ft, cos(s->rot), mass);
+  printf("%f || %f || %f\n", ax0, az0, aa0);
   */
 }
 
 
 void spc_draw(spaceship * s, camera2d * c, view * v) {
-  int i;
+  size_t i;
   polygon * pol;
   double p[2] = {0};
   double aux[2] = {0};
@@ -248,7 +249,7 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
       g2_polygon(v->id, pol->size, pol->pts);
     }
   }
-  //Pontos variaveis com o tempo (chamas):
+  /*Pontos variaveis com o tempo (chamas): */
   /*Chama vertical*/
   poly_clear(pol);
   point(0.0,                       (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD-20*s->ft,      p); poly_push(pol, p);
@@ -314,7 +315,7 @@ void spc_add_hist(spaceship * s, double dt) {
 int spc_unsafe_landing(spaceship * s) {
   size_t i;
   if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz < -LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX)
-    return 1; //pois nao cumpre as especificacoes
+    return 1; /*pois nao cumpre as especificacoes */
   for (i=0; i<s->moon->l_size; i++) {
     if (s->moon->arr->pts[s->moon->l_points[i]*2] + 2*HEXRAD < s->x && s->moon->arr->pts[s->moon->l_points[i]*2+2] > s->x -2*HEXRAD) return 0;
   }
@@ -329,16 +330,16 @@ void spc_save_to_file(spaceship * s) {
     fprintf(stderr, "E: Não foi possível abrir o ficheiro 'vooLunarCorrente.txt'\n");
     return;
   }
-  fprintf(fileout, "%lf [kg]\n", s->mass_tara);
+  fprintf(fileout, "%f [kg]\n", s->mass_tara);
   fprintf(fileout, FILE_HEADLINE);
 	for (i=0; i<s->h_len; i++) {
-  	fprintf(fileout, "%9.3lf", realtime += s->hist[i][0]);
-  	fprintf(fileout, "%14.3lf", s->hist[i][1]);
-  	fprintf(fileout, "%14.3lf", s->hist[i][2]);
-  	fprintf(fileout, "%14.3lf", s->hist[i][3]);
-  	fprintf(fileout, "%14.3lf", s->hist[i][4]);
-  	fprintf(fileout, "%18.3lf", s->hist[i][5]);
-  	fprintf(fileout, "%14.3lf\n", s->hist[i][6]);
+  	fprintf(fileout, "%9.3f", realtime += s->hist[i][0]);
+  	fprintf(fileout, "%14.3f", s->hist[i][1]);
+  	fprintf(fileout, "%14.3f", s->hist[i][2]);
+  	fprintf(fileout, "%14.3f", s->hist[i][3]);
+  	fprintf(fileout, "%14.3f", s->hist[i][4]);
+  	fprintf(fileout, "%18.3f", s->hist[i][5]);
+  	fprintf(fileout, "%14.3f\n", s->hist[i][6]);
 	}
 	fclose(fileout);
 }

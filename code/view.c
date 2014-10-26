@@ -12,16 +12,16 @@ view * view_init(int w, int h, char * name) {
   g2_attach(v->id, v->dev);
   g2_set_auto_flush(v->id, 0);
   g2_clear_palette(v->dev);
-  //cores:
-  //Usámos o programa gpick para tirar as cores a partir do pdf
-  //Na fase final, caso o professor concordar, trataremos de usar um design diferenta para a aplicacao
-  g2_ink(v->dev, 0.0, 0.0, 0.0); //0 #000000
-  g2_ink(v->dev, 1.0, 1.0, 1.0); //1 #FFFFFF
-  g2_ink(v->dev, 1.0, 0.8, 0.6); //2 #FFCC99
-  g2_ink(v->dev, 1.0, 0.0, 0.0); //3 #FF0000
-  g2_ink(v->dev, 0.8, 0.4, 0.2); //4 #CC6633
-  g2_ink(v->dev, 1.0, 0.4, 0.2); //5 #FF6633
-  g2_ink(v->dev, 0.05, 0.75, 0.91); //5 diamond blue
+  /*cores: */
+  /*Usámos o programa gpick para tirar as cores a partir do pdf */
+  /*Na fase final, caso o professor concordar, trataremos de usar um design diferenta para a aplicacao */
+  g2_ink(v->dev, 0.0, 0.0, 0.0); /*0 #000000 */
+  g2_ink(v->dev, 1.0, 1.0, 1.0); /*1 #FFFFFF */
+  g2_ink(v->dev, 1.0, 0.8, 0.6); /*2 #FFCC99 */
+  g2_ink(v->dev, 1.0, 0.0, 0.0); /*3 #FF0000 */
+  g2_ink(v->dev, 0.8, 0.4, 0.2); /*4 #CC6633 */
+  g2_ink(v->dev, 1.0, 0.4, 0.2); /*5 #FF6633 */
+  g2_ink(v->dev, 0.05, 0.75, 0.91); /*5 diamond blue */
   return v;
 }
 
@@ -34,7 +34,8 @@ void view_destroy(view * v) {
 }
 
 void view_begin(view * v) {
-  //TODO:
+  /*TODO: 
+  */
   /*
     Esta funcao vai servir para verificar se a janela para onde vamos desenhar ainda existe, ou se foi fechada pelo utilizador.
     Caso tenha sido fechada, podemos fazer 1 de duas coisas (a definir):
