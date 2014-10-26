@@ -1,6 +1,10 @@
 #include "../include/button.h"
 button * btn_init(double x,double y,double w, double h, double left, double bottom, int color,char * text, double fsz, int fcolor){
   button * btn = malloc(sizeof(button));
+  TESTMEM(btn);
+  btn->text = malloc(1+strlen(text));
+  TESTMEM(btn->text);
+  strcpy(btn->text, text);
   btn->x = x;
   btn->y = y;
   btn->w = w;
@@ -8,7 +12,6 @@ button * btn_init(double x,double y,double w, double h, double left, double bott
   btn->left = left;
   btn->bottom = bottom;
   btn->color = color;
-  btn->text = text;
   btn->fsz = fsz;
   btn->fcolor = fcolor;
   return btn;

@@ -22,6 +22,8 @@ typedef struct graph {
 
 graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color, int p_color, int axisl_color, int axisv_color, int axisn_color);
 
+void graph_destroy(graph *g);
+
 int graph_load_points_from_file (char *, graph *);
 
 int graph_draw(graph * g);

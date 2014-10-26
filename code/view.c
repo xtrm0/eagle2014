@@ -2,10 +2,7 @@
 
 view * view_init(int w, int h, char * name) {
   view * v = (view *)malloc(sizeof(view));
-  if (v == NULL) {
-    printf("(3x23) Erro detetado: Memory Access Error!");
-    exit(ENOMEM);
-  }
+  TESTMEM(v);
   memset(v,0,sizeof(view));
   v->W=w;
   v->H=h;
@@ -17,7 +14,7 @@ view * view_init(int w, int h, char * name) {
   g2_clear_palette(v->dev);
   //cores:
   //Usámos o programa gpick para tirar as cores a partir do pdf
-  //Na fase final, caso o professor concordar, trataremos de melhorar o design da aplicacao
+  //Na fase final, caso o professor concordar, trataremos de usar um design diferenta para a aplicacao
   g2_ink(v->dev, 0.0, 0.0, 0.0); //0 #000000
   g2_ink(v->dev, 1.0, 1.0, 1.0); //1 #FFFFFF
   g2_ink(v->dev, 1.0, 0.8, 0.6); //2 #FFCC99

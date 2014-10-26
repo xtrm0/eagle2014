@@ -1,5 +1,4 @@
 VERSAO INTERMEDIA:
-	+ Corrigir libertacao de memoria (faltam muitos free)
 	+ Transicoes entre janelas e menu principal
 	+ Blindar o programa
 	+ Por tudo em modo ansi C89 (nao usar // para comentarios)
@@ -8,6 +7,6 @@ VERSAO INTERMEDIA:
 	+ Testar leitura de texto em todo o lado
 	+ Por valores fisicos corretos
 	+ Desenhar cauda da spaceship (chama)
-	+ Verificar se foi possivel alocar memoria em todos os mallocs
+	+ Criar uma nave copia que enviada para o cockpit, para garantir que os dados definidos na opcao 1 se mantem para sempre!
 	+ Verificar no view_begin() se a janela ainda existe
 	+ O testing do desenho da superficie foi baixo. Voltar a faze-lo

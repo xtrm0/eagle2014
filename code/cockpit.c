@@ -72,6 +72,7 @@ int modo_cockpit(spaceship * s) {
 
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(150, 150, 0, 0, 150, 150, 800-150, 300-150);
+
   if(!(s->initialized)) {
     tmp = s;
     s = spc_init(0, 50, 0.0);
@@ -91,9 +92,13 @@ int modo_cockpit(spaceship * s) {
   btn_pause = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Pause", 20.0, COLOR_WHITE);
   btn_play = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Start", 20.0, COLOR_WHITE);
   btn_exit = btn_init(400, 110, 90, 30, 20, 8, COLOR_BLACK, "Sair", 20.0, COLOR_WHITE);
+
   mouse_x = malloc(sizeof(double));
   mouse_y = malloc(sizeof(double));
   mouse_button = malloc(sizeof(int));
+  TESTMEM(mouse_x);
+  TESTMEM(mouse_y);
+  TESTMEM(mouse_button);
   pol = poly();
 
   clock_gettime(CLOCK_MONOTONIC, &tend);
@@ -209,7 +214,7 @@ int modo_cockpit(spaceship * s) {
     tend.tv_nsec = tstart.tv_nsec;
     if (sleeptime > 0) {
        tsleep.tv_sec = (time_t) sleeptime;
-       tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8); 
+       tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8);
        nanosleep(&tsleep, &trem);
     }
   }
@@ -218,7 +223,17 @@ int modo_cockpit(spaceship * s) {
   spc_save_to_file(s);
   printf(" Done!\n");
 
-  //TODO: Desalocar a memoria que falta desalocar:
-
+  btn_destroy(btn_more_r);
+  btn_destroy(btn_less_r);
+  btn_destroy(btn_more_t);
+  btn_destroy(btn_less_t);
+  btn_destroy(btn_pause);
+  btn_destroy(btn_play);
+  btn_destroy(btn_exit);
+  free(mouse_x);
+  free(mouse_y);
+  free(mouse_button);
+  c2d_destroy(c);
+  poly_destroy(pol);
   return 0;
 }

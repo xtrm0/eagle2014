@@ -2,6 +2,7 @@
 
 graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color, int p_color, int axisl_color, int axisv_color, int axisn_color) {
   graph * g = malloc(sizeof(graph));
+  TESTMEM(g);
   g->data = poly();
   g->max_x = DBL_MIN;
   g->min_x = 0;
@@ -17,6 +18,13 @@ graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color
   g->axisv_color = axisv_color;
   g->axisn_color = axisn_color;
   return g;
+}
+
+void graph_destroy(graph * g){
+  poly_destroy(g->data);
+  c2d_destroy(g->c);
+  view_destroy(g->v);
+  free(g);
 }
 
 int graph_load_points_from_file (char *nome, graph * g) {
@@ -114,6 +122,8 @@ int graph_draw(graph * g) {
     g2_string(g->v->id, p3[0]-7*strlen(g->x_axis), p3[1]-10, g->x_axis);
     g2_string(g->v->id, p4[0]-10, p4[1]-20, g->y_axis);
   view_end(g->v);
+
+  poly_destroy(pol);
 }
 
 void graph_addpoint(graph * g, double * p) {
@@ -133,4 +143,6 @@ void modo_graph(char * filename) {
   printf(" Loaded %ld points!\n", g->data->size);
   graph_draw(g);
   getchar(); //caso o programa seja iniciado por algo tipo echo 3 | eagle2014, garante que nao fecha a janela ate se premir ctrl+c
+
+  graph_destroy(g);
 }

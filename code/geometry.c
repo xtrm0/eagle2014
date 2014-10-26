@@ -10,6 +10,7 @@ double * point(double x, double y, double * s) {
 }
 double * _point(double x, double y) {
   double * s = malloc(sizeof(double)*2);
+  TESTMEM(s);
   s[0] = x;
   s[1] = y;
   return s;
@@ -33,6 +34,7 @@ double * rotate(double * p, double rad, double * s) {
 }
 double * _rotate(double * p, double rad) {
   double * s = (double *)malloc(sizeof(double) * 2);
+  TESTMEM(s);
   rotate(p,rad,s);
   return s;
 }
@@ -46,7 +48,9 @@ double * rotate_p(double * p, double rad, double * origin, double * s, double * 
 double * _rotate_p(double * p, double rad, double * origin) {
   double * s, * aux;
   s = (double *)malloc(sizeof(double) * 2);
+  TESTMEM(s);
   aux = (double *)malloc(sizeof(double) * 2);
+  TESTMEM(aux);
   rotate_p(p, rad, origin, s, aux);
   free(aux);
   return s;
@@ -59,6 +63,7 @@ double * hadamart(double * p, double * q, double * s) {
 }
 double * _scale2d(double * p, double * q) {
   double * s = malloc(sizeof(double)*2);
+  TESTMEM(s);
   hadamart(p,q,s);
   return s;
 }
@@ -72,6 +77,7 @@ double * translate(double * p, double * T, double *s) {
 }
 double * _translate(double * p, double * T) {
   double * s = (double *)malloc(sizeof(double)*2);
+  TESTMEM(s);
   translate(p,T,s);
   return s;
 }
@@ -86,6 +92,7 @@ double * simetric(double * p, double * s) {
 double * _simetric(double * p) {
   int i;
   double * s = (double *)malloc(sizeof(double)*2);
+  TESTMEM(s);
   simetric(p,s);
   return s;
 }
@@ -99,6 +106,7 @@ double * inverse(double *p, double *s) {
 double * _inverse(double * p) {
   int i;
   double * s = (double *)malloc(sizeof(double)*2);
+  TESTMEM(s);
   inverse(p,s);
   return s;
 }
@@ -135,9 +143,11 @@ POLYGON FUNCTIONS
 
 polygon * poly() {
   polygon * s = malloc(sizeof(polygon));
+  TESTMEM(s);
   s->size = 0;
   s->max_size = 1;
   s->pts = malloc(sizeof(double)*2);
+  TESTMEM(s->pts);
   return s;
 }
 
@@ -151,6 +161,7 @@ polygon * poly_allocate(polygon * s, size_t sz) {
   if (sz <= s->max_size) return s;
   while (sz > (s->max_size *= 2));
   d = malloc(sizeof(double) * s->max_size * 2);
+  TESTMEM(d);
   memcpy(d, s->pts, sizeof(double) * s->size * 2);
   free(s->pts);
   s->pts = d;
@@ -166,9 +177,11 @@ polygon * poly_copy(polygon * s, polygon * d) {
 
 polygon * _poly_copy(polygon * s) {
   polygon * d = malloc(sizeof(polygon));
+  TESTMEM(d);
   d->size = s->size;
   d->max_size = s->max_size;
   d->pts = malloc(sizeof(double) * s->max_size * 2);
+  TESTMEM(d->pts);
   memcpy(d->pts, s->pts, sizeof(double) * s->size * 2);
   return d;
 }
@@ -193,6 +206,7 @@ polygon * poly_push(polygon * s, double * p) {
   if (s->max_size==s->size) {
     s->max_size = s->max_size * 2;
     d = malloc(sizeof(double) * s->max_size * 2);
+    TESTMEM(d);
     memcpy(d, s->pts, sizeof(double) * s->size * 2);
     free(s->pts);
     s->pts = d;

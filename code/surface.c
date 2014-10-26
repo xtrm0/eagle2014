@@ -2,10 +2,19 @@
 
 surface * sfc_init() {
   surface * s = malloc(sizeof(surface));
+  TESTMEM(s);
   s->arr = poly();
   s->l_size = 0;
   s->l_max_size = 1;
   s->l_points = malloc(sizeof(size_t));
+  TESTMEM(s->l_points);
+  return s;
+}
+
+void sfc_destroy(surface * s) {
+  poly_destroy(s->arr);
+  free(s->l_points);
+  free(s);
 }
 
 void sfc_add_point(surface * s, double * p) {
@@ -17,6 +26,7 @@ void sfc_add_lp(surface * s, size_t index) {
   if (s->l_max_size==s->l_size) {
     s->l_max_size = s->l_max_size * 2;
     g = malloc(sizeof(size_t) * s->l_max_size);
+    TESTMEM(g);
     memcpy(g, s->l_points, sizeof(size_t) * s->l_size);
     free(s->l_points);
     s->l_points = g;

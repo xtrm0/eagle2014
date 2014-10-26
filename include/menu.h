@@ -51,7 +51,7 @@ void read_double(char *, double *, unsigned int);
 
   Nao desiste enquando nao tiver um inteiro na forma valida
 */
-void read_int(char * prompt, int * target, int mini, int maxi)
+void read_int(char * prompt, int * target, int mini, int maxi);
 
 
 #endif

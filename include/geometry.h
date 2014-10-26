@@ -1,5 +1,6 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
+#include "../include/defines.h"
 #include <errno.h>
 #include <limits.h>
 #include <float.h>

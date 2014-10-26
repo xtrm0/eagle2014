@@ -2,10 +2,7 @@
 
 spaceship * spc_init(double x, double z, double rot) {
   spaceship * s = (spaceship *)malloc(sizeof(spaceship));
-  if (s == NULL) {
-    printf("(3x23) Erro detetado: Memory Access Error!");
-    exit(ENOMEM);
-  }
+  TESTMEM(s);
   memset(s,0,sizeof(spaceship));
   s->initialized = 0;
   s->moon = sfc_init();
@@ -19,7 +16,9 @@ spaceship * spc_init(double x, double z, double rot) {
   s->h_len=0;
   s->h_max=1;
   s->hist = malloc(sizeof(double *)*1);
+  TESTMEM(s->hist);
   s->hist[0] = malloc(sizeof(double)*7);
+  TESTMEM(s->hist[0]);
   return s;
 }
 
@@ -33,7 +32,9 @@ void spc_init_model(spaceship * s, view *v) {
   s->parts = malloc(sizeof(polygon *) * s->npart);
   s->fillpart = malloc(sizeof(int) * s->npart);
   s->colors = malloc(sizeof(int) * s->npart);
-
+  TESTMEM(s->parts);
+  TESTMEM(s->fillpart);
+  TESTMEM(s->colors);
   /* Spacecraft Head (hexagon) */
 
   s->colors[0] = g2_ink(v->dev, 0.6, 0.4, 0.8); //#9966CC
@@ -110,6 +111,11 @@ void spc_init_model(spaceship * s, view *v) {
 }
 
 void spc_destroy(spaceship * s) {
+  size_t i;
+  for (i=0; i<s->h_len; i++)
+    free(s->hist[i]);
+  free(s->hist);
+  sfc_destroy(s->moon);
   free(s);
 }
 
@@ -205,6 +211,7 @@ void spc_add_hist(spaceship * s, double dt) {
   if (s->h_max==s->h_len) {
     s->h_max = s->h_max * 2;
     d = malloc(sizeof(double *) * s->h_max);
+    TESTMEM(d);
     for (i=0; i<s->h_len; i++)
       d[i] = s->hist[i];
     free(s->hist);
@@ -212,6 +219,7 @@ void spc_add_hist(spaceship * s, double dt) {
   }
 
   s->hist[s->h_len] = malloc(sizeof(double)*7);
+  TESTMEM(s->hist[s->h_len]);
   s->hist[s->h_len][0] = dt;
   s->hist[s->h_len][1] = s->x;
   s->hist[s->h_len][2] = s->z;
