@@ -2,10 +2,7 @@
 #define MENU_H
 #include "../include/spaceship.h"
 #include <stdio.h>
-#define COND_BIGGERTHAN0 (1<<0)
-#define COND_SMALLRTHAN0 (1<<1)
-#define COND_ANGLERAD (1<<2)
-#define COND_ALTITUDE (1<<3)
+
 
 /*
   Menu do programa - Serve para mostar o menu
@@ -39,8 +36,22 @@ void print_banner();
 
 /*
   Le um double do teclado
+
+  Nao desiste enquando nao tiver um double na forma valida
+  O ultimo argumento e recebi como bitmask
 */
+#define COND_BIGGERTHAN0 (1<<0)
+#define COND_SMALLRTHAN0 (1<<1)
+#define COND_ANGLERAD (1<<2)
+#define COND_ALTITUDE (1<<3)
 void read_double(char *, double *, unsigned int);
+
+/*
+  Le um inteiro do teclado
+
+  Nao desiste enquando nao tiver um inteiro na forma valida
+*/
+void read_int(char * prompt, int * target, int mini, int maxi)
 
 
 #endif

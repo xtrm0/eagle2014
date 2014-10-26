@@ -11,7 +11,7 @@
 /*
   Estamos a usar muitos defines para facilitar fazer alteracoes no design
   Não tem problema as somas, porque o gcc substitui por um so valor inteiro ao compilar
-  TODO: Utilizar isto de forma mais eficiente
+  TODO: Mudar os nomes das variaveis
 */
 #define COCK_FONT_SIZE 20
 #define COCK_TOP  10

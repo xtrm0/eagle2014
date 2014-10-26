@@ -2,6 +2,13 @@
 #define SURFACE_H
 #include "../include/geometry.h"
 #include "../include/view.h"
+/*
+  Representa a superficie lunar
+  arr-> vertices da superficies
+  l_points -> array dinamica que indica as arestas que sao locais de aterragem
+  l_size -> numero de pontos de aterragem
+*/
+
 typedef struct surface {
   polygon * arr;
   size_t l_size;

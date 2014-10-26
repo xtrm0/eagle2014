@@ -33,7 +33,7 @@ void view_destroy(view * v) {
 }
 
 void view_begin(view * v) {
-  //atualmente isto nao faz nada :P
+  //TODO: verificar se a janela existe mesmo
 }
 void view_end(view * v) {
   g2_flush(v->id);

@@ -209,7 +209,7 @@ int modo_cockpit(spaceship * s) {
     tend.tv_nsec = tstart.tv_nsec;
     if (sleeptime > 0) {
        tsleep.tv_sec = (time_t) sleeptime;
-       tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8); //TODO: ISTO DEVIA SER 10e9, mas por algum motivo so da bem quando ponho 10e8. Temos de investigar
+       tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8); 
        nanosleep(&tsleep, &trem);
     }
   }

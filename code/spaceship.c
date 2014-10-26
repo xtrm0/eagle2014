@@ -125,11 +125,15 @@ void spc_destroy(spaceship * s) {
 */
 void spc_update_pos(spaceship * s, double dt) {
   //TODO: fazer as colisoes aqui
-  //TODO: fazer integracao por pedacos
   //printf("dt:%lf, x: %lf\n",dt, s->x);
   double ax0, az0, aa0;
   double fx, fz;
   double mass = s->mass_tara + s->mass_comb;
+  /*
+    Podiamos por aqui um for para fazer a integracao em intervalos mais pequenos do que a atualizacao grafica
+    No entanto, nao o vamos fazer pois 1/60 de segundo e suficiente para a precisao utilizada
+    Talvez na versao o final o facamos
+  */
   //1) Calcula a(t), I(t):
   s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD; //Deviamos usar uma constante k: (2/5)<k<(2/3) em vez de 2/5,
   ax0 = -N_TAU_T*s->ft*sin(s->rot)/mass;
@@ -170,6 +174,7 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   point(s->x, s->z, aux);
   pol = poly();
 /*
+  Desenha a colision_shape:
   poly_copy(s->colision_shape, pol);
   poly_rotate(pol, s->rot);
   poly_translate(pol, aux);

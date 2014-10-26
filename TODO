@@ -1,8 +1,13 @@
 VERSAO INTERMEDIA:
-	+ Comentarios
-	+ Por nomes dos ficheiros bem
 	+ Corrigir libertacao de memoria (faltam muitos free)
-	+ Por ficheiro de bitmap para enviar para o X11X
 	+ Transicoes entre janelas e menu principal
 	+ Blindar o programa
 	+ Por tudo em modo ansi C89 (nao usar // para comentarios)
+	+ graph_load_points_from_file: verificar se o ficheiro existe
+	+ verificar se foi possivel abrir os ficheiros
+	+ Testar leitura de texto em todo o lado
+	+ Por valores fisicos corretos
+	+ Desenhar cauda da spaceship (chama)
+	+ Verificar se foi possivel alocar memoria em todos os mallocs
+	+ Verificar no view_begin() se a janela ainda existe
+	+ O testing do desenho da superficie foi baixo. Voltar a faze-lo

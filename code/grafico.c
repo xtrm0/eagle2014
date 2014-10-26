@@ -81,8 +81,6 @@ int graph_draw(graph * g) {
     g2_pen(g->v->id, g->p_color);
     poly_copy(g->data, pol);
     poly_project(pol, g->c, pol);
-//    dump_pol(pol);
-    //TODO: Descobrir qual o melhor tipo de metodo para desenhar isto: pois podemos usar so pontos em vez de retas
     g2_poly_line(g->v->id, pol->size, pol->pts);
 
     //desenha escala:
@@ -134,5 +132,5 @@ void modo_graph(char * filename) {
   graph_load_points_from_file (filename, g);
   printf(" Loaded %ld points!\n", g->data->size);
   graph_draw(g);
-  getchar(); //caso o programa seja iniciado por algo tipo echo 3 | eagle2014, garante que nao fecha a janela ate se premir ctrl+c (o que acho que seria pretendido)
+  getchar(); //caso o programa seja iniciado por algo tipo echo 3 | eagle2014, garante que nao fecha a janela ate se premir ctrl+c
 }
