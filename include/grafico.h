@@ -22,12 +22,13 @@ typedef struct graph {
 
 graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color, int p_color, int axisl_color, int axisv_color, int axisn_color);
 
-/*
-  Esta funcao e o exemplo perfeito de um uso para a biblioteca g2, no entanto de modo a podermos utilizar a nossa camara, nao vamos usar
-  o TODO:<nome da funcoa de referencial>
-*/
 int graph_load_points_from_file (char *, graph *);
 
+int graph_draw(graph * g);
+
+void graph_addpoint(graph * g, double * p);
+
+void modo_graph(char * filename);
 
 
 #endif

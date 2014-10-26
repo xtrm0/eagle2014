@@ -1,38 +1,8 @@
 #include "../include/cockpit.h"
 
-void gui_init(view * v) {
-  //limpa o ecra:
-  g2_clear(v->id);
-
-  //desenha um retangulo:
-  //TODO: editar isto para desenhar a seguir a camara ser desenhada o.o, de modo a tapar tudo o que for escrito fora da camara
-  g2_pen(v->id, COLOR_GUI);
-  g2_filled_rectangle(v->id, 0, 0, v->W, v->H);
-
-  g2_pen(v->id, COLOR_BLACK);
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 1*COCK_PAD_VERT, "Atitude:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 2*COCK_PAD_VERT, "Altitude:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 3*COCK_PAD_VERT, "Distancia Horizontal:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 4*COCK_PAD_VERT, "Velocidade x:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 5*COCK_PAD_VERT, "Velocidade z:");
-  g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 6*COCK_PAD_VERT, "Combustivel:");
-
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
-  g2_string(v->id, COCK_SECOND_LEFT, v->H - COCK_TOP - 1*COCK_PAD_VERT, "F :");
-  g2_string(v->id, COCK_SECOND_LEFT, v->H - COCK_TOP - 2*COCK_PAD_VERT, "F :");
-  g2_set_font_size(v->id, COCK_FONT_SIZE/1.4);
-  g2_string(v->id, COCK_SECOND_LEFT + 8, v->H - COCK_TOP - 1*COCK_PAD_VERT - 8, "r");
-  g2_string(v->id, COCK_SECOND_LEFT + 8, v->H - COCK_TOP - 2*COCK_PAD_VERT - 8, "m");
-  g2_set_font_size(v->id, COCK_FONT_SIZE);
-}
-
 void draw_gui(spaceship * s, camera2d * c, view * v) {
   char str[20];
   g2_pen(v->id, COLOR_GUI);
-
-
-
 
   g2_pen(v->id, COLOR_GUI);
   g2_filled_rectangle(v->id, 0, 0, c->vpos[0]-1, v->H-1);
@@ -45,8 +15,6 @@ void draw_gui(spaceship * s, camera2d * c, view * v) {
   g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 4*COCK_PAD_VERT, "Velocidade x:");
   g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 5*COCK_PAD_VERT, "Velocidade z:");
   g2_string(v->id, COCK_LEFT, v->H - COCK_TOP - 6*COCK_PAD_VERT, "Combustivel:");
-
-
 
   g2_set_font_size(v->id, COCK_FONT_SIZE);
   g2_string(v->id, COCK_SECOND_LEFT, v->H - COCK_TOP - 1*COCK_PAD_VERT, "F :");
@@ -127,7 +95,6 @@ int modo_cockpit(spaceship * s) {
   mouse_y = malloc(sizeof(double));
   mouse_button = malloc(sizeof(int));
   pol = poly();
-  gui_init(v);
 
   clock_gettime(CLOCK_MONOTONIC, &tend);
   while (1) {

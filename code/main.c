@@ -4,8 +4,10 @@
 #ifndef _DEBUG
 
 int main(void) {
-  spaceship * s = NULL;
-  while(!menu());
+  spaceship * s;
+  s = spc_init(0,0,0);
+  print_banner();
+  while(!menu(s));
 
   return 0;
 }
@@ -15,11 +17,10 @@ int main(void) {
 
 int main(void) {
   spaceship * s;
-  surface * moon;
   s = spc_init(0,0,0);
   //read_data_spec(s);
   modo_cockpit(s);
-  modo_graph ("vooLunarCorrente.txt");
+  modo_graph("vooLunarCorrente.txt");
   printf("Press a key to continue");
   getchar();
   return 0;

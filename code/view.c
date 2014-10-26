@@ -10,13 +10,14 @@ view * view_init(int w, int h, char * name) {
   v->W=w;
   v->H=h;
   v->name = name;
-  v->dev = g2_open_X11X(w, h, 0, 0, name, name, "/dev/null", 0, 0);
+  v->dev = g2_open_X11X(w, h, 0, 0, name, name, NULL, 0, 0);
   v->id = g2_open_vd();
   g2_attach(v->id, v->dev);
   g2_set_auto_flush(v->id, 0);
   g2_clear_palette(v->dev);
   //cores:
-  //Estamos a usar as mesmas do pdf. Na fase final, caso o professor concordar, trataremos de melhorar o design da aplicacao
+  //Usámos o programa gpick para tirar as cores a partir do pdf
+  //Na fase final, caso o professor concordar, trataremos de melhorar o design da aplicacao
   g2_ink(v->dev, 0.0, 0.0, 0.0); //0 #000000
   g2_ink(v->dev, 1.0, 1.0, 1.0); //1 #FFFFFF
   g2_ink(v->dev, 1.0, 0.8, 0.6); //2 #FFCC99

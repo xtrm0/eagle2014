@@ -32,7 +32,7 @@ void spc_init_model(spaceship * s, view *v) {
   s->npart = 5;
   s->parts = malloc(sizeof(polygon *) * s->npart);
   s->fillpart = malloc(sizeof(int) * s->npart);
-  s->colors = malloc(sizeof(int) * s->npart); //Usámos o programa gpick para tirar as cores a partir do pdf
+  s->colors = malloc(sizeof(int) * s->npart);
 
   /* Spacecraft Head (hexagon) */
 

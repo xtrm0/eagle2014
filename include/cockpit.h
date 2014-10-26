@@ -11,7 +11,7 @@
 /*
   Estamos a usar muitos defines para facilitar fazer alteracoes no design
   Não tem problema as somas, porque o gcc substitui por um so valor inteiro ao compilar
-  TODO: Utilizar mesmo isto
+  TODO: Utilizar isto de forma mais eficiente
 */
 #define COCK_FONT_SIZE 20
 #define COCK_TOP  10
@@ -22,7 +22,6 @@
 #define COCK_SECOND_LEFT 400
 
 
-#define COCK_VALUES_LEFT
 /*
   Modo cockpit - Representa o modo cockpit do programa e todas as funcoes de simulacao deste
 */
@@ -35,9 +34,12 @@
     zero se nao ocorreu nenhum erro critico
     non-zero para terminar o programa
 */
-void draw_gui();
+int modo_cockpit(spaceship * s);
 
-int cockipt_loop();
+
+
+//desenha o texto e o background da interface grafica
+void draw_gui();
 
 
 #endif

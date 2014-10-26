@@ -5,8 +5,8 @@
 #define COND_BIGGERTHAN0 (1<<0)
 #define COND_SMALLRTHAN0 (1<<1)
 #define COND_ANGLERAD (1<<2)
+#define COND_ALTITUDE (1<<3)
 
-#
 /*
   Menu do programa - Serve para mostar o menu
   Definimos aqui todas as funcoes relacionadas com input e output pela consola
@@ -33,10 +33,14 @@ void clearbuffer();
 void read_data_spec();
 
 /*
+  Imprime o cabecalho que se ve quando se abre o programa
+*/
+void print_banner();
+
+/*
   Le um double do teclado
 */
 void read_double(char *, double *, unsigned int);
-
 
 
 #endif

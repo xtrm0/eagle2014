@@ -25,7 +25,6 @@ int graph_load_points_from_file (char *nome, graph * g) {
   double massa, tempo, x, z, vx, vz, atitude, combustivel;
   double max_z, max_t;
   FILE * fin = fopen(nome, "r");
-  polygon * pol;
   double p[2]= {0};
   poly_destroy(g->data);
   g->data = poly();
@@ -40,6 +39,8 @@ int graph_load_points_from_file (char *nome, graph * g) {
     g->max_y = max(g->max_y, p[1]);
     g->min_y = min(g->min_y, p[1]);
   }
+  //Ordena os pontos por tempo, para evitar casos em que estes nao estejam por ordem:
+  qsort(g->data->pts, g->data->size, sizeof(double)*2, double_increasing);
   return 0;
 }
 
@@ -128,11 +129,10 @@ void graph_addpoint(graph * g, double * p) {
 
 void modo_graph(char * filename) {
   graph * g;
-
   g = graph_init(800,800,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
   graph_load_points_from_file (filename, g);
   printf(" Loaded %ld points!\n", g->data->size);
   graph_draw(g);
-  getchar();
+  getchar(); //caso o programa seja iniciado por algo tipo echo 3 | eagle2014, garante que nao fecha a janela ate se premir ctrl+c (o que acho que seria pretendido)
 }

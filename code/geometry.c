@@ -1,10 +1,7 @@
 #include "../include/geometry.h"
-//TODO: make all implementations be pass by arg, instead of returning a pointer (they should all return void)
+//WARNING: all functions starting with _ allocate memory for the result and may not dealocate it
 
-//WARNING: all functions starting with _ allocate memory for the result, and are therefore slower than without the _
-//TODO: Nas comparacoes, e capaz de nao ser preciso usar typecasting
-
-//TODO: Check if malloc returns error!!!
+//TODO: Check if malloc returns errors!!!
 
 double * point(double x, double y, double * s) {
   s[0] = x;
@@ -129,12 +126,12 @@ double * project(double * p, camera2d * c, double * s) {
 }
 
 
+
 /*
 ------------------------------------------------
 POLYGON FUNCTIONS
 ------------------------------------------------
 */
-
 
 polygon * poly() {
   polygon * s = malloc(sizeof(polygon));
@@ -301,4 +298,14 @@ camera2d * c2d_init(double w, double h, double x, double y, double W, double H, 
 }
 void c2d_destroy(camera2d * c) {
   free(c);
+}
+
+
+
+
+/*
+  Helper functions:
+*/
+int double_increasing (const void * a, const void * b){
+  return ((*(double *) a) - (*(double *) b));
 }
