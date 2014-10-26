@@ -29,9 +29,7 @@ void graph_destroy(graph * g){
 
 int graph_load_points_from_file (char *nome, graph * g) {
   //TODO: Verificar se o ficheiro existe e e possivel de ser lido e imprimir warning
-  int d, dev;
   double massa, tempo, x, z, vx, vz, atitude, combustivel;
-  double max_z, max_t;
   FILE * fin = fopen(nome, "r");
   double p[2]= {0};
   poly_destroy(g->data);
@@ -52,7 +50,7 @@ int graph_load_points_from_file (char *nome, graph * g) {
   return 0;
 }
 
-int graph_draw(graph * g) {
+void graph_draw(graph * g) {
   //atualiza a camara pos e dim, para ter as dimensoes do ecra
   polygon * pol;
   double O[2]={0}, p1[2]={0}, p2[2]={0}, p3[2]={0}, p4[2]={0};

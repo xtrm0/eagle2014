@@ -1,7 +1,10 @@
 #ifndef MENU_H
 #define MENU_H
 #include "../include/spaceship.h"
+#include "../include/cockpit.h"
+#include "../include/grafico.h"
 #include <stdio.h>
+#include <ctype.h>
 
 
 /*
@@ -44,6 +47,7 @@ void print_banner();
 #define COND_SMALLRTHAN0 (1<<1)
 #define COND_ANGLERAD (1<<2)
 #define COND_ALTITUDE (1<<3)
+#define COND_BIGGERTHAN100 (1<<4)
 void read_double(char *, double *, unsigned int);
 
 /*

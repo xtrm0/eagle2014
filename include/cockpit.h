@@ -1,5 +1,5 @@
-#ifndef MENU_H
-#define MENU_H
+#ifndef COCKPIT_H
+#define COCKPIT_H
 #include "../include/spaceship.h"
 #include "../include/button.h"
 #include <stdio.h>
@@ -7,6 +7,8 @@
 #include <unistd.h>
 //5 graus:
 #define MAXROT 0.0872664626
+#define LAND_MAXVZ 0.1
+#define LAND_MAXVX 0.05
 
 /*
   Estamos a usar muitos defines para facilitar fazer alteracoes no design

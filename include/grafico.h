@@ -26,7 +26,7 @@ void graph_destroy(graph *g);
 
 int graph_load_points_from_file (char *, graph *);
 
-int graph_draw(graph * g);
+void graph_draw(graph * g);
 
 void graph_addpoint(graph * g, double * p);
 

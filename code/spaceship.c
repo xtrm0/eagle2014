@@ -24,7 +24,6 @@ spaceship * spc_init(double x, double z, double rot) {
 
 void spc_init_model(spaceship * s, view *v) {
   //TODO: passar a ler a nave de um ficheiro, em vez de ser daqui
-  int i;
   polygon * pol;
   double p[2]= {0}; //isto inicializa a {0,0}
 
@@ -133,7 +132,6 @@ void spc_update_pos(spaceship * s, double dt) {
   //TODO: fazer as colisoes aqui
   //printf("dt:%lf, x: %lf\n",dt, s->x);
   double ax0, az0, aa0;
-  double fx, fz;
   double mass = s->mass_tara + s->mass_comb;
   /*
     Podiamos por aqui um for para fazer a integracao em intervalos mais pequenos do que a atualizacao grafica

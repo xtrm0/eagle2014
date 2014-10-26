@@ -1,0 +1,1 @@
+gcc -Wall code/main.c code/menu.c code/geometry.c code/spaceship.c code/view.c code/cockpit.c code/button.c code/grafico.c code/surface.c -lg2 -lm

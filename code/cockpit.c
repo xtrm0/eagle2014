@@ -65,7 +65,7 @@ int modo_cockpit(spaceship * s) {
   double tmpp[4]={0,0,10,0};
   double floor0_p[2];
   double floor1_p[2];
-  int * mouse_button;
+  unsigned int * mouse_button;
   int runapp = 0;
   int resultado = 0;
   int mouse_last = 0, mouse_click=0;
@@ -95,7 +95,7 @@ int modo_cockpit(spaceship * s) {
 
   mouse_x = malloc(sizeof(double));
   mouse_y = malloc(sizeof(double));
-  mouse_button = malloc(sizeof(int));
+  mouse_button = malloc(sizeof(unsigned int));
   TESTMEM(mouse_x);
   TESTMEM(mouse_y);
   TESTMEM(mouse_button);
@@ -123,7 +123,7 @@ int modo_cockpit(spaceship * s) {
         poly_rotate(pol, s->rot);
         poly_translate(pol, aux);
         if(poly_colide_lineseg(pol, floor0, floor1)) {
-          if (s->rot > MAXROT || s->rot < 2*N_PI - MAXROT || s->vz > 0.01 || s->vx > 0.005 || s->vx < -0.005) {
+          if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz > LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX) {
             resultado = 1;
             printf("Alunagem completa sem sucesso.\n");
           } else {

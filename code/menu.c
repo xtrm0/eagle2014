@@ -52,6 +52,13 @@ void read_double(char * prompt, double * target, unsigned int conditions) {
     }
   }
 
+  if (conditions & COND_BIGGERTHAN100) {
+    if (*target < 0) {
+      printf("Introduza um valor superior a 100!\n");
+      goto begin_read_double;
+    }
+  }
+
   if (conditions & COND_SMALLRTHAN0) {
     if (*target > 0) {
       printf("Introduza um valor negativo!\n");
@@ -61,7 +68,7 @@ void read_double(char * prompt, double * target, unsigned int conditions) {
 
   if (conditions & COND_ALTITUDE) {
     if (*target < 44.4) {
-      printf("Altitude da nave muito baixa!\n");
+      printf("Altitude inicial da nave muito baixa!\n");
       goto begin_read_double;
     }
   }
@@ -77,10 +84,11 @@ void read_data_spec(spaceship * s) {
   pol = poly();
   s->initialized = 1;
   printf("Introduza os dados requisitados: \n");
-  read_double("Introduza a massa do módulo (sem combustível) (Kg): ", &(s->mass_tara), COND_BIGGERTHAN0);
-  read_double("Altítude do centro de massa no início da alunagem (m): ", &(s->z), 0);
+  read_double("Introduza a massa do módulo (sem combustível) (Kg): ", &(s->mass_tara), COND_BIGGERTHAN100);
+  read_double("Introduza a massa de combustível do módulo (kg): ", &(s->mass_comb), COND_BIGGERTHAN100);
+  read_double("Altítude do centro de massa no início da alunagem (m): ", &(s->z), COND_ALTITUDE);
   read_double("Distância horizontal do centro de massa no início da alunagem (m): ", &(s->x), 0);
-  read_double("Velocidade vertical no início da alunagem (m/s): ", &(s->vz), COND_ALTITUDE);
+  read_double("Velocidade vertical no início da alunagem (m/s): ", &(s->vz), 0);
   read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), 0);
   read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLERAD);
 

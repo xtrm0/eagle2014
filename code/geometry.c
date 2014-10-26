@@ -90,7 +90,6 @@ double * simetric(double * p, double * s) {
   return s;
 }
 double * _simetric(double * p) {
-  int i;
   double * s = (double *)malloc(sizeof(double)*2);
   TESTMEM(s);
   simetric(p,s);
@@ -104,7 +103,6 @@ double * inverse(double *p, double *s) {
   return s;
 }
 double * _inverse(double * p) {
-  int i;
   double * s = (double *)malloc(sizeof(double)*2);
   TESTMEM(s);
   inverse(p,s);
@@ -188,11 +186,13 @@ polygon * _poly_copy(polygon * s) {
 
 polygon * poly_clear(polygon * s) { //Nao fazemos o free, para poupar espaco
   s->size=0;
+  return s;
 }
 
 polygon * poly_clean(polygon * s) {
   poly_destroy(s);
   s = poly();
+  return s;
 }
 
 void poly_pop(polygon * s) {
