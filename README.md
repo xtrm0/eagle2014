@@ -10,7 +10,9 @@ Numero:_________80816; Nome:Diogo_Gonçalves; Mestrado:_MEAer;
 
 Numero:_________81861; Nome:__Afonso_Tinoco; Mestrado:_MEAer;
 
+
 Como compilar o programa:
+==========
 É possível compilar o programa de duas formas, consoante as configurações da máquina de teste:
 + Forma recomendada - usando o utilitário make:
 ```
