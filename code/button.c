@@ -26,7 +26,7 @@ void btn_destroy(button * btn) {
 }
 
 void btn_draw(button * btn, view * v) {
-  //TODO: Desenha um botao na posicao assinalada
+  /*TODO: Desenha um botao na posicao assinalada */
   g2_pen(v->id, btn->color);
   g2_filled_rectangle(v->id, btn->x, btn->y, btn->x+btn->w, btn->y+btn->h);
   g2_pen(v->id, btn->fcolor);

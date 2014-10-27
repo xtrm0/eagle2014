@@ -15,7 +15,7 @@ int main(void) {
 }
 
 #else
-//CODIGO MAIN PARA DEBUG :P
+/*CODIGO MAIN PARA DEBUG :P */
 
 int main(void) {
   spaceship * s;

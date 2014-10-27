@@ -86,7 +86,7 @@ double * _simetric(double * p);
 double * inverse(double *p, double *s);
 double * _inverse(double * p);
 
-//Projeta um ponto para o referencial de uma view
+/*Projeta um ponto para o referencial de uma view */
 double * project(double * p, camera2d * c, double * s);
 
 /*
@@ -104,10 +104,10 @@ int lineseg_colide(double * p1, double * p2, double * p3, double * p4);
   As funcoes abaixo devolvem um apontador igual ao que receberam como argumentos
 */
 
-//Cria um poligono
+/*Cria um poligono */
 polygon * poly();
 
-//Liberta a memoria de um poligono
+/*Liberta a memoria de um poligono */
 void poly_destroy(polygon *);
 
 /*
@@ -193,7 +193,7 @@ void c2d_destroy(camera2d *);
 /*
   Helper functions:
 */
-//Funcao para usar no quicksort para ordenar doubles por ordem crescente
+/*Funcao para usar no quicksort para ordenar doubles por ordem crescente */
 int double_increasing (const void * a, const void * b);
 
 

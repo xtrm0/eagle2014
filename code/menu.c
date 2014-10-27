@@ -92,20 +92,20 @@ void read_data_spec(spaceship * s) {
   read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), 0);
   read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLERAD);
 
-//TODO: Por tudo o que esta abaixo numa funcao so para o modo 2:
+/*TODO: Por tudo o que esta abaixo numa funcao so para o modo 2: */
   read_int("Introduza a quantidade de pontos de alunagem: ", &ponts, 1, 1000000);
   for (i=0; i<ponts; i++) {
     printf("Ponto %d:\n", i);
     read_double("Introduza a coordenada x do inicio do ponto de alunagem: ", &p[0], 0);
-    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); //Pois ainda nao definimos a superficie lunar
+    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); /*Pois ainda nao definimos a superficie lunar */
     p[1]=0.0;
     poly_push(pol, p);
     read_double("Introduza a coordenada x do fim do ponto de alunagem: ", &p[0], 0);
-    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); //Pois ainda nao definimos a superficie lunar
+    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); /*Pois ainda nao definimos a superficie lunar */
     p[1]=0.0;
     poly_push(pol, p);
     if (pol->pts[2*pol->size-2] > pol->pts[2*pol->size-4]) {
-      //faz os swap dos pontos, de modo a garantir que estao por ordem crescente (é importante porque o sort so tem em conta o primeiro ponto)
+      /*faz os swap dos pontos, de modo a garantir que estao por ordem crescente (é importante porque o sort so tem em conta o primeiro ponto) */
       tmp = pol->pts[2*pol->size-2];
       pol->pts[2*pol->size-2] = pol->pts[2*pol->size-4];
       pol->pts[2*pol->size-4] = tmp;
@@ -115,14 +115,14 @@ void read_data_spec(spaceship * s) {
     }
   }
   qsort(pol, ponts, sizeof(double)*4, double_increasing);
-  //adiciona os pontos ao poligono mesmo da nave
+  /*adiciona os pontos ao poligono mesmo da nave */
   p[0] = -100000;
   p[1] = 0.0;
   sfc_add_point(s->moon, p);
   for (i=0; i<ponts; i++) {
     sfc_add_lp(s->moon, 1+2*i);
     sfc_add_point(s->moon, pol->pts + 4*i);
-    sfc_add_point(s->moon, pol->pts + 4*i+2); //Ha um erro deste genero no draw_graph
+    sfc_add_point(s->moon, pol->pts + 4*i+2); /*Ha um erro deste genero no draw_graph */
   }
   p[0] = 100000;
   p[1] = 0.0;
