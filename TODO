@@ -1,16 +1,6 @@
 VERSAO INTERMEDIA:
 +++	+ Por valores fisicos corretos
 
-
-TESTING
-+++	+ Testar leitura de texto em todo o lado
-+	+ Blindar o programa
-
-PRODUCTION
-+++	+ Por tudo em modo ansi C89 (nao usar // para comentarios)
-
-
 VERSAO FINAL
 ++	+ Verificar no view_begin() se a janela ainda existe
 +	+ Transicoes entre janelas e menu principal
-
