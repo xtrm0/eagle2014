@@ -44,7 +44,7 @@ void gtimer_sleep(gtimer * c) {
     nanosleep(&c->tsleep, &c->trem);
   } else {
     c->cnt--;
-    if (abs(c->fps-c->target_fps) > SIGMA && c->cnt == 6) {
+    if (c->fps > 2 && c->cnt == 6) {
       c->cnt=10;
       c->fps /= 2.0;
     }
@@ -96,7 +96,7 @@ void gtimer_sleep(gtimer * c) {
     thrd_sleep(&c->tsleep, &c->trem);
   } else {
     c->cnt--;
-    if (abs(c->fps-c->target_fps) > SIGMA && c->cnt == 6) {
+    if (c->fps > 2 && c->cnt == 6) {
       c->cnt=10;
       c->fps /= 2.0;
     }
