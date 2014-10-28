@@ -8,6 +8,7 @@ void gtimer_destroy(gtimer *c ) {
 gtimer * gtimer_init() {
   gtimer * c;
   c = malloc(sizeof(gtimer));
+  TESTMEM(c);
   clock_gettime(CLOCK_MONOTONIC, &c->tend);
   return c;
 }
@@ -45,6 +46,7 @@ void gtimer_sleep(gtimer * c, double sleeptime) {
 gtimer * gtimer_init() {
   gtimer * c;
   c = malloc(sizeof(gtimer));
+  TESTMEM(c);
   timespec_get(&c->tend, TIME_UTC);
   return c;
 }
@@ -73,6 +75,8 @@ void gtimer_sleep(gtimer * c, double sleeptime) {
   }
 }
 #else
-
+/*
+  TODO: Utilizar relogios externos.
+*/
 #endif
 #endif

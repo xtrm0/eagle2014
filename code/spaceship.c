@@ -11,7 +11,7 @@ spaceship * spc_init(double x, double z, double rot) {
   s->w = 20.0;
   s->h = 20.0;
   s->rot = rot;
-  s->mass_tara = TARA;
+  s->mass_tara = N_TARA;
   s->mass_comb = 1200.0;
   s->h_len=0;
   s->h_max=1;
@@ -182,7 +182,13 @@ void spc_update_pos(spaceship * s, double dt) {
   /*TODO: fazer as colisoes aqui */
   /*printf("dt:%f, x: %f\n",dt, s->x); */
   double ax0, az0, aa0;
-  double mass = s->mass_tara + s->mass_comb;
+  double mass;
+  if (s->mass_comb <= 0) {
+    s->mass_comb = 0;
+    s->fr = 0;
+    s->ft = 0;
+  }
+  mass = s->mass_tara + s->mass_comb;
   /*
     Podiamos por aqui um for para fazer a integracao em intervalos mais pequenos do que a atualizacao grafica
     No entanto, nao o vamos fazer pois 1/60 de segundo e suficiente para a precisao utilizada
@@ -202,6 +208,7 @@ void spc_update_pos(spaceship * s, double dt) {
 
   /*3) Calcula a(t+dt) e I(t+dt): serve so para calcular v(t+dt) e w(t+dt); */
   s->I = 2.0/5.0 * mass * HEXRAD * HEXRAD;
+  s->mass_comb = s->mass_comb - (abs(N_BETA_R*N_TAU_R*s->fr) + N_BETA_T*N_TAU_T*s->ft)*dt;
 
   /*4) Calcula v(t+dt), w(t+dt): */
   s->va = s->va + (aa0 + N_TAU_R*s->fr*HEXRAD/s->I)/2.0*dt;
@@ -280,8 +287,6 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
 
   poly_destroy(pol);
 }
-
-
 
 void spc_add_hist(spaceship * s, double dt) {
   size_t i;

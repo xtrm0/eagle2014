@@ -67,7 +67,7 @@ void read_double(char * prompt, double * target, unsigned int conditions) {
   }
 
   if (conditions & COND_ALTITUDE) {
-    if (*target < 44.4) {
+    if (*target < 14) {
       printf("Altitude inicial da nave muito baixa!\n");
       goto begin_read_double;
     }

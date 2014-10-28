@@ -1,6 +1,7 @@
 #ifndef GTIMER_H
 #define GTIMER_H
 #include "../include/defines.h"
+#include <errno.h>
 /*
   Esta header e usada nas funcoes de sleep de todos os loops da aplicacao
   TODO: O gclock_sleep esta a funcionar mal, Nao podemos usar um double para calcular quanto tempo queremos dormir

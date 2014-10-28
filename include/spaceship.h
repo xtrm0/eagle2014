@@ -17,12 +17,11 @@
 #define N_TAU_R 441
 #define N_TAU_T 44400
 /*Fazer as contas para os dois valores abaixo */
-#define N_BETA_R 1.0
-#define N_BETA_T 1.0
+#define N_BETA_R 0.01
+#define N_BETA_T 0.0001
 #define N_G 1.622
 #define N_PI 3.1415926535
-#define FT 10.0
-#define TARA 14696
+#define N_TARA 14696
 /*Constantes de aterragem */
 /*5 graus: */
 #define MAXROT 0.0872664626
