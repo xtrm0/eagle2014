@@ -134,7 +134,7 @@ int modo_cockpit(spaceship * s) {
         poly_copy(s->colision_shape, pol);
         poly_rotate(pol, s->rot);
         poly_translate(pol, aux);
-        if(poly_colide_lineseg(pol, floor0, floor1) || s->z <= 13 /*A segunda condição serve para evitar colision escape para velocidades muito rapidas*/) {}
+        if(poly_colide_lineseg(pol, floor0, floor1) || s->z <= 13) { /*A segunda condição serve para evitar colision escape para velocidades muito rapidas*/
           switch (spc_unsafe_landing(s)) {
             case 0:
               resultado = 2;
