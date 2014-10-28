@@ -5,7 +5,7 @@ CC = gcc
 IDIR=include
 ODIR=objects
 CDIR=code
-OBJECTS= main.o menu.o geometry.o spaceship.o view.o cockpit.o button.o grafico.o surface.o
+OBJECTS= main.o menu.o geometry.o spaceship.o view.o cockpit.o button.o grafico.o surface.o gtimer.o
 OBJECTSPATH = $(patsubst %,$(ODIR)/%,$(OBJECTS))
 .PHONY: all clean debug
 

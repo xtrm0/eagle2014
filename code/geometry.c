@@ -1,7 +1,5 @@
 #include "../include/geometry.h"
-/*WARNING: all functions starting with _ allocate memory for the result and may not dealocate it */
-
-/*TODO: Check if malloc returns errors!!! */
+/*@WARNING: all functions starting with _ allocate memory for the result and may not dealocate it */
 
 double * point(double x, double y, double * s) {
   s[0] = x;

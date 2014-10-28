@@ -61,15 +61,15 @@ void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
 }
 
 int modo_cockpit(spaceship * s) {
-  struct timespec tstart, tend, tsleep, trem;
   void * tmp;
   view * v;
   camera2d * c;
   button * btn_more_t, * btn_less_t, * btn_more_r, * btn_less_r;
   button * btn_pause, * btn_play, * btn_exit;
   polygon * pol;
+  gtimer * teemo;
   double aux[2] = {0};
-  double deltatime, sleeptime;
+  double deltatime;
   double fps = 60.0;
   double revfps = 1.0/fps;
   double * mouse_x, * mouse_y;
@@ -82,6 +82,7 @@ int modo_cockpit(spaceship * s) {
   int runapp = 0;
   int resultado = 0;
   int mouse_last = 0, mouse_click=0;
+
 
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(150, 150, 0, 0, 150, 150, 800-150, 300-150);
@@ -114,10 +115,9 @@ int modo_cockpit(spaceship * s) {
   TESTMEM(mouse_button);
   pol = poly();
 
-  clock_gettime(CLOCK_MONOTONIC, &tend);
+  teemo = gtimer_init();
   while (1) {
-    clock_gettime(CLOCK_MONOTONIC, &tstart);
-    deltatime = (((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec) - ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec));
+    deltatime = gtimer_begin(teemo);
     /*printf("%f\n", deltatime); */
 
     /*Parte de input: */
@@ -228,15 +228,7 @@ int modo_cockpit(spaceship * s) {
 
 
     mouse_last = *mouse_button;
-    clock_gettime(CLOCK_MONOTONIC, &tend);
-    sleeptime = revfps - (((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-    tend.tv_sec = tstart.tv_sec;
-    tend.tv_nsec = tstart.tv_nsec;
-    if (sleeptime > 0) {
-       tsleep.tv_sec = (time_t) sleeptime;
-       tsleep.tv_nsec = (time_t) ((sleeptime-tsleep.tv_sec)*10e8);
-       nanosleep(&tsleep, &trem);
-    }
+    gtimer_sleep(teemo, revfps);
   }
   view_destroy(v);
   printf("Saving simulation data to file...");
@@ -256,5 +248,6 @@ int modo_cockpit(spaceship * s) {
   c2d_destroy(c);
   poly_destroy(pol);
   spc_destroy(s);
+  gtimer_destroy(teemo);
   return 0;
 }

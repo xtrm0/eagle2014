@@ -34,14 +34,16 @@ void view_destroy(view * v) {
 }
 
 void view_begin(view * v) {
-  /*TODO: 
-  */
   /*
-    Esta funcao vai servir para verificar se a janela para onde vamos desenhar ainda existe, ou se foi fechada pelo utilizador.
-    Caso tenha sido fechada, podemos fazer 1 de duas coisas (a definir):
-      1) Acabar o programa e mostrar um erro
-      2) Voltar a imprimir a janela e imprimir um warning
+    TODO: Esta funcao nao funciona porque o g2 nao garante o funcionamente,
+    porque o g2 nao verifica se a janela foi fechada :S
+    É impossivel fazer-mos isto funcionar sem usar-mos o X11/X.h
   */
+  if (!g2_device_exist(v->dev)) {
+    fprintf(stderr, "E: A janela foi fechada\n");
+    fprintf(stderr, "W:`Vamos terminar o programa\n");
+    exit(0);
+  }
 }
 void view_end(view * v) {
   g2_flush(v->id);

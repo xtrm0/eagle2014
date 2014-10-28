@@ -35,6 +35,9 @@ void btn_draw(button * btn, view * v) {
 }
 
 int btn_hover(button * btn, double x, double y) {
+  /*
+    @Warning: O g2 nao permite saber se o rato se encontra diretamente sobre a janela ou se encontra uma janela entre o rato e a janela do g2.
+  */
   return (btn->x <= x && btn->x + btn->w >= x
       &&  btn->y <= y && btn->y + btn->h >= y);
 }

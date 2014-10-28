@@ -2,9 +2,10 @@
 #define COCKPIT_H
 #include "../include/spaceship.h"
 #include "../include/button.h"
+#include "../include/gtimer.h"
 #include <stdio.h>
 #include <time.h>
-#include <unistd.h>
+
 
 
 /*

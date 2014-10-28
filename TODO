@@ -1,5 +1,7 @@
 VERSAO INTERMEDIA:
 +++	+ Por valores fisicos corretos
++++	+ Por butoes a desenhar de forma bonita
++++	+ COrrigir Readme.md para ter o compilador certo
 
 VERSAO FINAL
 ++	+ Verificar no view_begin() se a janela ainda existe
