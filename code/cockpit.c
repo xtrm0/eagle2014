@@ -83,9 +83,8 @@ int modo_cockpit(spaceship * s) {
   int resultado = 0;
   int mouse_last = 0, mouse_click=0;
 
-
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
-  c = c2d_init(150, 150, 0, 0, 150, 150, 800-150, 300-150);
+  c = c2d_init(50, 50, 0, 0, 150, 150, 800-150, 300-150);
 
   if(!(s->initialized)) {
     fprintf(stderr, "W: Dados inicias não definidos - usando valores predifinidos!\n");

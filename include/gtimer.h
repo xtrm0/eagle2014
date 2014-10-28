@@ -24,12 +24,16 @@ typedef struct gtimer {
 }gtimer;
 #else
 #ifdef _ISOC11_SOURCE
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
+#include <threads.h>
 typedef struct gtimer {
   struct timespec tstart, tend, tsleep, trem;
 }gtimer;
 /*
   O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar enquanto o processador dorme
-  E ao mesmo tempo usar o chrono para ter informacoes sobre o tempo :)
 */
 #else
 /*

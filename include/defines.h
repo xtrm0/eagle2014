@@ -5,6 +5,7 @@
     compativel com POSIX: #define _POSIX_C_VERSION 199309L (199309 e a primeira versao do posix que define o nanosleep)
     C11 ou superior: #define _ISOC11_SOURCE 1
     outro: nao definir nada
+#define _ISOC11_SOURCE
 */
 #define _POSIX_C_SOURCE 199309L
 #define _POSIX_C_VERSION 199309L

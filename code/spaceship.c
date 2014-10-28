@@ -11,8 +11,8 @@ spaceship * spc_init(double x, double z, double rot) {
   s->w = 20.0;
   s->h = 20.0;
   s->rot = rot;
-  s->mass_tara = 1000.0;
-  s->mass_comb = 100.0;
+  s->mass_tara = TARA;
+  s->mass_comb = 1200.0;
   s->h_len=0;
   s->h_max=1;
   s->hist = malloc(sizeof(double *)*1);

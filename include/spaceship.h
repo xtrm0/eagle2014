@@ -11,17 +11,18 @@
 #include <g2.h>
 #include <g2_X11.h>
 /*METADE DO LADO DO HEXAGONO: */
-#define HEXRAD 15.0
+#define HEXRAD 4.5
 
 /*Constantes fisicas: */
-#define N_TAU_R 10000.0
-#define N_TAU_T 100000.0
+#define N_TAU_R 441
+#define N_TAU_T 44400
+/*Fazer as contas para os dois valores abaixo */
 #define N_BETA_R 1.0
 #define N_BETA_T 1.0
 #define N_G 1.622
 #define N_PI 3.1415926535
 #define FT 10.0
-
+#define TARA 14696
 /*Constantes de aterragem */
 /*5 graus: */
 #define MAXROT 0.0872664626
