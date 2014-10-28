@@ -38,9 +38,9 @@ void gtimer_sleep(gtimer * c, double sleeptime) {
 #else
 #ifdef _ISOC11_SOURCE
 /*
-  TODO: Aqui vamos usar um mutex:
-    1) Mede o tempo de CPU no begin
-    2) Faz mtx_timedlock no end com o tempo que faltar, para um mutex impossivel de bloquear
+  TODO: Aqui vamos usar:
+    1) Mede o tempo usando timespec_get
+    2) Utiliza a funcao thrd_sleep() para dormir
 */
 #else
 

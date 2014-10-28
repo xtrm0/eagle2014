@@ -28,7 +28,8 @@ typedef struct gtimer {
   struct timespec tstart, tend, tsleep, trem;
 }gtimer;
 /*
-  O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar enquanto o processador dorma
+  O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar enquanto o processador dorme
+  E ao mesmo tempo usar o chrono para ter informacoes sobre o tempo :)
 */
 #else
 /*
