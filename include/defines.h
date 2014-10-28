@@ -23,6 +23,10 @@
   fprintf(stderr, "(3x23) Erro detetado: Memory Access Error!");\
   exit(ENOMEM);\
 }
+
+#define max(a,b) ((a) >= (b) ? (a) : (b))
+#define min(a,b) ((a) <= (b) ? (a) : (b))
+
 /*Definição para comparar doubles:*/
 #define SIGMA 0.0000001
 #endif

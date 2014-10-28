@@ -28,13 +28,13 @@ double gtimer_getdt(gtimer * c) {
 
 void gtimer_sleep(gtimer * c) {
   double slp;
-  printf("FPS: %lf\n", c->fps);
+  printf("FPS: %f\n", c->fps);
   clock_gettime(CLOCK_MONOTONIC, &c->tend);
   slp = 1.0/c->fps - (((double)c->tend.tv_sec + 1.0e-9*c->tend.tv_nsec) - ((double)c->tstart.tv_sec + 1.0e-9*c->tstart.tv_nsec));
   c->tend.tv_sec = c->tstart.tv_sec;
   c->tend.tv_nsec = c->tstart.tv_nsec;
   if (slp > 0) {
-    c->cnt++;
+    c->cnt = min(c->cnt+1, 14);
     if (abs(c->fps-c->target_fps) > SIGMA && c->cnt == 14) {
       c->cnt=10;
       c->fps *= 2.0;
@@ -43,7 +43,7 @@ void gtimer_sleep(gtimer * c) {
     c->tsleep.tv_nsec = (time_t) ((slp - c->tsleep.tv_sec)*10e8);
     nanosleep(&c->tsleep, &c->trem);
   } else {
-    c->cnt--;
+    c->cnt = max(c->cnt-1, 6);
     if (c->fps > 2 && c->cnt == 6) {
       c->cnt=10;
       c->fps /= 2.0;
@@ -86,7 +86,7 @@ void gtimer_sleep(gtimer * c) {
   c->tend.tv_sec = c->tstart.tv_sec;
   c->tend.tv_nsec = c->tstart.tv_nsec;
   if (slp > 0) {
-    c->cnt++;
+    c->cnt = min(c->cnt+1, 14);
     if (abs(c->fps-c->target_fps) > SIGMA && c->cnt == 14) {
       c->cnt=10;
       c->fps *= 2.0;
@@ -95,7 +95,7 @@ void gtimer_sleep(gtimer * c) {
     c->tsleep.tv_nsec = c->tend.tv_nsec + (time_t) ((slp - ((size_t)(slp)))*10e8);
     thrd_sleep(&c->tsleep, &c->trem);
   } else {
-    c->cnt--;
+    c->cnt = max(c->cnt-1, 6);
     if (c->fps > 2 && c->cnt == 6) {
       c->cnt=10;
       c->fps /= 2.0;
