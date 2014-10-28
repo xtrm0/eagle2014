@@ -70,8 +70,6 @@ int modo_cockpit(spaceship * s) {
   gtimer * teemo;
   double aux[2] = {0};
   double deltatime;
-  double fps = 60.0;
-  double revfps = 1.0/fps;
   double * mouse_x, * mouse_y;
   double floor0[2]= {-10000.0, 0};
   double floor1[2]= {10000.0, 0};
@@ -114,7 +112,7 @@ int modo_cockpit(spaceship * s) {
   TESTMEM(mouse_button);
   pol = poly();
 
-  teemo = gtimer_init();
+  teemo = gtimer_init(TARGET_FPS);
   while (1) {
     deltatime = gtimer_begin(teemo);
     /*printf("%f\n", deltatime); */
@@ -227,7 +225,7 @@ int modo_cockpit(spaceship * s) {
 
 
     mouse_last = *mouse_button;
-    gtimer_sleep(teemo, revfps);
+    gtimer_sleep(teemo);
   }
   view_destroy(v);
   printf("Saving simulation data to file...");

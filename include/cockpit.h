@@ -6,12 +6,12 @@
 #include <stdio.h>
 #include <time.h>
 
-
+#define TARGET_FPS 60.0
 
 /*
+  Defines para design:
   Estamos a usar muitos defines para facilitar fazer alteracoes no design
   Não tem problema as somas, porque o gcc substitui por um so valor inteiro ao compilar
-  TODO: Mudar os nomes das variaveis
 */
 #define COCKPIT_FONT_SIZE 20
 #define COCKPIT_TOP  0

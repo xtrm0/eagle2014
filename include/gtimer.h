@@ -2,9 +2,14 @@
 #define GTIMER_H
 #include "../include/defines.h"
 #include <errno.h>
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
 /*
   Esta header e usada nas funcoes de sleep de todos os loops da aplicacao
   TODO: O gclock_sleep esta a funcionar mal, Nao podemos usar um double para calcular quanto tempo queremos dormir
+  TODO: As funcoes para C11 so funcinam em versoes muito recentes do glibc
 */
 /*
   Perdemos uma boa quantidade de tempo com este ficheiro de modo a tentar maximizar os seguintes fatores:
@@ -16,26 +21,10 @@
 */
 #if _POSIX_C_VERSION >= 199309L
 #include <unistd.h>
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
-typedef struct gtimer {
-  struct timespec tstart, tend, tsleep, trem;
-}gtimer;
 #else
 #ifdef _ISOC11_SOURCE
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
 #include <threads.h>
-typedef struct gtimer {
-  struct timespec tstart, tend, tsleep, trem;
-}gtimer;
-/*
-  O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar enquanto o processador dorme
-*/
+/* O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar */
 #else
 /*
   Estamos a compilar para/nalgum sistema estupido. (iex: microprocessador muito antigo)
@@ -43,8 +32,14 @@ typedef struct gtimer {
 */
 #endif
 #endif
+typedef struct gtimer {
+  struct timespec tstart, tend, tsleep, trem;
+  double target_fps;
+  double fps;
+  int cnt;
+}gtimer;
 
-gtimer * gtimer_init();
+gtimer * gtimer_init(double tfps);
 /*
   Inicia um clock e devolve o tempo desde o ultimo clock
 */
@@ -55,7 +50,7 @@ double gtimer_begin(gtimer *);
 */
 double gtimer_getdt(gtimer *);
 
-void gtimer_sleep(gtimer *, double sleeptime);
+void gtimer_sleep(gtimer *);
 
 void gtimer_destroy(gtimer *);
 
