@@ -22,5 +22,5 @@ Como compilar o programa:
 
 + Forma tradicional - usando apenas o gcc:
 ```
-  gcc -O2 -Wall -pedantic -ansi code/main.c code/menu.c code/geometry.c code/spaceship.c code/view.c code/cockpit.c code/button.c code/grafico.c code/surface.c -lg2 -lm -o eagle2014
+  gcc -O2 -Wall -pedantic -ansi code/main.c code/menu.c code/geometry.c code/spaceship.c code/view.c code/cockpit.c code/button.c code/grafico.c code/surface.c code/gtimer.c -lg2 -lm -o eagle2014
 ```

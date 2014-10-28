@@ -25,9 +25,16 @@ void btn_destroy(button * btn) {
   }
 }
 
-void btn_draw(button * btn, view * v) {
+void btn_draw(button * btn, view * v, double x, double y, unsigned int mouse_button) {
   /*TODO: Desenha um botao na posicao assinalada */
-  g2_pen(v->id, btn->color);
+  if (btn_hover(btn, x, y)) {
+    if (mouse_button & Button1MotionMask)
+      g2_pen(v->id, COLOR_CLICK);
+    else
+      g2_pen(v->id, COLOR_COMB_R);
+  } else {
+    g2_pen(v->id, btn->color);
+  }
   g2_filled_rectangle(v->id, btn->x+3, btn->y, btn->x+btn->w-3, btn->y+btn->h);
   g2_filled_rectangle(v->id, btn->x, btn->y+3, btn->x+3, btn->y+btn->h-3);
   g2_filled_rectangle(v->id, btn->x+btn->w-3, btn->y+3, btn->x+btn->w, btn->y+btn->h-3);

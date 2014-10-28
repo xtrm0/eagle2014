@@ -14,6 +14,7 @@
 #define COLOR_MOON  4
 #define COLOR_COMB_T 5
 #define COLOR_COMB_R 6
+#define COLOR_CLICK 7
 /*
   Estrutura que representa uma janela que esta a ser mostrada ao utilizador
   Esta janela implementa double buffering atravez dos metodos begin e end

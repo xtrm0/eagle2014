@@ -259,7 +259,7 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   /*Pontos variaveis com o tempo (chamas): */
   /*Chama vertical*/
   poly_clear(pol);
-  point(0.0,                       (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD-20*s->ft,      p); poly_push(pol, p);
+  point(0.0,                       (-3.0/2.0*sqrt(3.0)+0.25-s->ft*2)*HEXRAD,      p); poly_push(pol, p);
   point(-0.25*HEXRAD*(1+s->ft),               (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,      p); poly_push(pol, p);
   point(0.25*HEXRAD*(1+s->ft),                (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,      p); poly_push(pol, p);
   poly_rotate(pol, s->rot);

@@ -13,7 +13,7 @@ button * btn_init(double,double,double,double,double,double,int,char *,double,in
 
 void btn_destroy();
 
-void btn_draw(button *, view *);
+void btn_draw(button *, view *, double, double, unsigned int);
 
 int btn_hover(button*, double x, double y);
 

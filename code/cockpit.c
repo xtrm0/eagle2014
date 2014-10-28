@@ -209,18 +209,18 @@ int modo_cockpit(spaceship * s) {
       spc_draw(s,c,v);
 
       draw_gui(s,c,v,resultado); /*Atualiza o text na gui */
-      btn_draw(btn_more_r, v);
-      btn_draw(btn_less_r, v);
-      btn_draw(btn_more_t, v);
-      btn_draw(btn_less_t, v);
+      btn_draw(btn_more_r, v, *mouse_x,*mouse_y, *mouse_button);
+      btn_draw(btn_less_r, v, *mouse_x,*mouse_y, *mouse_button);
+      btn_draw(btn_more_t, v, *mouse_x,*mouse_y, *mouse_button);
+      btn_draw(btn_less_t, v, *mouse_x,*mouse_y, *mouse_button);
       if (!resultado) {
         if (runapp) {
-          btn_draw(btn_pause, v);
+          btn_draw(btn_pause, v, *mouse_x,*mouse_y, *mouse_button);
         } else {
-          btn_draw(btn_play, v);
+          btn_draw(btn_play, v, *mouse_x,*mouse_y, *mouse_button);
         }
       } else {
-        btn_draw(btn_exit,v);
+        btn_draw(btn_exit, v, *mouse_x,*mouse_y, *mouse_button);
       }
 
     view_end(v); /*Envia o buffer grafico escondido para o X11 desenhar na janela */
