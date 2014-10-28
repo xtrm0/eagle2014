@@ -28,7 +28,7 @@ double gtimer_getdt(gtimer * c) {
 
 void gtimer_sleep(gtimer * c) {
   double slp;
-  printf("FPS: %f\n", c->fps);
+  printf("\nFPS: %f\ncnt:%d\n", c->fps, c->cnt);
   clock_gettime(CLOCK_MONOTONIC, &c->tend);
   slp = 1.0/c->fps - (((double)c->tend.tv_sec + 1.0e-9*c->tend.tv_nsec) - ((double)c->tstart.tv_sec + 1.0e-9*c->tstart.tv_nsec));
   c->tend.tv_sec = c->tstart.tv_sec;

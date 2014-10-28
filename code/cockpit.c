@@ -115,6 +115,7 @@ int modo_cockpit(spaceship * s) {
   teemo = gtimer_init(TARGET_FPS);
   while (1) {
     deltatime = gtimer_begin(teemo);
+    printf("%f", 1/deltatime);
     /*printf("%f\n", deltatime); */
 
     /*Parte de input: */
