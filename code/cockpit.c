@@ -8,7 +8,7 @@ void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
   g2_filled_rectangle(v->id, 0, 0, c->vpos[0]-1, v->H-1);
   g2_filled_rectangle(v->id, c->vpos[0], 0, v->W, c->vpos[1]-1);
   g2_pen(v->id, COLOR_BLACK);
-  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  /*g2_set_font_size(v->id, COCKPIT_FONT_SIZE);*/
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "Atitude:");
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, "Altitude:");
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 3*COCKPIT_PAD_VERT, "Distancia Horizontal:");
@@ -17,16 +17,16 @@ void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 6*COCKPIT_PAD_VERT, "Combustivel:");
   g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 7*COCKPIT_PAD_VERT, "Aterragem:");
 
-  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  /*g2_set_font_size(v->id, COCKPIT_FONT_SIZE);*/
   g2_string(v->id, COCKPIT_SECOND_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "F :");
   g2_string(v->id, COCKPIT_SECOND_LEFT, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, "F :");
-  g2_set_font_size(v->id, COCKPIT_FONT_SIZE/1.4);
+  /*g2_set_font_size(v->id, COCKPIT_FONT_SIZE/1.4);*/
   g2_string(v->id, COCKPIT_SECOND_LEFT + 8, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT - 8, "r");
   g2_string(v->id, COCKPIT_SECOND_LEFT + 8, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT - 8, "m");
-  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  /*g2_set_font_size(v->id, COCKPIT_FONT_SIZE);*/
 
   g2_pen(v->id, COLOR_BLACK);
-  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
+  /*g2_set_font_size(v->id, COCKPIT_FONT_SIZE);*/
 
   /*Lado direito das labels: */
   sprintf(str, "%5.2f" " \xb0", s->rot*180.0/(N_PI)); /*Aqui tivemos de usar o valor em hexadecimal, porque o nosso editor de texto estava a guardar o caracter latino º */
@@ -80,9 +80,9 @@ int modo_cockpit(spaceship * s) {
   int runapp = 0;
   int resultado = 0;
   int mouse_last = 0, mouse_click=0;
-
   v = view_init(800, 300, "eagle2014 - Modo Cockpit");
   c = c2d_init(50, 50, 0, 0, 150, 150, 800-150, 300-150);
+  g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
 
   if(!(s->initialized)) {
     fprintf(stderr, "W: Dados inicias não definidos - usando valores predifinidos!\n");
@@ -115,7 +115,6 @@ int modo_cockpit(spaceship * s) {
   teemo = gtimer_init(TARGET_FPS);
   while (1) {
     deltatime = gtimer_begin(teemo);
-    printf("%f\n", 1/deltatime);
     /*printf("%f\n", deltatime); */
 
     /*Parte de input: */

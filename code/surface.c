@@ -63,4 +63,5 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
     g2_pen(v->id, COLOR_RED);
     g2_line(v->id, pol->pts[2*s->l_points[i]], pol->pts[2*s->l_points[i]+1], pol->pts[2*s->l_points[i]+2], pol->pts[2*s->l_points[i]+3]);
   }
+  poly_destroy(pol);
 }
