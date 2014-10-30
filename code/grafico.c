@@ -162,6 +162,13 @@ void graph_draw(graph * g) {
 }
 
 void graph_addpoint(graph * g, double * p) {
+  /*
+    Adiciona o ponto p ao grafico
+    Temos de ter em atencao que e preciso manter a ordem de x para que o grafico seja bem desenhado. 
+Atualmente esta função não está a ter isso em conta, pelo que tem complexidade O(1)
+Se implementar-mos a versão força bruta, fazendo qsort cada vez que chama-mos esta função, teremos complexidade O(n*nlogn) para adicionar n pontos. O que não seria aceitavel para muitos pontos
+Por causa disso, caso sentir-mos a necessidade de implementar esta função completamente, usaremos uma binary tree para manter tudo ordenado segundo o eixo x com complexidade O(nlogn) para adicionar n pontos
+   */
   poly_push(g->data,p);
   g->max_x = max(g->max_x, p[0]);
   g->min_x = min(g->min_x, p[0]);
@@ -170,13 +177,14 @@ void graph_addpoint(graph * g, double * p) {
   return;
 }
 
-void modo_graph(char * filename) {
+int modo_graph(char * filename) {
   graph * g;
   g = graph_init(800,800,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
+  fflush(stdout);
   if (graph_load_points_from_file (filename, g)) {
     graph_destroy(g);
-    return;
+    return 1;
   }
   printf(" Loaded %lu points!\n", (unsigned long)g->data->size);
   graph_draw(g);
@@ -184,4 +192,5 @@ void modo_graph(char * filename) {
   getchar();
 
   graph_destroy(g);
+  return 0;
 }

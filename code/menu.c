@@ -53,7 +53,7 @@ void read_double(char * prompt, double * target, unsigned int conditions) {
   }
 
   if (conditions & COND_BIGGERTHAN100) {
-    if (*target < 0) {
+    if (*target < 100) {
       printf("Introduza um valor superior a 100!\n");
       goto begin_read_double;
     }

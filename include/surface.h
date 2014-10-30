@@ -20,10 +20,19 @@ surface * sfc_init();
 
 void sfc_destroy(surface *);
 
+/*
+  Devolve um ponteiro para uma copia da superificie
+ */
 surface * _sfc_copy(surface * a);
 
+/*
+  Adiciona um ponto à superificie
+ */
 void sfc_add_point(surface * s, double * p);
 
+/*
+  Torna a aresta que se inicia no ponto com indice assinalado um local de aterragem seguro
+ */
 void sfc_add_lp(surface * s, size_t index);
 
 void sfc_draw(surface * s, camera2d * c, view * v);

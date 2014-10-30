@@ -93,8 +93,16 @@ void spc_update_pos(spaceship * s, double dt); /*TODO: adicionar uma estrutura a
 */
 void spc_draw(spaceship * s, camera2d * c, view * v);
 
+/*
+  Guarda os pontos atuais da posição da nave em memória
+  O(1+)
+ */
 void spc_add_hist(spaceship * s, double dt);
 
+/*
+  Grava os pontos de posição da nave que se encontram em memória no ficheiro vooLunarCorrente.txt
+   O(1+)
+ */
 void spc_save_to_file(spaceship *);
 
 /*
@@ -103,6 +111,8 @@ void spc_save_to_file(spaceship *);
     0 em aterragem segura dentro de uma zona segura
     1 em aterragem perigosa
     2 em aterragem segura fora de pontos de alunagem
+
+  Notas: Ver spaceship.c para notas sobre complexidade
 */
 int spc_unsafe_landing(spaceship * s);
 

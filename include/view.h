@@ -29,10 +29,32 @@ typedef struct view {
   char * name;
 } view;
 
-
+/*
+  Inicializa um view:
+    Abre a janela e o virtual device e ligaos
+    Limpa as cores iniciais do g2
+    Aloca as cores base do nosso programa
+ */
 view * view_init(int,int,char *);
+
+/*
+  Destroi uma view:
+    Desliga a janela do virtual device
+    Fecha o virtual device e a janela
+  Nota: Retorna erro caso a janela tenha sido fechada pelo sistema de janelas (O g2 nao capta eventos, pelo que e impossivel saber se a janela foi fechada ou nao)
+ */
 void view_destroy(view *);
+
+/*
+  Inicializa a fase de desenho numa janela
+ */
 void view_begin(view * v);
+
+/*
+  Acaba a fase de desenho de uma janela.
+  Pede ao X11 para desenhar a buffer grafica do g2 para o ecrã.
+  (em conjunto com o view_begin é uma micro implementação de um double buffer)
+ */
 void view_end(view * v);
 
 

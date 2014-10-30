@@ -216,7 +216,8 @@ void spc_update_pos(spaceship * s, double dt) {
   s->vx  = s->vx + (ax0 +-N_TAU_T*s->ft*sin(s->rot)/mass)/2.0*dt;
 
   /*normaliza a rotacao: */
-  s->rot = fmod(s->rot, 2*N_PI); /*Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar */
+  /* s->rot = fmod(s->rot, 2*N_PI); Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar */
+
   /*Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave */
   spc_add_hist(s, dt);
 /*

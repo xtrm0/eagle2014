@@ -1,6 +1,6 @@
 VERSAO INTERMEDIA:
-+++	+ Corrigir Readme.md para ter o compilador certo
-+++	+ Implementar a funcao para esperar em modo ANSI
++++	+ Rever UI
++++	+ Testar se o programa funciona
 
 VERSAO FINAL
 ++	+ Verificar no view_begin() se a janela ainda existe

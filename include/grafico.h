@@ -24,13 +24,31 @@ graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color
 
 void graph_destroy(graph *g);
 
+/*
+  Carrega os pontos de um ficheiro para um grafico
+  returns:
+    0 caso nao hajam erros
+    1 caso tenham ocorrido erros
+ */
 int graph_load_points_from_file (char *, graph *);
 
 void graph_draw(graph * g);
 
+/*
+  Adiciona ao grafico um ponto
+  NOTA: ver grafico.c para notas sobre complexidade
+ */
 void graph_addpoint(graph * g, double * p);
 
-void modo_graph(char * filename);
+/*
+  Faz o loop do modo cockpit
+  arguments:
+
+  returns:
+    zero se nao ocorreu nenhum erro critico
+    non-zero para terminar o programa
+*/
+int modo_graph(char * filename);
 
 
 #endif
