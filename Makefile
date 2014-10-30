@@ -1,6 +1,6 @@
 FLAGS=-c -Wall -pedantic -ansi
 LNFLAGS=-Wall -pedantic -ansi
-LNLIBS=-lg2 -lm
+LNLIBS=-lg2 -lm -lrt
 CC = gcc
 IDIR=include
 ODIR=objects

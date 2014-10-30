@@ -28,6 +28,7 @@ view * view_init(int w, int h, char * name) {
 
 void view_destroy(view * v) {
   if (v!=NULL) {
+    g2_detach(v->id, v->dev); 
     g2_close(v->dev);
     g2_close(v->id);
     free(v);

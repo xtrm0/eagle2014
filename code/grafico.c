@@ -31,7 +31,7 @@ void graph_destroy(graph * g){
 
 int graph_load_points_from_file (char *nome, graph * g) {
   double massa=0, tempo, x, z, vx, vz, atitude, combustivel;
-  char tmp;
+  char tmp; 
   FILE * fin;
   double p[2]= {0};
   char line[301]; /*estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2 */
@@ -41,7 +41,10 @@ int graph_load_points_from_file (char *nome, graph * g) {
   }
   poly_destroy(g->data);
   g->data = poly();
-  fgets(line, 300, fin);
+
+  if (fgets(line, 300, fin)==NULL) {
+    fprintf(stderr, "W: Erro na leitura do ficheiro: Ficheiro Vazio!\n");
+  }
   if (line[strlen(line)-1]!='\n') {
     fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
     while(fgetc(fin)!='\n');
@@ -49,7 +52,10 @@ int graph_load_points_from_file (char *nome, graph * g) {
   if (sscanf(line, "%lf [kg]%*[ \n\t]%c", &massa, &tmp)!=1) {
       fprintf(stderr, "W: Problema ao ler a massa a partir do ficheiro (percebemos: %f kg)\n", massa);
   }
-  fgets(line, 300, fin);
+
+  if (fgets(line, 300, fin)==NULL) {
+    fprintf(stderr, "W: Erro na leitura do ficheiro: O ficheiro só tem 1 linha!\n");
+  }
   if (line[strlen(line)-1]!='\n') {
     fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
     while(fgetc(fin)!='\n');
@@ -57,6 +63,7 @@ int graph_load_points_from_file (char *nome, graph * g) {
   if (strcmp(line, FILE_HEADLINE)){
     fprintf(stderr, "W: A linha de coluna nao se encontra igual à do programa!\n");
   }
+
   while (fgets(line, 300, fin)) {
     if (line[strlen(line)-1]!='\n') {
       fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
@@ -171,7 +178,7 @@ void modo_graph(char * filename) {
     graph_destroy(g);
     return;
   }
-  printf(" Loaded %ld points!\n", g->data->size);
+  printf(" Loaded %lu points!\n", (unsigned long)g->data->size);
   graph_draw(g);
   printf("Carregue nalguma tecla para fechar o gráfico...\n");
   getchar();
