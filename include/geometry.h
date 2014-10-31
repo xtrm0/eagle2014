@@ -84,7 +84,7 @@ double * _simetric(double * p);
 double * inverse(double *p, double *s);
 double * _inverse(double * p);
 
-/*Projeta um ponto para o referencial de uma view */
+/*Projeta um ponto para o referencial de uma janela*/
 double * project(double * p, camera2d * c, double * s);
 
 /*
@@ -134,6 +134,8 @@ polygon * poly_clean(polygon *);
   Roda um poligono em torno do ponto (0,0)
 */
 polygon * poly_rotate(polygon *, double);
+
+/*TODO: polygon * poly_rotate2d_p(polygon *, double, double *); Rodar um poligono a volta de um ponto*/
 
 /*
   Translaciona um poligono por um vetor (p[0],p[1])

@@ -92,7 +92,6 @@ void read_data_spec(spaceship * s) {
   read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), 0);
   read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLERAD);
 
-/*TODO: Por tudo o que esta abaixo numa funcao so para o modo 2: */
   read_int("Introduza a quantidade de pontos de alunagem: ", &ponts, 1, 1000000);
   for (i=0; i<ponts; i++) {
     printf("Ponto %d:\n", i);

@@ -127,7 +127,6 @@ int modo_cockpit(spaceship * s) {
         spc_update_pos(s,deltatime);
 
         /*colision detection: */
-        /*TODO: implementar isto dentro do update_pos, pois queremos que se veja a posicao antes e depois e se faca uma colisao entre um prisma e um segmente de um plano que sao a versao extrudida da shape de colisao e da linha de chao, pelo tempo */
         point(s->x, s->z, aux);
         poly_copy(s->colision_shape, pol);
         poly_rotate(pol, s->rot);
@@ -197,7 +196,6 @@ int modo_cockpit(spaceship * s) {
       g2_filled_rectangle(v->id, c->vpos[0], c->vpos[1], c->vpos[0] + c->vdim[0], c->vpos[1] + c->vdim[1]);
       g2_pen(v->id, COLOR_WHITE);
       g2_filled_rectangle(v->id, c->vpos[0]+4, c->vpos[1]+4, c->vpos[0] + c->vdim[0]-3, c->vpos[1] + c->vdim[1]-4);
-      /*TODO: Adicionar aqui algum efeito bonito */
 
       /*Desenha o chao: */
       sfc_draw(s->moon,c,v);

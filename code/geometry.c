@@ -107,8 +107,6 @@ double * _inverse(double * p) {
   return s;
 }
 
-/*TODO: Otimizar isto */
-/*TODO: Quase de certeza que isto esta certo, mas voltar a fazer as contas */
 double * project(double * p, camera2d * c, double * s) {
   double aux1[2] = {0,0};
   double aux2[2] = {0,0};
@@ -185,7 +183,7 @@ polygon * _poly_copy(polygon * s) {
   return d;
 }
 
-polygon * poly_clear(polygon * s) { /*Nao fazemos o free, para poupar tempo */
+polygon * poly_clear(polygon * s) {
   s->size=0;
   return s;
 }
@@ -225,7 +223,7 @@ polygon * poly_rotate(polygon * s, double rot) {
   return s;
 }
 
-/*TODO: polygon * poly_rotate2d_p(polygon *, double, double *); */
+
 
 polygon * poly_translate(polygon * s, double * T) {
   size_t i;

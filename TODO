@@ -1,7 +1,0 @@
-VERSAO INTERMEDIA:
-+++	+ Rever UI
-+++	+ Testar se o programa funciona
-
-VERSAO FINAL
-++	+ Verificar no view_begin() se a janela ainda existe
-+	+ Transicoes entre janelas e menu principal

@@ -8,7 +8,6 @@
 #include <string.h>
 /*
   Esta header e usada nas funcoes de sleep de todos os loops da aplicacao
-  TODO: No gclock_sleep, é aceitável usar-mos um double para fazer as contas para quanto tempo queremos dormir, pois caso o valor que queremos dormir nao caiba como inteiro no double, então esse valor é certamente superior a 1/fps. Logo enviamos sempre a precisão certa ao nanosleep. 
   NOTA: As funcoes para C11 so funcinam em versoes muito recentes do glibc
 */
 /*
