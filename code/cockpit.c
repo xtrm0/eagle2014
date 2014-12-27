@@ -73,7 +73,6 @@ int modo_cockpit(spaceship * s) {
   double * mouse_x, * mouse_y;
   double floor0[2]= {-10000.0, 0};
   double floor1[2]= {10000.0, 0};
-  double tmpp[4]={-100,0,100,0};
   double floor0_p[2];
   double floor1_p[2];
   unsigned int * mouse_button;
@@ -84,16 +83,23 @@ int modo_cockpit(spaceship * s) {
   c = c2d_init(50, 50, 0, 0, 150, 150, 800-150, 300-150);
   g2_set_font_size(v->id, COCKPIT_FONT_SIZE);
 
-  if(!(s->initialized)) {
-    fprintf(stderr, "W: Dados inicias não definidos - usando valores predifinidos!\n");
+  if(((s->initialized) ^ INIT_SPACESHIP)==0) {
+    fprintf(stderr, "W: Dados inicias da nave não definidos - usando valores predifinidos!\n");
     tmp = s;
     s = spc_init(0, 150, 0.0);
     free((spaceship *) tmp);
-    sfc_add_point(s->moon, floor0);
-    sfc_add_point(s->moon, tmpp);
-    sfc_add_point(s->moon, tmpp+2);
-    sfc_add_point(s->moon, floor1);
+  }
+  
+  if (((s->initialized) ^ INIT_SURFACE)==0) {
+    fprintf(stderr, "W: Dados inicias da superficie lunar não definidos - usando plano horizontal!\n");
+    /*
+    TODO:
+    sfc_add_point_back(s->moon, floor0);
+    sfc_add_point_back(s->moon, tmpp);
+    sfc_add_point_back(s->moon, tmpp+2);
+    sfc_add_point_back(s->moon, floor1);
     sfc_add_lp(s->moon, 1);
+    */
   }
   spc_init_model(s, v);
   btn_more_r  = btn_init(COCKPIT_SECOND_LEFT + 160, v->H - COCKPIT_TOP - 1.25*COCKPIT_PAD_VERT, 30, 30, 8, 10, COLOR_BLACK, ">", 20.0, COLOR_WHITE);

@@ -5,6 +5,7 @@
 
 int main(void) {
   spaceship * s;
+//  pl_no * m = NULL;
   s = spc_init(0,0,0);
   print_banner();
 
@@ -20,6 +21,7 @@ int main(void) {
 int main(void) {
   spaceship * s;
   s = spc_init(0,0,0);
+  surface_planner(s->moon);
   read_data_spec(s);
   modo_cockpit(s);
   modo_graph("vooLunarCorrente.txt");

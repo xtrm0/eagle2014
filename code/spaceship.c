@@ -124,17 +124,6 @@ void spc_init_model(spaceship * s, view *v) {
   point(0.5*HEXRAD,                        (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,            p); poly_push(pol, p);
   s->parts[3] = pol;
 
-  /* Combustion
-
-  s->colors[4] = g2_ink(v->dev, 1.0, 0.4, 0.2); #FF6633
-  s->fillpart[4] = 1;
-  pol = poly();
-  point(0.0,                                          (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD,                                        p); poly_push(pol, p);
-  point(1.0/12.0*(sqrt(3.0)*HEXRAD-0.5)*FT,           (-3.0/2.0*sqrt(3.0)+0.25)*HEXRAD+1.0/4.0*(sqrt(3.0)*HEXRAD-0.5)*FT,      p); poly_push(pol, p);
-  s->parts[4] = pol;
-
-  */
-
   /*
    * Colision detection shape
    */
@@ -315,16 +304,16 @@ void spc_add_hist(spaceship * s, double dt) {
 }
 
 /*
-  Isto funciona apenas para o modo 2, e tem complexidade O(n_pontos_alunagem), o que aceitavel visto que so e executada 1 vez no fim das simulacoes
-  Para o modo 5, temos de melhorar a surface: Vamos fazer esta funcao ser O(log(n_pontos_alunagem), usando algum estrutura que o permita (iex: kd-tree));
+  //TODO
 */
 int spc_unsafe_landing(spaceship * s) {
   size_t i;
   if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz < -LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX)
     return 1; /*pois nao cumpre as especificacoes */
-  for (i=0; i<s->moon->l_size; i++) {
+/*  for (i=0; i<s->moon->l_size; i++) {
     if (s->moon->arr->pts[s->moon->l_points[i]*2] + 2*HEXRAD < s->x && s->moon->arr->pts[s->moon->l_points[i]*2+2] > s->x -2*HEXRAD) return 0;
   }
+  */
   return 2;
 }
 

@@ -1,4 +1,4 @@
-#ifndef GEOMETRY_H
+  #ifndef GEOMETRY_H
 #define GEOMETRY_H
 #include "../include/defines.h"
 #include <errno.h>
@@ -184,9 +184,17 @@ camera2d * c2d_init(double,double,double,double,double,double,double,double);
   Destroi uma camara
 */
 void c2d_destroy(camera2d *);
-
-
-
+/*
+  Faz com que a camara fique minima camara que contem o retangulo e que comeca nas coordenadas x, y, ficando com o aspec ratio do ecra :)
+*/
+void c2d_fit(camera2d *c, double x, double y, double w, double h);
+/*
+  Faz zoom out pela percentagem per (1=100%=nada altera):
+    mantem:
+      aspect ratio
+      centro da camara
+*/
+void c2d_zoom(camera2d *c, double per);
 
 
 

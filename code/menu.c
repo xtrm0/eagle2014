@@ -1,88 +1,7 @@
 #include "../include/menu.h"
 
-void clearbuffer() {
-  while(getchar()!='\n');
-}
-
-void read_int(char * prompt, int * target, int mini, int maxi) {
-  char c;
-  begin_read_int:
-
-  fputs(prompt, stdout);
-  if (scanf("%d", target)!=1) {
-    clearbuffer();
-    printf("Erro no formato especificado!\n");
-    goto begin_read_int;
-  }
-  while((c=getchar())!='\n') {
-    if (!isspace(c)) {
-      clearbuffer();
-      printf("Erro no formato especificado: Não coloque caracteres depois do numero!\n");
-      goto begin_read_int;
-    }
-  }
-  if (*target < mini || *target > maxi) {
-    printf("O número tem de estar entre %d e %d!\n", mini, maxi);
-    goto begin_read_int;
-  }
-}
-
-void read_double(char * prompt, double * target, unsigned int conditions) {
-  char c;
-  begin_read_double:
-
-  fputs(prompt, stdout);
-  if (scanf("%lf", target)!=1) {
-    clearbuffer();
-    printf("Erro no formato especificado!\n");
-    goto begin_read_double;
-  }
-  while((c=getchar())!='\n') {
-    if (!isspace(c)) {
-      clearbuffer();
-      printf("Erro no formato especificado: Não coloque unidades!\n");
-      goto begin_read_double;
-    }
-  }
-
-  if (conditions & COND_BIGGERTHAN0) {
-    if (*target < 0) {
-      printf("Introduza um valor positivo!\n");
-      goto begin_read_double;
-    }
-  }
-
-  if (conditions & COND_BIGGERTHAN100) {
-    if (*target < 100) {
-      printf("Introduza um valor superior a 100!\n");
-      goto begin_read_double;
-    }
-  }
-
-  if (conditions & COND_SMALLRTHAN0) {
-    if (*target > 0) {
-      printf("Introduza um valor negativo!\n");
-      goto begin_read_double;
-    }
-  }
-
-  if (conditions & COND_ALTITUDE) {
-    if (*target < 14) {
-      printf("Altitude inicial da nave muito baixa!\n");
-      goto begin_read_double;
-    }
-  }
-}
-
-
 void read_data_spec(spaceship * s) {
-  int i;
-  int ponts;
-  double p[2];
-  double tmp;
-  polygon * pol;
-  pol = poly();
-  s->initialized = 1;
+  s->initialized |= 1;
   printf("Introduza os dados requisitados: \n");
   read_double("Introduza a massa do módulo (sem combustível) (Kg): ", &(s->mass_tara), COND_BIGGERTHAN100);
   read_double("Introduza a massa de combustível do módulo (kg): ", &(s->mass_comb), COND_BIGGERTHAN100);
@@ -91,55 +10,21 @@ void read_data_spec(spaceship * s) {
   read_double("Velocidade vertical no início da alunagem (m/s): ", &(s->vz), 0);
   read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), 0);
   read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLERAD);
-
-  read_int("Introduza a quantidade de pontos de alunagem: ", &ponts, 1, 1000000);
-  for (i=0; i<ponts; i++) {
-    printf("Ponto %d:\n", i);
-    read_double("Introduza a coordenada x do inicio do ponto de alunagem: ", &p[0], 0);
-    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); /*Pois ainda nao definimos a superficie lunar */
-    p[1]=0.0;
-    poly_push(pol, p);
-    read_double("Introduza a coordenada x do fim do ponto de alunagem: ", &p[0], 0);
-    printf("Iremos usar a coordenada z=0.0 nesta fase intermédia\n"); /*Pois ainda nao definimos a superficie lunar */
-    p[1]=0.0;
-    poly_push(pol, p);
-    if (pol->pts[2*pol->size-2] > pol->pts[2*pol->size-4]) {
-      /*faz os swap dos pontos, de modo a garantir que estao por ordem crescente (é importante porque o sort so tem em conta o primeiro ponto) */
-      tmp = pol->pts[2*pol->size-2];
-      pol->pts[2*pol->size-2] = pol->pts[2*pol->size-4];
-      pol->pts[2*pol->size-4] = tmp;
-      tmp = pol->pts[2*pol->size-1];
-      pol->pts[2*pol->size-1] = pol->pts[2*pol->size-3];
-      pol->pts[2*pol->size-3] = tmp;
-    }
-  }
-  qsort(pol, ponts, sizeof(double)*4, double_increasing);
-  /*adiciona os pontos ao poligono mesmo da nave */
-  p[0] = -100000;
-  p[1] = 0.0;
-  sfc_add_point(s->moon, p);
-  for (i=0; i<ponts; i++) {
-    sfc_add_lp(s->moon, 1+2*i);
-    sfc_add_point(s->moon, pol->pts + 4*i);
-    sfc_add_point(s->moon, pol->pts + 4*i+2); /*Ha um erro deste genero no draw_graph */
-  }
-  p[0] = 100000;
-  p[1] = 0.0;
-  sfc_add_point(s->moon, p);
-  poly_destroy(pol);
 }
 
 int menu(spaceship * s) {
   char opcao, c;
   spaceship * d;
-  printf("\nSelecione uma opção:\n");
-  printf("1. Especificação dos dados do módulo e das condições iniciais do voo.\n");
-  printf("2. Simulação do voo em modo de “cockpit”.\n");
-  printf("3. Apresentação em modo gráfico da trajectória do módulo.\n");
-  printf("4. Definição do perfil da superfície lunar.\n");
-  printf("5. Simulação do voo em modo gráfico.\n");
-  printf("Opção: ");
+  printf("\nSelecione uma opção:\n"
+         "1. Especificação dos dados do módulo e das condições iniciais do voo.\n"
+         "2. Simulação do voo em modo de “cockpit”.\n"
+         "3. Apresentação em modo gráfico da trajectória do módulo.\n"
+         "4. Definição do perfil da superfície lunar.\n"
+         "5. Simulação do voo em modo gráfico.\n"
+         "0. Sair\n"
+         "Opção: ");
   c= opcao = getchar();
+  /* Este while ignora whitespaces a seguir a opcao introduzida */
   while(c!='\n') {
     c=getchar();
     if (!isspace(c)) {
@@ -163,7 +48,7 @@ int menu(spaceship * s) {
       modo_graph("vooLunarCorrente.txt");
       break;
     case '4':
-      printf("EM CONSTRUÇÃO");
+      s->initialized |= surface_planner(s->moon);
       break;
     case '5':
       printf("EM CONSTRUÇÃO");

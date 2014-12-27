@@ -14,9 +14,10 @@
 #define HEXRAD 4.5
 
 /*Constantes fisicas: */
+/* Obtidos a partir da pagina da wikipedia TODO:colocar aqui url para a pagina*/
 #define N_TAU_R 441
 #define N_TAU_T 44400
-/*Fazer as contas para os dois valores abaixo */
+/*Os valores de Beta estao apenas na ordem de grandeza certa, no entanto dependem das caracteristicas do combustivel, pelo que nada sabemos sobre elas*/
 #define N_BETA_R 0.01
 #define N_BETA_T 0.0001
 #define N_G 1.622
@@ -28,8 +29,10 @@
 #define LAND_MAXVZ 0.1
 #define LAND_MAXVX 0.05
 
+
 /*
-    Representa uma nave espacial
+    Representa o tudo o que esteja relacionado com a nave espacial
+    Estamos a guardar a superificie lunar aqui, porque todas as funcoes que utilizam a superificie lunar tambem utilizam a nave espacial
 */
 /*
   Estamos a guardar o historico para memoria por questoes de performance (nao mantemos o ficheiro aberto durante 10 minutos :P):

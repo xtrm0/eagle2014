@@ -1,5 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
+#include <stdio.h>
+#include <errno.h>
 /*
   É preciso definir aqui a seguinte macro para escolher o tipo de compilação:
     compativel com POSIX: #define _POSIX_C_VERSION 199309L (199309 e a primeira versao do posix que define o nanosleep)
@@ -15,7 +17,7 @@
   Para alem disso, a funcao usleep() foi deprecada com o POSIX-2001
 #define _ISOC11_SOURCE
 */
-#define _POSIX_C_SOURCE 199309L
+//#define _POSIX_C_SOURCE 199309L
 #define _POSIX_C_VERSION 199309L
 #define FILE_HEADLINE "tempo [s]         x [m]         z [m]        vx [m]        vz [m]   atitude [graus]     fuel [kg]\n"
 
@@ -24,9 +26,24 @@
   exit(ENOMEM);\
 }
 
+/*
+  Coisas uteis para a linguagem
+*/
 #define max(a,b) ((a) >= (b) ? (a) : (b))
 #define min(a,b) ((a) <= (b) ? (a) : (b))
 
 /*Definição para comparar doubles:*/
 #define SIGMA 0.0000001
+
+
+/*Definicoes de fisica e matematica */
+/*Maxima coordenada em qualquer eixo*/
+#define MAX_COORD 10000000
+
+/*Bitmasks partilhadas por diversos ficheiros*/
+  /* Bitmasks para verificar se a spaceship ja foi inicializada*/
+#define INIT_SPACESHIP 1
+#define INIT_SURFACE   2
+#define INIT_LANDING   4
+
 #endif
