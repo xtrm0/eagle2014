@@ -23,18 +23,26 @@
  */
 #if _POSIX_C_VERSION >= 199309L
 #include <unistd.h>
+  /*
+  Representa um clock para usar em loops de logica/desenhar.
+  O target_fps indica o numero de fps que queriamos que gtimer atinja.
+  O fps indica o numero de fps que estamos a usar atualmente com base no score indicado no cnt.
+  Utilização:
+    Basicamente, pomos gtimer_begin no inicio do loop
+    E gtimer_end no fim do loop.
+ */
+typedef struct gtimer {
+  struct timespec tstart, tend, tsleep, trem;
+  double target_fps;
+  double fps;
+  int cnt;
+}gtimer;
 #else
 #ifdef _ISOC11_SOURCE
-#include <threads.h>
-/* O compilador suporta threads (norma ansi C11). Podemos usar o thrd_sleep para esperar */
-#else
-/*
-  Estamos a compilar para/nalgum sistema estupido. (iex: microprocessador muito antigo)
-  Podemos procurar funcoes equivalentes ao nanosleep para sistemas especificos
+/* O compilador suporta threads (C11). Podemos usar o thrd_sleep para esperar
+Ha que notar que o glibc ainda nao implementou o threads seguindo o C11, pelo que isto so funcionara no futuro :)
 */
-#endif
-#endif
-
+#include <threads.h>
 /*
   Representa um clock para usar em loops de logica/desenhar.
   O target_fps indica o numero de fps que queriamos que gtimer atinja.
@@ -49,17 +57,37 @@ typedef struct gtimer {
   double fps;
   int cnt;
 }gtimer;
-
-gtimer * gtimer_init(double tfps);
-
+#else
 /*
-  Inicia um clock e devolve o tempo desde o ultimo clock
+  Estamos a compilar para/nalgum sistema estupido. (iex: microprocessador muito antigo)
+  Podemos procurar funcoes equivalentes ao nanosleep para sistemas especificos, mas
+  nesta caso vamos usar o mysleep
 */
+typedef struct gtimer {
+  time_t tlu;
+  unsigned long long steps; /*Representa o numero de ticks que ja esperou durante este segundo*/
+  unsigned long long times;
+  double fps;
+}gtimer;
+#define K_1 10000
+#define K_2_COCKPIT 1000
+#define K_2_GRAPHIC 1000
+#define K_3 100
+/*
+  Se nao tivermos bibliotecas de tempo com precisao podemos ter segundos em que a velocidade de jogo esta entre 0,5x e 2x o que e suposto.
+  Para alem disso o tempo cpu que o sistema concede a aplicacao nao e sempre o mesmo, pelo que serao de esperar erros ainda maiores
+  A melhor forma de corrigir isto e usar o nanosleep(nao usamos usleep, pois o nanosleep tem maior precisao)
+*/
+#endif
+#endif
+
+
+
+
+gtimer * gtimer_init(double tfps, int pts, int modo);
+
 double gtimer_begin(gtimer *);
 
-/*
-  Devolve o tempo em segundos que passou entre os 2 ultimos begin (e necessario que no meio tenha ocorrido um gclock_sleep)
-*/
 double gtimer_getdt(gtimer *);
 
 void gtimer_sleep(gtimer *);

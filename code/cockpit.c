@@ -61,7 +61,6 @@ void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
 }
 
 int modo_cockpit(spaceship * s, unsigned int mode) {
-  //TODO: Se este ficheiro ficar com mais de 500 linhas, ou esta funcao com mais de 300, usar uma struct
   void * tmp;
   view * v;
   camera2d * c;
@@ -136,7 +135,7 @@ int modo_cockpit(spaceship * s, unsigned int mode) {
   TESTMEM(mouse_y);
   TESTMEM(mouse_button);
 
-  teemo = gtimer_init(TARGET_FPS);
+  teemo = gtimer_init(TARGET_FPS, s->moon->arr_size, mode);
   while (1) {
     deltatime = gtimer_begin(teemo);
     printf("%f\n", deltatime);
@@ -272,6 +271,6 @@ int modo_cockpit(spaceship * s, unsigned int mode) {
 }
 
 
-void resize_camera_pts(spaceship * s, camera * c) {
-  //TODO:!!!
+void resize_camera_pts(spaceship * s, camera2d * c) {
+  //TODO:resize camera!!!
 }

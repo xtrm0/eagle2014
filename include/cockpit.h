@@ -62,5 +62,5 @@ Explicacao do resize_camera_pts()
 	A funcao f e a seguinte: f(x) = ln(x)*sqrt(x), f(x)>0 //TODO: fazer desta uma funcao bonita
 	Temos o retangulo da camara definido
 */
-void resize_camera_pts(spaceship * s, camera * c);
+void resize_camera_pts(spaceship * s, camera2d * c);
 #endif

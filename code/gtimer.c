@@ -5,7 +5,7 @@ void gtimer_destroy(gtimer *c) {
 }
 
 #if _POSIX_C_VERSION >= 199309L
-gtimer * gtimer_init(double tfps) {
+gtimer * gtimer_init(double tfps, int pts, int modo) {
   gtimer * c;
   c = malloc(sizeof(gtimer));
   TESTMEM(c);
@@ -57,7 +57,7 @@ void gtimer_sleep(gtimer * c) {
     1) Mede o tempo usando timespec_get
     2) Utiliza a funcao thrd_sleep() para dormir
 */
-gtimer * gtimer_init(double tfps) {
+gtimer * gtimer_init(double tfps, int pts, int modo) {
   gtimer * c;
   c = malloc(sizeof(gtimer));
   TESTMEM(c);
@@ -103,8 +103,47 @@ void gtimer_sleep(gtimer * c) {
   }
 }
 #else
+gtimer * gtimer_init(double tfps, int pts, int modo) {
+  unsigned long long ticks=0;
+  time_t tmp;
+  gtimer * c;
+  c = malloc(sizeof(gtimer));
+  TESTMEM(c);
+  c->tlu=time(NULL);
+  c->fps = c->tfps;
+  tmp = time(NULL);
+  while(tmp!=time(NULL));
+  tmp = time(NULL);
+  for (ticks=0; (tmp+5!=time(NULL)); ticks++);
+  c->steps = (unsigned long long) ticks * (K_1*pts + (modo==MODE_COCKPIT ? K_2_COCKPIT : K_2_GRAPHIC) + K_3);
+  return c;
+}
+
 /*
-  TODO: Utilizar relogios externos.
+  Atualiza o numero de steps que dorme
 */
+double gtimer_begin(gtimer * c) {
+  if (c->tlu!=time(NULL)) {
+    c->steps = c->steps * (c->times/c->fps);
+    c->times = 0;
+  }
+  return gtimer_getdt(c);
+}
+
+double gtimer_getdt(gtimer * c) {
+  return 1/c->fps;
+}
+
+/*Funcao privada, feita apenas para cumprir o prototipo pedido no enunciado*/
+void mysleep(unsigned long long ticks) {
+  while(ticks--);
+}
+
+void gtimer_sleep(gtimer * c) {
+  gtimer_begin(c);
+  c->times++;
+  mysleep(TICKS);
+}
+
 #endif
 #endif
