@@ -6,7 +6,7 @@
 #include <string.h>
 #include <g2.h>
 #include <g2_X11.h>
-#include "geometry.h"
+#include "../include/geometry.h"
 #define COLOR_BLACK 0
 #define COLOR_WHITE 1
 #define COLOR_GUI   2
@@ -43,7 +43,7 @@ view * view_init(int,int,char *);
     Fecha o virtual device e a janela
   Nota: Retorna erro caso a janela tenha sido fechada pelo sistema de janelas (O g2 nao capta eventos, pelo que e impossivel saber se a janela foi fechada ou nao)
  */
-void view_destroy(view *);
+void view_destroy(view * v);
 
 /*
   Inicializa a fase de desenho numa janela

@@ -89,7 +89,6 @@ int surface_planner_menu(surface * s) {
 		}
 	break;
 	case '3':
-
 		read_string("Insira o nome do ponto [sem espacos]:", nm, 4, MAX_POINT_NAME, COND_NOSPACE);
 		tmp = l_find(s->arr, &arr_find_byname, nm);
 		if (tmp == NULL) {
@@ -156,7 +155,6 @@ int surface_planner(surface * s) {
 	double minx, miny, maxx, maxy;
 	list_no * aux;
 	moon_point * tmp;
-	int r=0;
 	v = view_init(800, 600, "eagle2014 - Desenhar superfície lunar");
   	c = c2d_init(800, 600, 0, 0, 800, 600, 0, 0);
   	s_p_update_window(s,c,v);

@@ -48,13 +48,14 @@ typedef struct spaceship {
   double w, h;
   double x, z;
   double rot;
-  double vx, vz, va; /*w significa velocidade angular */
+  double vx, vz, va;
   double fr, ft; /*Isto e em percentagem em relacao as forcas maximas */
   double mass_tara, mass_comb;
   double I;
   polygon * colision_shape;
   surface * moon;
   /*Parte do historico para guardar para ficheiro: */
+  //TODO: mudar para usar lista
   size_t h_len;
   size_t h_max;
   double ** hist;
@@ -89,7 +90,7 @@ void spc_destroy(spaceship * s);
 /*
   Atualiza a posicao da nave, apos terem passado dt segundos
 */
-void spc_update_pos(spaceship * s, double dt);
+int spc_update_pos(spaceship * s, double dt);
 
 /*
   Desenha a nave no ecra id;

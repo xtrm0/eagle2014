@@ -29,9 +29,10 @@ void graph_destroy(graph * g){
   }
 }
 
-int graph_load_points_from_file (char *nome, graph * g) {
-  double massa=0, tempo, x, z, vx, vz, atitude, combustivel;
-  char tmp; 
+int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
+  double massa=0;
+  double o[7];
+  char tmp;
   FILE * fin;
   double p[2]= {0};
   char line[301]; /*estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2 */
@@ -70,12 +71,13 @@ int graph_load_points_from_file (char *nome, graph * g) {
       while(fgetc(fin)!='\n');
       continue;
     }
-    if (sscanf(line,"%lf %lf %lf %lf %lf %lf %lf%*[ \n\t]%c", &tempo, &x, &z, &vx, &vz, &atitude, &combustivel, &tmp)!=7) {
+    //estamos a ler:$<tempo> <x> <z> <vx> <vz> <atitude> <combustivel>%*[ \n\t]%c
+    if (sscanf(line,"%lf %lf %lf %lf %lf %lf %lf%*[ \n\t]%c", o, o+1, o+2, o+3, o+4, o+5, o+6, &tmp)!=7) {
       fprintf(stderr, "W: Linha invalida na leitura do ficheiro\n");
       continue;
     }
 
-    point(tempo,z,p); poly_push(g->data, p);
+    point(o[t1],o[t2], p); poly_push(g->data, p);
     g->max_x = max(g->max_x, p[0]);
     g->min_x = min(g->min_x, p[0]);
     g->max_y = max(g->max_y, p[1]);
@@ -87,7 +89,7 @@ int graph_load_points_from_file (char *nome, graph * g) {
   return 0;
 }
 
-void graph_draw(graph * g) {
+void graph_draw(graph * g, int t1, int t2) {
   /*atualiza a camara pos e dim, para ter as dimensoes do ecra */
   polygon * pol;
   double O[2]={0}, p1[2]={0}, p2[2]={0}, p3[2]={0}, p4[2]={0};
@@ -100,7 +102,6 @@ void graph_draw(graph * g) {
   g->c->dim[1] = (g->max_y - g->min_y)*1.14;
   g->c->pos[0] = g->min_x - (g->max_x - g->min_x)*0.090;
   g->c->pos[1] = g->min_y - (g->max_y - g->min_y)*0.090;
-
 
   view_begin(g->v);
     /*desenha o background: */
@@ -121,11 +122,14 @@ void graph_draw(graph * g) {
     g2_filled_triangle(g->v->id, p3[0]-5, p3[1], p3[0]+5, p3[1], p3[0], p3[1]+14);
 
     /*desenha os pontos: */
-    g2_pen(g->v->id, g->p_color);
-    poly_copy(g->data, pol);
-    poly_project(pol, g->c, pol);
-    g2_poly_line(g->v->id, pol->size, pol->pts);
-
+    if (t1==t2) {
+      //TODO: desenha apenas uma reta entre (xmin,xmin), (xmax,xmax)
+    } else {
+      g2_pen(g->v->id, g->p_color);
+      poly_copy(g->data, pol);
+      poly_project(pol, g->c, pol);
+      g2_poly_line(g->v->id, pol->size, pol->pts);
+    }
     /*desenha escala: */
     /*TODO: Para graficos generalizados, a escala nao fica muito bonita, mas para graficos so positivos funciona exatamente como esperado */
     g2_pen(g->v->id, g->axisv_color);
@@ -161,33 +165,17 @@ void graph_draw(graph * g) {
   poly_destroy(pol);
 }
 
-void graph_addpoint(graph * g, double * p) {
-  /*
-    Adiciona o ponto p ao grafico
-    Temos de ter em atencao que e preciso manter a ordem de x para que o grafico seja bem desenhado. 
-Atualmente esta função não está a ter isso em conta, pelo que tem complexidade O(1)
-Se implementar-mos a versão força bruta, fazendo qsort cada vez que chama-mos esta função, teremos complexidade O(n*nlogn) para adicionar n pontos. O que não seria aceitavel para muitos pontos
-Por causa disso, caso sentir-mos a necessidade de implementar esta função completamente, usaremos uma binary tree para manter tudo ordenado segundo o eixo x com complexidade O(nlogn) para adicionar n pontos
-   */
-  poly_push(g->data,p);
-  g->max_x = max(g->max_x, p[0]);
-  g->min_x = min(g->min_x, p[0]);
-  g->max_y = max(g->max_y, p[1]);
-  g->min_y = min(g->min_y, p[1]);
-  return;
-}
-
-int modo_graph(char * filename) {
+int modo_graph(char * filename, int t1, int t2) {
   graph * g;
-  g = graph_init(800,800,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
+  g = graph_init(600,600,"Z (m)","t (s)",COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
   fflush(stdout);
-  if (graph_load_points_from_file (filename, g)) {
+  if (graph_load_points_from_file (filename, g, t1, t2)) {
     graph_destroy(g);
     return 1;
   }
   printf(" Loaded %lu points!\n", (unsigned long)g->data->size);
-  graph_draw(g);
+  graph_draw(g, t1, t2);
   printf("Carregue nalguma tecla para fechar o gráfico...\n");
   getchar();
 

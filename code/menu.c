@@ -14,6 +14,7 @@ void read_data_spec(spaceship * s) {
 
 int menu(spaceship * s) {
   char opcao, c;
+  int t1, t2;
   spaceship * d;
   printf("\nSelecione uma opção:\n"
          "1. Especificação dos dados do módulo e das condições iniciais do voo.\n"
@@ -42,16 +43,27 @@ int menu(spaceship * s) {
       break;
     case '2':
       d = _spc_copy(s);
-      modo_cockpit(d);
+      modo_cockpit(d, MODE_COCKPIT);
       break;
     case '3':
-      modo_graph("vooLunarCorrente.txt");
+      printf("O que deseja representar horizontalmente?\n");
+      printf("0-tempo      |  3-velocidade horizontal  |  6-massa combustivel\n"
+             "1-longitude  |  4-velocidade vertical    |                     \n"
+             "2-altitude   |  5-atitude                |                     \n");
+      read_int("opcao:", &t1, 0,6);
+      printf("O que deseja representar verticalmente?\n");
+      printf("0-tempo      |  3-velocidade horizontal  |  6-massa combustivel\n"
+             "1-longitude  |  4-velocidade vertical    |                     \n"
+             "2-altitude   |  5-atitude                |                     \n");
+      read_int("opcao:", &t2, 0,6);
+      modo_graph("vooLunarCorrente.txt",t1,t2);
       break;
     case '4':
       s->initialized |= surface_planner(s->moon);
       break;
     case '5':
-      printf("EM CONSTRUÇÃO");
+      d = _spc_copy(s);
+      modo_cockpit(d, MODE_GRAPHIC);
       break;
     break;
       default:

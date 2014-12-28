@@ -71,12 +71,14 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
   double p2[2] = {0};
   double p3[3] = {0};
   list_no * aux;
+
+  g2_set_line_width(v->id, 2);
+  g2_pen(v->id, COLOR_MOON);
   if (s->arr->next==NULL) {
       p3[0] = -MAX_COORD;
       project(p3, c, p1);
       p3[0] = MAX_COORD;
       project(p3, c, p2);
-      printf("((%f, %f), (%f, %f))\n", p2[0],p2[1],p1[0],p1[1]);
       g2_line(v->id,p2[0],p2[1],p1[0],p1[1]);
       return;
   }
@@ -89,7 +91,6 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
     p3[0]=((moon_point *)(aux->val))->c[0];
     p3[1]=((moon_point *)(aux->val))->c[1];
     project(p3, c, p2);
-    printf("((%f, %f), (%f, %f))\n", p2[0],p2[1],p1[0],p1[1]);
     g2_line(v->id,p2[0],p2[1],p1[0],p1[1]);
     p1[0]=p2[0];
     p1[1]=p2[1];
@@ -98,6 +99,24 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
   p1[1] = p2[1];
   p1[0] = c->vdim[0] + 100 + c->vpos[0];
   g2_line(v->id,p2[0],p2[1],p1[0],p1[1]);
+
+  /*Desenha o objetivo atual*/
+  if (s->curr_lp!=NULL) {
+    if ((*(list_no**)s->curr_lp->val)->next!=NULL) {
+      aux = *(list_no**)s->curr_lp->val;
+      p3[0] = ((moon_point *)(aux->val))->c[0];
+      p3[1] = ((moon_point *)(aux->val))->c[1];
+      project(p3, c, p1);
+      aux = (*(list_no**)s->curr_lp->val)->next;
+      p3[0] = ((moon_point *)(aux->val))->c[0];
+      p3[1] = ((moon_point *)(aux->val))->c[1];
+      project(p3, c, p2);
+      g2_pen(v->id, COLOR_RED);
+      g2_set_line_width(v->id, 4);
+      g2_line(v->id,p2[0],p2[1],p1[0],p1[1]);
+    }
+  }
+  g2_set_line_width(v->id, 1);
 }
 
 

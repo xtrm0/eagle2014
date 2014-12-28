@@ -30,9 +30,9 @@ void graph_destroy(graph *g);
     0 caso nao hajam erros
     1 caso tenham ocorrido erros
  */
-int graph_load_points_from_file (char *, graph *);
+int graph_load_points_from_file (char *, graph *,int,int);
 
-void graph_draw(graph * g);
+void graph_draw(graph * g,int t1, int t2);
 
 /*
   Adiciona ao grafico um ponto
@@ -48,7 +48,7 @@ void graph_addpoint(graph * g, double * p);
     zero se nao ocorreu nenhum erro critico
     non-zero para terminar o programa
 */
-int modo_graph(char * filename);
+int modo_graph(char * filename,int t1, int t2);
 
 
 #endif

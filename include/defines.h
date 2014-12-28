@@ -46,4 +46,7 @@
 #define INIT_SURFACE   2
 #define INIT_LANDING   4
 
+  /* Bitmasks para controlar o modo de jogo*/
+#define MODE_COCKPIT   1
+#define MODE_GRAPHIC   2
 #endif

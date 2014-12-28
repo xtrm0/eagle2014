@@ -166,8 +166,10 @@ void spc_destroy(spaceship * s) {
     http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
   Temos um erro proporcional a O(dt^2) que e bastante baixo. Se quisessemos diminuir este erro (o que nao seria justificavel para um jogo),
   podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessecário e custoso em termos de ciclos do processador.
+
+  //TODO: isto tem de devolver o valor da atualizacao e fazer colision checking
 */
-void spc_update_pos(spaceship * s, double dt) {
+int spc_update_pos(spaceship * s, double dt) {
   /*TODO: fazer as colisoes aqui */
   /*printf("dt:%f, x: %f\n",dt, s->x); */
   double ax0, az0, aa0;
@@ -215,6 +217,7 @@ void spc_update_pos(spaceship * s, double dt) {
   printf("%f, %f, %f, %f\n", N_TAU_T, s->ft, cos(s->rot), mass);
   printf("%f || %f || %f\n", ax0, az0, aa0);
   */
+  return 3;
 }
 
 
@@ -303,11 +306,11 @@ void spc_add_hist(spaceship * s, double dt) {
   s->h_len++;
 }
 
-/*
-  //TODO
-*/
+
 int spc_unsafe_landing(spaceship * s) {
-  size_t i;
+  /*
+    //TODO
+  */
   if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz < -LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX)
     return 1; /*pois nao cumpre as especificacoes */
 /*  for (i=0; i<s->moon->l_size; i++) {
@@ -338,3 +341,4 @@ void spc_save_to_file(spaceship * s) {
 	}
 	fclose(fileout);
 }
+
