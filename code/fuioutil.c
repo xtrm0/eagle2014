@@ -6,73 +6,86 @@ void clearbuffer() {
 //TODO: falta verificar se o numero esta grande ou pequeno demais para ser int
 void read_int(char * prompt, int * target, int mini, int maxi) {
   char c;
-  begin_read_int:
+  int flag;
 
-  fputs(prompt, stdout);
-  if (scanf("%d", target)!=1) {
-    clearbuffer();
-    printf("Erro no formato especificado!\n");
-    goto begin_read_int;
-  }
-  while((c=getchar())!='\n') {
-    if (!isspace(c)) {
+  do {
+    flag=0;
+    fputs(prompt, stdout);
+    if (scanf("%d", target)!=1) {
       clearbuffer();
-      printf("Erro no formato especificado: Não coloque caracteres depois do numero!\n");
-      goto begin_read_int;
+      printf("Erro no formato especificado!\n");
+      flag=1; continue;
     }
-  }
-  if (*target < mini || *target > maxi) {
-    printf("O número tem de estar entre %d e %d!\n", mini, maxi);
-    goto begin_read_int;
-  }
+
+    while((c=getchar())!='\n') {
+      if (!isspace(c)) {
+        clearbuffer();
+        printf("Erro no formato especificado: Não coloque caracteres depois do numero!\n");
+        flag=1; break;
+      }
+    }
+    if (flag) continue;
+
+    if (*target < mini || *target > maxi) {
+      printf("O número tem de estar entre %d e %d!\n", mini, maxi);
+      flag=1; continue;
+    }
+  } while (flag);
 }
 
-//TODO: falta verificar se o numero esta grande ou pequeno demais para ser double
 void read_double(char * prompt, double * target, unsigned int conditions) {
+  int flag;
   char c;
-  begin_read_double:
 
-  fputs(prompt, stdout);
-  if (scanf("%lf", target)!=1) {
-    clearbuffer();
-    printf("Erro no formato especificado!\n");
-    goto begin_read_double;
-  }
-  while((c=getchar())!='\n') {
-    if (!isspace(c)) {
+  do {
+    flag=0;
+    fputs(prompt, stdout);
+    if (scanf("%lf", target)!=1) {
       clearbuffer();
-      printf("Erro no formato especificado: Não coloque unidades!\n");
-      goto begin_read_double;
+      printf("Erro no formato especificado!\n");
+      flag=1; continue;
     }
-  }
+    while((c=getchar())!='\n') {
+      if (!isspace(c)) {
+        clearbuffer();
+        printf("Erro no formato especificado: Não coloque unidades!\n");
+        flag=1; break;
+      }
+    }
+    if (flag) continue;
 
-  if (conditions & COND_BIGGERTHAN0) {
-    if (*target < 0) {
-      printf("Introduza um valor positivo!\n");
-      goto begin_read_double;
+    if (conditions & (COND_MASS_S|COND_MASS_C)) {
+      if (*target < 100) {
+        printf("Introduza um valor superior a 100kg!\n");
+        flag=1; continue;
+      }
+      if (*target > 100000) {
+        printf("Introduza um valor inferior a 100000kg!\n");
+        flag=1; continue;
+      }
     }
-  }
 
-  if (conditions & COND_BIGGERTHAN100) {
-    if (*target < 100) {
-      printf("Introduza um valor superior a 100!\n");
-      goto begin_read_double;
+    if (conditions & (COND_VELOC)) {
+      if (*target < -0.1*LIGHT_SPEED || *target > 0.1*LIGHT_SPEED) {
+        printf("A simulacao nao suporta velocidades relativistas!\n");
+        flag=1; continue;
+      }
     }
-  }
 
-  if (conditions & COND_SMALLRTHAN0) {
-    if (*target > 0) {
-      printf("Introduza um valor negativo!\n");
-      goto begin_read_double;
+    if (conditions & (COND_COORD|COND_ANGLE)) {
+      if (*target < -MAX_COORD || *target > MAX_COORD) {
+        printf("Valor inválido! (tem de estar no intervalo [-" PRETOSTRING(MAX_COORD) "," PRETOSTRING(MAX_COORD) "])\n");
+        flag=1; continue;
+      }
     }
-  }
 
-  if (conditions & COND_ALTITUDE) {
-    if (*target < 14) {
-      printf("Altitude inicial da nave muito baixa!\n");
-      goto begin_read_double;
+    if (conditions & COND_ALTITUDE) {
+      if (*target < 14) {
+        printf("A altitude inicial tem de ser superior a 14m\n");
+        flag=1; continue;
+      }
     }
-  }
+  } while(flag);
 }
 
 

@@ -314,17 +314,22 @@ void c2d_destroy(camera2d * c) {
     free(c);
 }
 
+//cordenadas do canto inferior esquerdo
 void c2d_fit(camera2d *c, double x, double y, double w, double h) {
-  double factor = ((double)c->vdim[1])/((double)c->vdim[0]);
   c->pos[0] = x;
   c->pos[1] = y;
-  if (factor>1) {
-    c->dim[0] = w*factor;
-    c->dim[1] = h;
-  } else {
-    c->dim[0] = w;
-    c->dim[1] = h/factor;
-  }
+  if (w==0) w=1;
+  if (h==0) h=1;
+  //TEST
+  c->dim[0] = c->dim[1] = max(w,h);
+}
+
+//cordenadas do centro
+void c2d_centerfit(camera2d *c, double x, double y, double w, double h) {
+  //Nota isto assume que queremos a escala w=h, que e o caso para todo o trabalho
+  c->dim[0] = c->dim[1] = max(w,h);
+  c->pos[0]= x - c->dim[0]/2;
+  c->pos[1]= y - c->dim[1]/2;
 }
 
 void c2d_zoom(camera2d *c, double per) {
@@ -335,6 +340,8 @@ void c2d_zoom(camera2d *c, double per) {
   c->pos[0] -= c->dim[0]/2;
   c->pos[1] -= c->dim[1]/2;
 }
+
+
 
 
 /*

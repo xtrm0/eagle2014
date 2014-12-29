@@ -4,7 +4,7 @@ void gtimer_destroy(gtimer *c) {
     free(c);
 }
 
-#if _POSIX_C_VERSION >= 199309L
+#if _POSIX_C_SOURCE >= 199309L
 gtimer * gtimer_init(double tfps, int pts, int modo) {
   gtimer * c;
   c = malloc(sizeof(gtimer));
@@ -51,11 +51,11 @@ void gtimer_sleep(gtimer * c) {
   }
 }
 #else
-#ifdef _ISOC11_SOURCE
+#if defined(_ISOC11_SOURCE) && !defined(__STDC_NO_THREADS__)
 /*
-  TODO: Aqui vamos usar:
-    1) Mede o tempo usando timespec_get
-    2) Utiliza a funcao thrd_sleep() para dormir
+  Estas funcoes ja foram definidas na norma C11, mas ainda nao foram implementadas o glibc, pelo que ainda nao existe codigo
+  Nos decidimos, com o intuito de adicionar um certo je ne sais quoi ao trabalho deixarmos aqui a nossa ideia de como ficariam nesta nova implementacao.
+  Para isso consultamos a norma C11, disponivel em http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=57853 
 */
 gtimer * gtimer_init(double tfps, int pts, int modo) {
   gtimer * c;

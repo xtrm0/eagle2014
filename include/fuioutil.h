@@ -5,19 +5,20 @@
 #include <stddef.h>
 #include <string.h>
 #include <ctype.h>
+
+#define COND_COORD     (1<<0)
+#define COND_ALTITUDE  (1<<1)
+#define COND_VELOC     (1<<2)
+#define COND_MASS_S    (1<<3)
+#define COND_MASS_C    (1<<4)
+#define COND_ANGLE     (1<<5)
+
 /*
   Le um double do teclado
 
   Nao desiste enquando nao tiver um double na forma valida
-  O ultimo argumento e recebi como bitmask
-  TODO: tornar as condicoes mais relacionaveis com a aplicacao
+  O ultimo argumento e recebido como bitmask
 */
-#define COND_BIGGERTHAN0 (1<<0)
-#define COND_SMALLRTHAN0 (1<<1)
-#define COND_ANGLERAD (1<<2)
-#define COND_ALTITUDE (1<<3)
-#define COND_BIGGERTHAN100 (1<<4)
-#define COND_COORD 0
 void read_double(char *, double *, unsigned int);
 
 /*

@@ -3,13 +3,13 @@
 void read_data_spec(spaceship * s) {
   s->initialized |= 1;
   printf("Introduza os dados requisitados: \n");
-  read_double("Introduza a massa do módulo (sem combustível) (Kg): ", &(s->mass_tara), COND_BIGGERTHAN100);
-  read_double("Introduza a massa de combustível do módulo (kg): ", &(s->mass_comb), COND_BIGGERTHAN100);
-  read_double("Altítude do centro de massa no início da alunagem (m): ", &(s->z), COND_ALTITUDE);
-  read_double("Distância horizontal do centro de massa no início da alunagem (m): ", &(s->x), 0);
-  read_double("Velocidade vertical no início da alunagem (m/s): ", &(s->vz), 0);
-  read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), 0);
-  read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLERAD);
+  read_double("Introduza a massa do módulo (sem combustível) (Kg): ", &(s->mass_tara), COND_MASS_S);
+  read_double("Introduza a massa de combustível do módulo (kg): ", &(s->mass_comb), COND_MASS_C);
+  read_double("Altítude do centro de massa no início da alunagem (m): ", &(s->z), COND_ALTITUDE|COND_COORD);
+  read_double("Distância horizontal do centro de massa no início da alunagem (m): ", &(s->x), COND_COORD);
+  read_double("Velocidade vertical no início da alunagem (m/s): ", &(s->vz), COND_VELOC);
+  read_double("Velocidade horizontal no início da alunagem (m/s): ", &(s->vx), COND_VELOC);
+  read_double("Atitude do modulo no início da alunagem (rad): ", &(s->rot), COND_ANGLE);
 }
 
 int menu(spaceship * s) {
@@ -43,7 +43,7 @@ int menu(spaceship * s) {
       break;
     case '2':
       d = _spc_copy(s);
-      modo_cockpit(d, MODE_COCKPIT);
+      game_engine(d, MODE_COCKPIT);
       break;
     case '3':
       printf("O que deseja representar horizontalmente?\n");
@@ -63,10 +63,9 @@ int menu(spaceship * s) {
       break;
     case '5':
       d = _spc_copy(s);
-      modo_cockpit(d, MODE_GRAPHIC);
+      game_engine(d, MODE_GRAPHIC);
       break;
-    break;
-      default:
+    default:
       printf("Opção desconhecida.\n");
   }
 

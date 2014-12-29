@@ -1,21 +1,17 @@
 #include "../include/surface_planner.h"
 void s_p_update_window(surface * s, camera2d * c, view * v) {
+	char str[60];
 	view_begin(v);
-	g2_clear(v->id);
-	g2_pen(v->id, COLOR_MOON);
-	sfc_draw(s,c,v);
-	g2_pen(v->id, COLOR_RED);
-	sfc_draw_labels(s,c,v);
-	/*
-		TODO: imprime informacao na janela:
-		Numero de pontos:
-		Numero de pontos de alunagem:
-	*/
-	g2_pen(v->id, COLOR_BLACK);
-	/*
-		g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 1*COCKPIT_PAD_VERT, "Atitude:");
-	  	g2_string(v->id, COCKPIT_LEFT, v->H - COCKPIT_TOP - 2*COCKPIT_PAD_VERT, "Altitude:");
-  	*/
+		g2_clear(v->id);
+		g2_pen(v->id, COLOR_MOON);
+		sfc_draw(s,c,v);
+		g2_pen(v->id, COLOR_RED);
+		sfc_draw_labels(s,c,v);
+		g2_pen(v->id, COLOR_BLACK);
+		sprintf(str, "Numero de pontos: %ld", (long int)s->arr_size);
+		g2_string(v->id, 20, v->H-20, str);
+		sprintf(str, "Numero de pontos de alunagem: %ld", (long int)s->lp_size);
+		g2_string(v->id, 20, v->H-40, str);
 	view_end(v);
 }
 
@@ -34,13 +30,14 @@ void read_mp(moon_point * p, surface * s) {
 }
 
 void surface_planner_menu_text() {
-	printf("[ Desenhando superficie lunar ]\n"
+	printf("[ Modo de desenho da superficie lunar ]\n"
 		"0 - Acabar superficie lunar\n"
 		"1 - Adicionar ponto\n"
 		"2 - Remover ponto\n"
 		"3 - Definir ponto de alunagem\n"
 		"4 - Imprimir sequencia dos pontos de alunagem\n"
 		"5 - Nova sequencia de alunagem (apaga a sequencia de alunagem atual)\n"
+		"6 - Nova lua\n"
 		"opcao: ");
 }
 
@@ -71,7 +68,7 @@ int surface_planner_menu(surface * s) {
 			sfc_clear_lp(s);
 		}
 		read_mp(&aux, s);
-		sfc_add_point_back(s, &aux);
+		sfc_add_point_sorted(s, &aux);
 	break;
 	case '2':
 		if (s->lp_size!=0) {
@@ -95,9 +92,9 @@ int surface_planner_menu(surface * s) {
 			printf("Ponto nao encontrado!\n");
 		} else if(tmp->next->next==NULL) {
 			printf("Ponto nao define aresta: ponto terminal!\n");
-		} else if(0) { //TODO
-			printf("Ponto nao define local de alunagem valido: comprimento da aresta inferior a 10m!\n");
-		} else if(0) { //TODO
+		} else if(distsq(((moon_point *)tmp->next->val)->c, ((moon_point *)tmp->next->next->val)->c) < 100) {
+			printf("Ponto nao define local de alunagem valido: comprimento da aresta (%lfm) inferior a 10m!\n", distsq(((moon_point *)tmp->next->val)->c, ((moon_point *)tmp->next->next->val)->c));
+		} else if(fabs(angle(((moon_point *)tmp->next->val)->c, ((moon_point *)tmp->next->next->val)->c)) > MAXROT) { 
 			printf("Ponto nao define local de alunagem valido: inclinacao superior a 5 graus!\n");
 		} else if (s->lp_back!=s->lp && (tmp->next)==*(list_no**)s->lp_back->val) {
 			printf("O ponto nao pode ser o mesmo que o anterior!\n");
@@ -124,7 +121,15 @@ int surface_planner_menu(surface * s) {
 		printf("Todos os pontos de alunagem foram apagados!\n");
 		sfc_clear_lp(s);
 	break;
-	default: 
+	case '6':
+		s->lp_size = 0;
+		s->arr_size = 0;
+		l_destroy(s->arr);
+    	l_destroy(s->lp);
+		s->arr = s->arr_back = l_init(sizeof(moon_point));
+ 		s->lp = s->lp_back = l_init(sizeof(void *));
+ 		printf("Nova lua criada!\n");
+	default:
 		printf("Opcao desconhecida! :S\n");
 	break;
 	}
@@ -155,10 +160,11 @@ int surface_planner(surface * s) {
 	double minx, miny, maxx, maxy;
 	list_no * aux;
 	moon_point * tmp;
-	v = view_init(800, 600, "eagle2014 - Desenhar superfície lunar");
-  	c = c2d_init(800, 600, 0, 0, 800, 600, 0, 0);
+	v = view_init(800, 600, "eagle2014 - Desenhar superficie lunar");
+  	c = c2d_init(600, 600, 0, 0, 800, 600, 0, 0);
+  	g2_set_font_size(v->id, PLANNER_FONT_SIZE);
   	s_p_update_window(s,c,v);
-  	while (surface_planner_menu(s)) {
+  	do {
   		sfc_print(s);
 		minx = -600;
 		miny = -800;
@@ -178,9 +184,9 @@ int surface_planner(surface * s) {
 			}
 		}
 		c2d_fit(c,minx,miny,maxx-minx,maxy-miny);
-		c2d_zoom(c, 1.05);
+		c2d_zoom(c, 1.10);
   		s_p_update_window(s,c,v);
-  	}
+  	} while (surface_planner_menu(s));
   	view_destroy(v);
   	c2d_destroy(c);
   	return (s->arr_size==0 ? INIT_SURFACE : 0)|(s->lp_size==0 ? INIT_LANDING : 0);

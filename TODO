@@ -1,10 +1,9 @@
-+ Testar a pseudo funcao de timming
-+ Verificar se aresta de alunagem e valida
-+ Adicionar pontos por ordem de x :) (i z)
-+ Scalling da camara
-
++ Modo grafico -> por valores bem (z esta trocado com x)
++ Testar antes de iniciar o modo cockpit se a nave esta por baixo ou por cima da superficie lunar
 
 [LATER]
++ Testar Scalling da camara
++ Testar a pseudo funcao de timming
 + Remover colors do make
 + adicionar prototipos em falta
 + Comentar, comentar, comentar

@@ -21,11 +21,9 @@ int main(void) {
 int main(void) {
   spaceship * s;
   s = spc_init(0,0,0);
-  /*
-    surface_planner(s->moon);
-    read_data_spec(s);
-  */
-  modo_cockpit(s, MODE_GRAPHIC);
+  //surface_planner(s->moon);
+  //read_data_spec(s);
+  game_engine(s, MODE_GRAPHIC);
   modo_graph("vooLunarCorrente.txt", 0,1);
   printf("Press a key to continue");
   getchar();

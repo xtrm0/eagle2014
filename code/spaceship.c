@@ -62,7 +62,6 @@ spaceship * _spc_copy(spaceship * a) {
 }
 
 void spc_init_model(spaceship * s, view *v) {
-  /*TODO: passar a ler a nave de um ficheiro, em vez de ser daqui */
   polygon * pol;
   double p[2]= {0}; /*isto inicializa a {0,0} */
 

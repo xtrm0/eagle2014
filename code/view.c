@@ -37,9 +37,9 @@ void view_destroy(view * v) {
 
 void view_begin(view * v) {
   /*
-    TODO: Esta funcao nao funciona porque o g2 nao verifica se a janela foi fechada :S
+    Esta funcao nao funciona porque o g2 nao verifica se a janela foi fechada :S
     Acreditamos ser impossivel fazes isto funcionar sem usar-mos o X11/X.h e criamos nos mesmos a janela
-    o g2_decide_exist nao faz o pretendido pois apenas verifica se a array g2_dev[v->dev] foi inicializado e nao foi fechado
+    o g2_decide_exist nao faz o pretendido pois apenas verifica se a array g2_dev[v->dev] foi inicializado e nao se a janela foi fechada
   */
   if (!g2_device_exist(v->dev)) {
     fprintf(stderr, "E: A janela foi fechada\n");

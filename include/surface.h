@@ -42,6 +42,8 @@ void sfc_add_point(surface * s, moon_point p);
   Adiciona um ponto a seguir ao ultimo ponto da superficie
 */
 void sfc_add_point_back(surface * s, moon_point * p);
+//Adiciona um ponto na posicao certa
+void sfc_add_point_sorted(surface * s, moon_point * p);
 
 /*
   Torna a aresta que se inicia no ponto com indice assinalado um local de aterragem seguro

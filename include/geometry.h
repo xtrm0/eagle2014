@@ -135,7 +135,12 @@ polygon * poly_clean(polygon *);
 */
 polygon * poly_rotate(polygon *, double);
 
-/*TODO: polygon * poly_rotate2d_p(polygon *, double, double *); Rodar um poligono a volta de um ponto*/
+/*polygon * poly_rotate2d_p(polygon * p, double r, double * c); Rodar um poligono a volta de um ponto
+Nao implementámos porque nao necessitámos, mas a sequencia de operacoes seria:
+p = p - c;
+poly_rotate(p, r);
+p = p + c;
+*/
 
 /*
   Translaciona um poligono por um vetor (p[0],p[1])
@@ -185,9 +190,13 @@ camera2d * c2d_init(double,double,double,double,double,double,double,double);
 */
 void c2d_destroy(camera2d *);
 /*
-  Faz com que a camara fique minima camara que contem o retangulo e que comeca nas coordenadas x, y, ficando com o aspec ratio do ecra :)
+  Faz com que a camara fique minima camara que contem o retangulo e que comeca nas coordenadas x, y, ficando com o aspec ratio 1:1 :)
 */
 void c2d_fit(camera2d *c, double x, double y, double w, double h);
+/*
+  Faz com que a camara fique a minima camara que contem o retangulo e esta centrado nas coordenadas x, y, ficando com o aspec ratio 1:1 :)
+*/
+void c2d_centerfit(camera2d *c, double x, double y, double w, double h);
 /*
   Faz zoom out pela percentagem per (1=100%=nada altera):
     mantem:

@@ -14,7 +14,7 @@
 #define HEXRAD 4.5
 
 /*Constantes fisicas: */
-/* Obtidos a partir da pagina da wikipedia TODO:colocar aqui url para a pagina*/
+/* Obtidos a partir da pagina da wikipedia http://en.wikipedia.org/wiki/Apollo_Lunar_Module*/
 #define N_TAU_R 441
 #define N_TAU_T 44400
 /*Os valores de Beta estao apenas na ordem de grandeza certa, no entanto dependem das caracteristicas do combustivel, pelo que nada sabemos sobre elas*/
@@ -23,11 +23,7 @@
 #define N_G 1.622
 #define N_PI 3.1415926535
 #define N_TARA 14696
-/*Constantes de aterragem */
-/*5 graus: */
-#define MAXROT 0.0872664626
-#define LAND_MAXVZ 0.1
-#define LAND_MAXVX 0.05
+
 
 
 /*
@@ -76,7 +72,6 @@ typedef struct spaceship {
 spaceship * spc_init(double,double,double);
 /*
   Carrega o modelo da nave espacial
-  TODO: Carregar de um ficheiro?
 */
 void spc_init_model(spaceship *, view *);
 

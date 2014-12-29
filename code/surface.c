@@ -37,12 +37,31 @@ int arr_find_byname(void *a, void *b) {
   return strcmp(((moon_point *)(((list_no *)a)->val))->name,(char *)b);
 }
 
-void sfc_add_point_after(surface * s, char name[MAX_POINT_NAME], moon_point p) {
+double mp_pos_cmp(moon_point *ma, moon_point *mb) {
+  if (mb->c[0]-ma->c[0] != 0)
+    return mb->c[0]-ma->c[0];
+  else
+    return mb->c[1]-ma->c[1];
+}
+
+int arr_find_pos(void *a, void *b) {
+  moon_point *ma, *mb;
+  ma = (moon_point *)(((list_no *)a)->val);
+  mb = (moon_point *)b;
+  return (mp_pos_cmp(ma,mb)>=0);
+}
+
+void sfc_add_point_sorted(surface * s, moon_point * p) {
   int flag=0;
-  list_no * aux = l_find(s->arr,&arr_find_byname,name);
-  if (aux->next == s->arr_back) flag=1;
-  l_push_next(aux->next, &p, sizeof(p));
-  if (flag) s->arr_back= s->arr_back->next;
+  list_no * aux = l_find(s->arr,&arr_find_pos,p);
+  if (aux == NULL) {
+    flag=1;
+    aux = s->arr_back;
+  }
+  l_push_next(aux, p, sizeof(moon_point));
+  if (flag) {
+    s->arr_back = s->arr_back->next;
+  }
   s->arr_size++;
 }
 
@@ -75,6 +94,7 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
   g2_set_line_width(v->id, 2);
   g2_pen(v->id, COLOR_MOON);
   if (s->arr->next==NULL) {
+      p3[0] = 0;
       p3[0] = -MAX_COORD;
       project(p3, c, p1);
       p3[0] = MAX_COORD;
@@ -129,8 +149,10 @@ void sfc_draw_labels(surface * s, camera2d * c, view * v) {
   aux = s->arr->next;
   while (aux!=NULL) {
     project(((moon_point *)aux->val)->c, c, p);
-    //TODO: desenha o nome na posicao dada
-    //g2_string(v->id, aux);
+    g2_pen(v->id, COLOR_CLICK);
+    g2_filled_circle(v->id, p[0], p[1], 2);
+    g2_pen(v->id, COLOR_BLACK);
+    g2_string(v->id,p[0], p[1]+5,((moon_point *)aux->val)->name);
     aux = aux->next;
   }
   //TODO: muda de cor

@@ -18,10 +18,7 @@
   Decidimos nao usar o sleep, pois todos os botoes da janela deixam de funcionar, dado que o so verificamos uma vez por segundo se o rato esta a ser clicado. É um problema interno do g2, que não é possível de corrigir sem deixar de o usar para criar as janelas. Uma melhor implementação do g2 teria a possibilidade de usar o modo de eventos do X11.
 */
 
-/*
-  Estes defines servem para descobrir qual o tipo de sleep vamos usar
- */
-#if _POSIX_C_VERSION >= 199309L
+#if _POSIX_C_SOURCE >= 199309L
 #include <unistd.h>
   /*
   Representa um clock para usar em loops de logica/desenhar.
