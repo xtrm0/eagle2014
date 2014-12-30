@@ -23,8 +23,8 @@ int main(void) {
   s = spc_init(0,0,0);
   //surface_planner(s->moon);
   //read_data_spec(s);
-  game_engine(s, MODE_GRAPHIC);
-  modo_graph("vooLunarCorrente.txt", 0,1);
+  //game_engine(s, MODE_GRAPHIC);
+  modo_graph("vooLunarCorrente.txt", 0,0);
   printf("Press a key to continue");
   getchar();
 

@@ -14,13 +14,12 @@ typedef struct graph {
   polygon * data;
   camera2d * c;
   view * v;
-  char * x_axis;
-  char * y_axis;
+  int t1, t2;
   double max_x, max_y, min_x, min_y;
   int p_color, b_color, axisl_color, axisv_color, axisn_color;
 } graph;
 
-graph * graph_init(double W, double H, char * x_axis, char * y_axis, int b_color, int p_color, int axisl_color, int axisv_color, int axisn_color);
+graph * graph_init(double W, double H, int t1, int t2, int b_color, int p_color, int axisl_color, int axisv_color, int axisn_color);
 
 void graph_destroy(graph *g);
 

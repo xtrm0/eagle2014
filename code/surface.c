@@ -142,8 +142,6 @@ void sfc_draw(surface * s, camera2d * c, view * v) {
 
 
 void sfc_draw_labels(surface * s, camera2d * c, view * v) {
-  //TODO: desenha as labels dos pontos de uma surface
-  //TODO: desenha os pontos de aterragem
   double p[2] = {0};
   list_no * aux;
   aux = s->arr->next;
@@ -153,14 +151,6 @@ void sfc_draw_labels(surface * s, camera2d * c, view * v) {
     g2_filled_circle(v->id, p[0], p[1], 2);
     g2_pen(v->id, COLOR_BLACK);
     g2_string(v->id,p[0], p[1]+5,((moon_point *)aux->val)->name);
-    aux = aux->next;
-  }
-  //TODO: muda de cor
-  aux = s->lp->next;
-  while (aux!=NULL) {
-    project(((moon_point *)aux->val)->c, c, p);
-    //TODO: desenha o nome de pontos de aterragem na posicao dada
-    //g2_string(v->id, aux);
     aux = aux->next;
   }
 }

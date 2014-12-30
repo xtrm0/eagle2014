@@ -1,9 +1,10 @@
-+ Modo grafico -> por valores bem (z esta trocado com x)
 + Testar antes de iniciar o modo cockpit se a nave esta por baixo ou por cima da superficie lunar
-
++ Modo cockpit -> colisoes
 [LATER]
 + Testar Scalling da camara
 + Testar a pseudo funcao de timming
++ Testar modo rever grafico
++ Testar modo grafico
 + Remover colors do make
 + adicionar prototipos em falta
 + Comentar, comentar, comentar
