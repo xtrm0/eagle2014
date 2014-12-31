@@ -1,11 +1,11 @@
-FLAGS=-c -Wall
-LNFLAGS=-Wall 
+FLAGS=-c -Wall -pedantic -ansi
+LNFLAGS=-Wall -pedantic -ansi
 LNLIBS=-lg2 -lm -lrt
-CC = gcc -fdiagnostics-color=auto
+CC = gcc
 IDIR=include
 ODIR=objects
 CDIR=code
-OBJECTS= main.o menu.o geometry.o spaceship.o view.o cockpit.o button.o grafico.o surface.o gtimer.o list.o surface_planner.o fuioutil.o
+OBJECTS= main.o menu.o geometry.o spaceship.o view.o game_engine.o button.o grafico.o surface.o gtimer.o list.o surface_planner.o fuioutil.o
 OBJECTSPATH = $(patsubst %,$(ODIR)/%,$(OBJECTS))
 .PHONY: all clean debug
 

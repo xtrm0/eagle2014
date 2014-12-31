@@ -1,10 +1,10 @@
 #ifndef GRAFICO_H
 #define GRAFICO_H
+#include "../include/defines.h"
 #include <stdio.h>
 #include <math.h>
 #include <g2.h>
 #include <g2_X11.h>
-#include "../include/defines.h"
 #include "../include/view.h"
 
 /*

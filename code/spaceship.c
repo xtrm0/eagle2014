@@ -1,6 +1,6 @@
 #include "../include/spaceship.h"
 
-spaceship * spc_init(double x, double z, double rot) {
+spaceship * spc_init(double x, double z, double rot, double fps) {
   spaceship * s = (spaceship *)malloc(sizeof(spaceship));
   TESTMEM(s);
   memset(s,0,sizeof(spaceship));
@@ -15,6 +15,7 @@ spaceship * spc_init(double x, double z, double rot) {
   s->mass_comb = 1200.0;
   s->h_len=0;
   s->h_max=1;
+  s->fps = fps;
   s->hist = malloc(sizeof(double *)*1);
   TESTMEM(s->hist);
   s->hist[0] = malloc(sizeof(double)*7);
@@ -164,15 +165,23 @@ void spc_destroy(spaceship * s) {
   Estamos a usar o metodo de integracao Velocity Verlet:
     http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
   Temos um erro proporcional a O(dt^2) que e bastante baixo. Se quisessemos diminuir este erro (o que nao seria justificavel para um jogo),
-  podiamos recorrer à integracao tendo por base mais termos anteriores, mas isso seria desnecessecário e custoso em termos de ciclos do processador.
-
-  //TODO: isto tem de devolver o valor da atualizacao e fazer colision checking
+  podiamos recorrer à integracao tendo por base mais termos, mas isso seria desnecessecário e custoso em termos de ciclos do processador.
 */
 int spc_update_pos(spaceship * s, double dt) {
-  /*TODO: fazer as colisoes aqui */
   /*printf("dt:%f, x: %f\n",dt, s->x); */
   double ax0, az0, aa0;
+  moon_point * p;
+  double p0[2]={0}, p1[2]={0}, p3[2]={0}, p4[2]={0}, p5[2]={0}, p6[2]={0};
   double mass;
+  int flag; /*Indica se colide com alguma aresta da lua*/
+  int ret=0;
+  int i;
+  list_no * j;
+  polygon * pol;
+  pol = poly();
+  p0[0] = s->x;
+  p0[1] = s->z;
+
   if (s->mass_comb <= 0) {
     s->mass_comb = 0;
     s->fr = 0;
@@ -208,15 +217,98 @@ int spc_update_pos(spaceship * s, double dt) {
   /*normaliza a rotacao: */
   /* s->rot = fmod(s->rot, 2*N_PI); Nao vamos usar porque e importante saber se o astronauta andou as voltas com a nave para aterrar */
 
+
+  /* Colision detection: */
+  p1[0] = s->x;
+  p1[1] = s->z;
+  poly_copy(s->colision_shape, pol);
+  poly_rotate(pol, s->rot);
+
+  j = s->moon->arr;
+  if (j->next==NULL) {
+    fputs("Chegámos a uma zona do programa que nao devia ter sido atingida", stderr);
+    exit(-1);
+  }
+  p = j->next->val;
+  p3[0] = p4[0] = -MAX_COORD;
+  p3[1] = p4[1] = p->c[1];
+  for (j=s->moon->arr; j->next!=NULL; j=j->next) {
+    flag = 0;
+    p = j->next->val;
+    p4[0] = p->c[0];
+    p4[1] = p->c[1];
+    /*testar se colide com (cs[0]+p0, cs[0]+p1)*/
+    p5[0] = pol->pts[0] + p0[0];
+    p5[1] = pol->pts[1] + p0[1];
+    p6[0] = pol->pts[0] + p1[0];
+    p6[1] = pol->pts[1] + p1[1];
+    if (lineseg_colide(p3,p4,p5,p6)) {
+      flag = 1;
+    }
+    for (i=1; i<s->colision_shape->size; i++) {
+      /*Testa se os vertices colidiram com a superificie no movimento*/
+      p5[0] = pol->pts[2*i] + p0[0];
+      p5[1] = pol->pts[2*i+1] + p0[1];
+      p6[0] = pol->pts[2*i] + p1[0];
+      p6[1] = pol->pts[2*i+1] + p1[1];
+      if (lineseg_colide(p3,p4,p5,p6)) {
+        flag = 1;
+      }
+
+      /*testa se as arestas estao a colidir com a superficie*/
+      p5[0] = pol->pts[2*(i-1)] + p1[0];
+      p5[1] = pol->pts[2*(i-1)+1] + p1[1];
+      p6[0] = pol->pts[2*i] + p1[0];
+      p6[1] = pol->pts[2*i+1] + p1[1];
+      if (lineseg_colide(p3,p4,p5,p6)) {
+        flag = 1;
+      }
+    }
+    if (flag) {
+      if (spc_safe_landing(s,p3,p4)) {
+        /* Para a nave */
+        if (s->vz<0) s->vz=0;
+        s->va = 0;
+        s->vx = 0;
+        s->rot = 0;
+        if (s->moon->curr_lp!=NULL && s->moon->arr != j) {
+          if (strcmp(((moon_point *)(*(list_no**)s->moon->curr_lp->val)->val)->name, ((moon_point *)j->val)->name)==0) {
+            if (ret>=0) {
+              ret++;
+              s->moon->curr_lp = s->moon->curr_lp->next;
+            }
+          }
+        }
+      } else {
+        /*correu mal*/
+        ret=-1;
+        break;
+      }
+    }
+    p3[0]=p4[0];
+    p3[1]=p4[1];
+  }
+
+  /*
+    Testa com a linha horiontal que passa pelo ultimo ponto.
+    Desta vez usamos uma colision shape de circulo para mostrar outro metodo alternativo
+    Como se verifica, este metodo nao e tao preciso como o anterior, mas decidimos deixa-lo a mesma para o mostar
+    (assumimos que a se fizermos testes de alunagem nao estamos a espera de nos deslocarmos para zonas que nao foram definidas)
+  */
+  if(s->x > p3[0]+HEXRAD) {
+    if (s->z - HEXRAD < p4[1]) {
+      if (!spc_safe_landing(s,p3,p4)) {
+        ret=-1;
+      }
+    }
+  }
+
+  poly_destroy(pol);
+
   /*Adiciona os novos pontos a funcao que guarda na memoria a trajetoria da nave */
   spc_add_hist(s, dt);
-/*
-  printf("x:%f, z: %f, rot: %f, vx: %f, vz: %f\n", s->x, s->z, s->rot, s->vx, s->vz);
-  printf("ft:%f, fr: %f, mass: %f, tau_R: %f, tau_t: %f\n", s->ft, s->fr, mass, N_TAU_R, N_TAU_T);
-  printf("%f, %f, %f, %f\n", N_TAU_T, s->ft, cos(s->rot), mass);
-  printf("%f || %f || %f\n", ax0, az0, aa0);
-  */
-  return 3;
+
+  return ret;
 }
 
 
@@ -227,15 +319,7 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   double aux[2] = {0};
   point(s->x, s->z, aux);
   pol = poly();
-/*
-  Desenha a colision_shape:
-  poly_copy(s->colision_shape, pol);
-  poly_rotate(pol, s->rot);
-  poly_translate(pol, aux);
-  poly_project(pol, c, pol);
-  g2_pen(v->id, COLOR_RED);
-  g2_polygon(v->id, pol->size, pol->pts);
-*/
+
   for (i=0; i<s->npart; i++) {
     poly_copy(s->parts[i], pol);
     poly_rotate(pol, s->rot);
@@ -280,6 +364,20 @@ void spc_draw(spaceship * s, camera2d * c, view * v) {
   poly_destroy(pol);
 }
 
+void spc_draw_cs(spaceship * s, camera2d * c, view * v) {
+  polygon * pol;
+  double aux[2] = {0};
+  point(s->x, s->z, aux);
+  pol = poly();
+  poly_copy(s->colision_shape, pol);
+  poly_rotate(pol, s->rot);
+  poly_translate(pol, aux);
+  poly_project(pol, c, pol);
+  g2_pen(v->id, COLOR_RED);
+  g2_polygon(v->id, pol->size, pol->pts);
+
+}
+
 void spc_add_hist(spaceship * s, double dt) {
   size_t i;
   double ** d;
@@ -306,17 +404,18 @@ void spc_add_hist(spaceship * s, double dt) {
 }
 
 
-int spc_unsafe_landing(spaceship * s) {
-  /*
-    //TODO
-  */
+int spc_safe_landing(spaceship * s, double * p1, double * p2) {
+  /* ve se cumpre os requisitos de aterragem */
   if ((s->rot <= N_PI && s->rot > MAXROT) || (s->rot >= N_PI && s->rot < 2*N_PI - MAXROT) || s->vz < -LAND_MAXVZ || s->vx > LAND_MAXVX || s->vx < -LAND_MAXVX)
-    return 1; /*pois nao cumpre as especificacoes */
-/*  for (i=0; i<s->moon->l_size; i++) {
-    if (s->moon->arr->pts[s->moon->l_points[i]*2] + 2*HEXRAD < s->x && s->moon->arr->pts[s->moon->l_points[i]*2+2] > s->x -2*HEXRAD) return 0;
-  }
-  */
-  return 2;
+    return 0;
+  /* verifica se a aresta dada tem uma inclinacao aceitavel para aterrar */
+  if (!valid_land_line(p1,p2))
+    return 0;
+  /* ve se esta completamente dentro do vertice de aterragem */
+  if (*p1 > s->x || s->x > *p2)
+    return 0;
+
+  return 1;
 }
 
 void spc_save_to_file(spaceship * s) {

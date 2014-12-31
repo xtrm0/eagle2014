@@ -1,7 +1,5 @@
 #ifndef DEFINES_H
 #define DEFINES_H
-#include <stdio.h>
-#include <errno.h>
 /*
   É preciso definir aqui a seguinte macro para escolher o tipo de compilação:
     compativel com POSIX: #define _POSIX_C_VERSION 199309L (199309 e a primeira versao do posix que define o nanosleep)
@@ -17,7 +15,15 @@
   Para alem disso, a funcao usleep() foi deprecada com o POSIX-2001 (o nanosleep faz o mesmo e tem maior precisao)
 
 */
-//#define _POSIX_C_SOURCE 199309L
+
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 199309L
+#endif
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 199309L
+
+#include <stdio.h>
+#include <errno.h>
 #define FILE_HEADLINE "tempo [s]         x [m]         z [m]        vx [m]        vz [m]   atitude [graus]     fuel [kg]\n"
 
 
@@ -69,6 +75,11 @@
 
 /* FONTS SIZES */
 #define PLANNER_FONT_SIZE 12
+
+/* Nomes de ficheiros para input/output */
+#define FILENAME_MOON "superficieLunar.txt"
+#define FILENAME_DATA "vooLunarCorrente.txt"
+#define FILE_MOON_HEADLINE "Nome                           X               Z\n"
 
 
 #endif

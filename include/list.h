@@ -1,8 +1,12 @@
 #ifndef _LIST_HPP
 #define _LIST_HPP
+#include "defines.h"
 #include <stdlib.h>
 #include <string.h>
-#include "defines.h"
+/*
+ Esta estrutura representa uma lista geral que pode ter valores de qualquer tipo. Para isso utilizamos um void *.
+ Fizemos desta forma para poupar linhas de codigo
+*/
 typedef struct LIST_NO {
   void * val;
   struct LIST_NO * next;

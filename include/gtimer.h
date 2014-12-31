@@ -62,18 +62,16 @@ typedef struct gtimer {
 */
 typedef struct gtimer {
   time_t tlu;
-  unsigned long long steps; /*Representa o numero de ticks que ja esperou durante este segundo*/
-  unsigned long long times;
+  unsigned long int steps; /*Representa o numero de ticks que ja esperou durante este segundo*/
+  unsigned long int times;
   double fps;
 }gtimer;
-#define K_1 10000
-#define K_2_COCKPIT 1000
-#define K_2_GRAPHIC 1000
-#define K_3 100
+
 /*
   Se nao tivermos bibliotecas de tempo com precisao podemos ter segundos em que a velocidade de jogo esta entre 0,5x e 2x o que e suposto.
   Para alem disso o tempo cpu que o sistema concede a aplicacao nao e sempre o mesmo, pelo que serao de esperar erros ainda maiores
   A melhor forma de corrigir isto e usar o nanosleep(nao usamos usleep, pois o nanosleep tem maior precisao)
+  Este metodo nao foi testado e nao aconselhamos a usalo
 */
 #endif
 #endif

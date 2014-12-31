@@ -104,18 +104,18 @@ void gtimer_sleep(gtimer * c) {
 }
 #else
 gtimer * gtimer_init(double tfps, int pts, int modo) {
-  unsigned long long ticks=0;
+  unsigned long int ticks=0;
   time_t tmp;
   gtimer * c;
   c = malloc(sizeof(gtimer));
   TESTMEM(c);
   c->tlu=time(NULL);
-  c->fps = c->tfps;
+  c->fps = tfps;
   tmp = time(NULL);
   while(tmp!=time(NULL));
   tmp = time(NULL);
-  for (ticks=0; (tmp+5!=time(NULL)); ticks++);
-  c->steps = (unsigned long long) ticks * (K_1*pts + (modo==MODE_COCKPIT ? K_2_COCKPIT : K_2_GRAPHIC) + K_3);
+  for (ticks=0; (tmp+5>time(NULL)); ticks++);
+  c->steps = (unsigned long int) ticks / (tfps);
   return c;
 }
 
@@ -135,14 +135,14 @@ double gtimer_getdt(gtimer * c) {
 }
 
 /*Funcao privada, feita apenas para cumprir o prototipo pedido no enunciado*/
-void mysleep(unsigned long long ticks) {
+void mysleep(unsigned long ticks) {
   while(ticks--);
 }
 
 void gtimer_sleep(gtimer * c) {
   gtimer_begin(c);
   c->times++;
-  mysleep(TICKS);
+  mysleep(c->steps);
 }
 
 #endif

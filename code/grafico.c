@@ -37,7 +37,6 @@ int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
   FILE * fin;
   double p[2]= {0};
   char line[301]; /*estamos a dar um valor muito alto para deixar o usar criar o ficheiro à mão. idealmente o tamanho strlen(FILE_HEADLINE)+2 */
-  line[0]='\0';
   if ((fin = fopen(nome, "r")) == NULL) {
     fprintf(stderr, "E: Não foi possível abrir o ficheiro");
     return 1;
@@ -48,6 +47,7 @@ int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
   if (fgets(line, 300, fin)==NULL) {
     fprintf(stderr, "W: Erro na leitura do ficheiro: Ficheiro Vazio!\n");
   }
+  line[300]='\0';
   if (line[strlen(line)-1]!='\n') {
     fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
     while(fgetc(fin)!='\n');
@@ -59,6 +59,7 @@ int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
   if (fgets(line, 300, fin)==NULL) {
     fprintf(stderr, "W: Erro na leitura do ficheiro: O ficheiro só tem 1 linha!\n");
   }
+  line[300]='\0';
   if (line[strlen(line)-1]!='\n') {
     fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
     while(fgetc(fin)!='\n');
@@ -68,12 +69,13 @@ int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
   }
 
   while (fgets(line, 300, fin)) {
+    line[300]='\0';
     if (line[strlen(line)-1]!='\n') {
       fprintf(stderr, "W: Linha muito longa na leitura do ficheiro\n");
       while(fgetc(fin)!='\n');
       continue;
     }
-    //estamos a ler:$<tempo> <x> <z> <vx> <vz> <atitude> <combustivel>%*[ \n\t]%c
+    /*estamos a ler:$<tempo> <x> <z> <vx> <vz> <atitude> <combustivel>%*[ \n\t]%c*/
     if (sscanf(line,"%lf %lf %lf %lf %lf %lf %lf%*[ \n\t]%c", o, o+1, o+2, o+3, o+4, o+5, o+6, &tmp)!=7) {
       fprintf(stderr, "W: Linha invalida na leitura do ficheiro\n");
       continue;
@@ -94,7 +96,7 @@ int graph_load_points_from_file (char *nome, graph * g, int t1, int t2) {
 void graph_draw(graph * g, int t1, int t2) {
   /*atualiza a camara pos e dim, para ter as dimensoes do ecra */
   /* Aqui e um local onde faria sentido usar uma variavel global, para nao estar a perder tempo a por tanta coisa no stack */
-  /*static const*/ char axisname[7][20]={"t (s)\0","x (m)\0","z (m)\0","vx (m/s)\0","vz (m/s)\0","teta (\xb0)\0","m (kg)\0"};
+  /*static const*/ char axisname[7][20]={"t(s)\0","x(m)\0","z(m)\0","vx(m/s)\0","vz(m/s)\0","0(\xb0) \0","m(kg)\0"};
   polygon * pol;
   double O[2]={0}, p1[2]={0}, p2[2]={0}, p3[2]={0}, p4[2]={0};
   double sum[2]={0};
@@ -185,7 +187,7 @@ void graph_draw(graph * g, int t1, int t2) {
 
 int modo_graph(char * filename, int t1, int t2) {
   graph * g;
-  g = graph_init(600,600,t1,t2,COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
+  g = graph_init(650,650,t1,t2,COLOR_WHITE,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK);
   printf("Reading data from file... ");
   fflush(stdout);
   if (graph_load_points_from_file (filename, g, t1, t2)) {
@@ -193,8 +195,11 @@ int modo_graph(char * filename, int t1, int t2) {
     return 1;
   }
   printf(" Loaded %lu points!\n", (unsigned long)g->data->size);
-  graph_draw(g, t1, t2);
-  printf("Carregue nalguma tecla para fechar o gráfico...\n");
+  if((unsigned long)g->data->size != 0 )
+    graph_draw(g, t1, t2);
+  else 
+    printf("Se nao ha pontos, nao ha grafico :P!\n");
+  printf("Carregue nalguma tecla para fechar a janela...\n");
   getchar();
 
   graph_destroy(g);

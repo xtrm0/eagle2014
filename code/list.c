@@ -30,7 +30,6 @@ void l_destroy(list_no * base) {
 }
 list_no * l_find(list_no * base, int (*f)(void *,void *), void * arg) {
 	while (base->next!=NULL) {
-		printf("%d\n", f(base->next, arg));
 		if (f(base->next, arg)==0) return base;
 		base=base->next;
 	}

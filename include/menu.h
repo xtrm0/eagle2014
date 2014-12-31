@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 #include "../include/spaceship.h"
-#include "../include/cockpit.h"
+#include "../include/game_engine.h"
 #include "../include/grafico.h"
 #include "../include/fuioutil.h"
 #include "../include/surface_planner.h"

@@ -88,7 +88,7 @@ double * _inverse(double * p);
 double * project(double * p, camera2d * c, double * s);
 
 /*
-  Indica se dois segmentos de reta colidem.
+  Indica se dois segmentos de reta colidem. .p1p2. e .p3p4.
   Devolve:
     1 caso colidam
     0 caso contrario

@@ -1,4 +1,4 @@
-#include "../include/cockpit.h"
+#include "../include/game_engine.h"
 
 void draw_gui(spaceship * s, camera2d * c, view * v, int res) {
   char str[60];
@@ -116,11 +116,10 @@ void draw_gui_graphic(spaceship * s, camera2d * c, view * v, int res) {
 }
 
 int game_engine(spaceship * s, unsigned int mode) {
-  void * tmp;
-  view * v;
-  camera2d * c;
-  button * btn_more_t, * btn_less_t, * btn_more_r, * btn_less_r;
-  button * btn_pause, * btn_play, * btn_exit;
+  view * v =NULL;
+  camera2d * c =NULL;
+  button * btn_more_t=NULL, * btn_less_t=NULL, * btn_more_r=NULL, * btn_less_r=NULL;
+  button * btn_pause=NULL, * btn_play=NULL, * btn_exit=NULL;
   gtimer * teemo;
   double deltatime;
   double * mouse_x, * mouse_y;
@@ -130,6 +129,7 @@ int game_engine(spaceship * s, unsigned int mode) {
   int resultado = 1;
   int mouse_last = 0, mouse_click=0;
   int gameflag=1;
+  int k=0;
   if (mode & MODE_COCKPIT) {
     v = view_init(800, 300, "eagle2014 - Modo Cockpit");
     c = c2d_init(50, 50, 0, 0, 150, 150, 800-150, 300-150);
@@ -142,11 +142,9 @@ int game_engine(spaceship * s, unsigned int mode) {
 
   if(((s->initialized) & INIT_SPACESHIP)==0) {
     fprintf(stderr, "W: Dados inicias da nave não definidos - usando valores predifinidos!\n");
-    tmp = s;
-    s = spc_init(0, 150, 0.0);
-    free((spaceship *) tmp);
+    s->z=150;
   }
-  //TODO: caso nao esteja definido o plano de aterragem isto deve funcionar de outra forma
+
   if ((s->initialized & (INIT_SURFACE))==0) {
     fprintf(stderr, "W: Dados inicias da superficie lunar não definidos - usando plano horizontal!\n");
     sfc_destroy(s->moon);
@@ -194,32 +192,32 @@ int game_engine(spaceship * s, unsigned int mode) {
   TESTMEM(mouse_y);
   TESTMEM(mouse_button);
 
-  teemo = gtimer_init(TARGET_FPS, s->moon->arr_size, mode);
+  teemo = gtimer_init(s->fps, s->moon->arr_size, mode);
   while (gameflag) {
     deltatime = gtimer_begin(teemo);
-//  printf("%f\n", deltatime);
+/*  printf("%f\n", deltatime);*/
 
     /*Parte de input: */
       g2_query_pointer(v->dev, mouse_x, mouse_y, mouse_button);
       mouse_click = (mouse_last & ((*mouse_button) ^ mouse_last));
-//    printf("%d", *mouse_button);
     /*Parte de logica: */
       /*atualiza a nave: */
       if (runapp && resultado>0) {
-        switch (spc_update_pos(s,deltatime)) {
+        k=spc_update_pos(s,deltatime);
+        switch (k) {
           case 0:
-            resultado = 0;
-            printf("A missão foi um sucesso.\n");
             break;
-          case 1:
+          case -1:
             resultado = -1;
-            printf("Alunagem completa sem sucesso (pois nao respeita as regras de alunagem).\n");
-            break;
-          case 2:
-            resultado = -1;
-            printf("Alunagem completa sem sucesso (pois aterrou fora de um ponto de alunagem).\n");
+            printf("Alunagem completa sem sucesso (crash).\n");
             break;
           default:
+            resultado += k;
+            if (resultado==s->moon->lp_size+1) {
+              printf("A missão foi um sucesso.\n");
+              resultado=0;
+              runapp=0;
+            }
             break;
         }
         /*atualiza a forca: */
@@ -284,8 +282,9 @@ int game_engine(spaceship * s, unsigned int mode) {
         g2_pen(v->id, COLOR_WHITE);
         g2_filled_rectangle(v->id, c->vpos[0], c->vpos[1], c->vpos[0] + c->vdim[0], c->vpos[1] + c->vdim[1]);
         sfc_draw(s->moon,c,v);
-        if (*mouse_button & KeyReleaseMask) { //Ver o que corresponde ao capslocks
+        if (*mouse_button & KeyReleaseMask) { /*Ver se o capslocks esta premido que corresponde ao capslocks*/
           sfc_draw_labels(s->moon,c,v);
+          spc_draw_cs(s,c,v);
         }
       }
       /*Desenha a nave, rodada (neste modo o referencial da camara é solidário com o da nave): */
@@ -345,7 +344,7 @@ void resize_camera_pts(spaceship * s, camera2d * c) {
   double p1[2] = {0};
   double p2[2] = {0};
   double tmp;
-  double minz=MAX_COORD;
+  double minz=s->z;
   aux = s->moon->arr;
   if (aux->next==NULL) {
     /*nao ha pontos, representa a linha y=0*/
@@ -355,11 +354,9 @@ void resize_camera_pts(spaceship * s, camera2d * c) {
   }
 
   p = aux->next->val;
-  p1[0] = p->c[0];
-  p1[1] = p->c[1];
+  p2[0] = p1[0] = p->c[0];
+  p2[1] = p1[1] = p->c[1];
 
-  /* eSTA QAUIQ UM ERRO QUE ACONTECE QUANDO ANDAMOS PARA A esquerda do 1 ponto (nao acontece com a direita do ultimo)
-  */
   if (s->x <= p1[0] || aux->next==NULL) {
     minz = min(minz, p1[1]);
   }
@@ -373,7 +370,7 @@ void resize_camera_pts(spaceship * s, camera2d * c) {
     if (fabs(s->x - p1[0]) <= AUX_LINES_ZOOM) {
       minz = min(minz, p1[1]);
     }
-    if (p1[0]-p2[0]>0.5) { //este 0.5 e para evitar division by 0
+    if (p1[0]-p2[0]>0.5) { /*este 0.5 e para evitar division by 0*/
       if (p2[0] < s->x-AUX_LINES_ZOOM && p1[0] > s->x-AUX_LINES_ZOOM) {
         tmp = (p2[1]*(s->x-AUX_LINES_ZOOM-p2[0]) + p1[1]*(p1[0]-(s->x-AUX_LINES_ZOOM)))/(p1[0]-p2[0]);
         minz = min(minz, tmp);
@@ -393,6 +390,5 @@ void resize_camera_pts(spaceship * s, camera2d * c) {
   }
 
   c2d_centerfit(c, s->x, (s->z+2*HEXRAD + minz)/2.0, 2*AUX_LINES_ZOOM, s->z - minz);
-  c2d_zoom(c, 1.20);
-  printf("%f %f %f %f %f\n",minz, c->pos[0], c->pos[1], c->dim[0], c->dim[1]);
+  c2d_zoom(c, 1.30);
 }

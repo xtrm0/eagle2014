@@ -48,10 +48,10 @@ typedef struct spaceship {
   double fr, ft; /*Isto e em percentagem em relacao as forcas maximas */
   double mass_tara, mass_comb;
   double I;
+  double fps;
   polygon * colision_shape;
   surface * moon;
   /*Parte do historico para guardar para ficheiro: */
-  //TODO: mudar para usar lista
   size_t h_len;
   size_t h_max;
   double ** hist;
@@ -69,7 +69,7 @@ typedef struct spaceship {
 /*
   Aloca memoria para a spaceship e cria-a
 */
-spaceship * spc_init(double,double,double);
+spaceship * spc_init(double,double,double,double);
 /*
   Carrega o modelo da nave espacial
 */
@@ -88,9 +88,14 @@ void spc_destroy(spaceship * s);
 int spc_update_pos(spaceship * s, double dt);
 
 /*
-  Desenha a nave no ecra id;
+  Desenha a nave, para a janela v, usando a camara para fazer projecoes;
 */
 void spc_draw(spaceship * s, camera2d * c, view * v);
+
+/*
+  Desenha a colision shape da nave, para a janela v, usando a camara para fazer projecoes;
+*/
+void spc_draw_cs(spaceship * s, camera2d * c, view * v);
 
 /*
   Guarda os pontos atuais da posição da nave em memória
@@ -113,7 +118,7 @@ void spc_save_to_file(spaceship *);
 
   Notas: Ver spaceship.c para notas sobre complexidade
 */
-int spc_unsafe_landing(spaceship * s);
+int spc_safe_landing(spaceship * s, double * p1, double * p2);
 
 
 #endif

@@ -161,3 +161,9 @@ void sfc_clear_lp (surface * s) {
   s->lp = s->lp_back = l_init(sizeof(void *));
   s->lp_size=0;
 }
+
+int valid_land_line(double * p1, double * p2) {
+  if (fabs(angle(p1, p2)) > (MAXROT/4.0))
+    return 0;
+  return 1;
+}

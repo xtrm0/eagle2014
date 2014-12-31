@@ -3,7 +3,6 @@ void clearbuffer() {
   while(getchar()!='\n');
 }
 
-//TODO: falta verificar se o numero esta grande ou pequeno demais para ser int
 void read_int(char * prompt, int * target, int mini, int maxi) {
   char c;
   int flag;
@@ -97,7 +96,11 @@ void read_string(char * prompt, char * target, size_t min_len, size_t max_len, u
     puts(prompt);
     flag = 0;
     a[max_len]='a';
-    fgets(a, max_len+1, stdin);
+    if (fgets(a, max_len+1, stdin)==NULL) {
+      flag = 1;
+      printf("Erro Desconhecido :S");
+      continue;
+    }
     if (a[max_len]=='\0' && a[max_len-1]!='\n') {
       clearbuffer();
       printf("Input muito comprido (maximo %ld caracteres)", max_len-1);
@@ -110,7 +113,7 @@ void read_string(char * prompt, char * target, size_t min_len, size_t max_len, u
       flag = 1;
       continue;
     }
-    if (conditions ^ COND_NOSPACE) {
+    if (conditions & COND_NOSPACE) {
       if (strchr(a, ' ')!=NULL || strchr(a, '\t')!=NULL || strchr(a, '\v')!=NULL || strchr(a, '\f')!=NULL || strchr(a, '\r')!=NULL) {
         printf("Espacos nao permitidos (sao considerados todos os espacos)");
         flag = 1;

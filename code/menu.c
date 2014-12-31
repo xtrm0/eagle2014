@@ -42,6 +42,10 @@ int menu(spaceship * s) {
       read_data_spec(s);
       break;
     case '2':
+      if ((s->initialized & INIT_SURFACE) && !(s->initialized & INIT_LANDING)) {
+        printf("Falta inicializar o plano de voo e/o a superficie lunar!");
+        break;
+      }
       d = _spc_copy(s);
       game_engine(d, MODE_COCKPIT);
       break;
@@ -59,9 +63,18 @@ int menu(spaceship * s) {
       modo_graph("vooLunarCorrente.txt",t1,t2);
       break;
     case '4':
+      if (s->moon->lp_size!=0) {
+        printf ("W: isto vai apagar todos os pontos de alunagem!\n Deseja continuar?");
+        if (ask_yes_no()==0)
+          break;
+      }
       s->initialized |= surface_planner(s->moon);
       break;
     case '5':
+      if (s->initialized & INIT_SPACESHIP && (!(s->initialized & INIT_SURFACE) || !(s->initialized & INIT_LANDING))) {
+        printf("Falta inicializar o plano de voo e/o a superficie lunar!");
+        break;
+      }
       d = _spc_copy(s);
       game_engine(d, MODE_GRAPHIC);
       break;

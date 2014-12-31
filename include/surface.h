@@ -42,24 +42,37 @@ void sfc_add_point(surface * s, moon_point p);
   Adiciona um ponto a seguir ao ultimo ponto da superficie
 */
 void sfc_add_point_back(surface * s, moon_point * p);
-//Adiciona um ponto na posicao certa
+/*Adiciona um ponto na posicao ordenada da lista*/
 void sfc_add_point_sorted(surface * s, moon_point * p);
 
 /*
   Torna a aresta que se inicia no ponto com indice assinalado um local de aterragem seguro
  */
 void sfc_add_lp(surface * s, char name[MAX_POINT_NAME]);
-
+/*
+  Desenha a superficie
+*/
 void sfc_draw(surface * s, camera2d * c, view * v);
-
+/*
+  Desenha o os pontos e os seus nomes proximo deles
+*/
 void sfc_draw_labels(surface * s, camera2d * c, view * v);
-
+/*
+  Tira um ponto da superficie
+*/
 void sfc_remove_arr(surface * s, list_no * tmp);
-
+/*
+  Apaga a sequencia de aterragem atual
+*/
 void sfc_clear_lp (surface * s);
 
 /*
-Funcoes auxiliares para as pesquisas:
+  Funcoes auxiliares para as pesquisas:
 */
 int arr_find_byname(void *a, void *b);
+
+/*
+  Indica se uma aresta pode ser uma aresta de alunagem
+*/
+int valid_land_line(double * p1, double * p2);
 #endif
