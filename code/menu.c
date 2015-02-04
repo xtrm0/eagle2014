@@ -68,6 +68,7 @@ int menu(spaceship * s) {
         if (ask_yes_no()==0)
           break;
       }
+      s->initialized &= INIT_SPACESHIP;
       s->initialized |= surface_planner(s->moon);
       break;
     case '5':
