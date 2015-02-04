@@ -103,13 +103,13 @@ void read_string(char * prompt, char * target, size_t min_len, size_t max_len, u
     }
     if (a[max_len]=='\0' && a[max_len-1]!='\n') {
       clearbuffer();
-      printf("Input muito comprido (maximo %ld caracteres)", max_len-1);
+      printf("Input muito comprido (maximo %ld caracteres)", (long int)max_len-1);
       flag = 1;
       continue;
     }
     *(strchr(a, '\n')) = '\0';
     if (strlen(a)<min_len) {
-      printf("Input muito curto (minimo %ld caracteres)", min_len);
+      printf("Input muito curto (minimo %ld caracteres)", (long int)min_len);
       flag = 1;
       continue;
     }

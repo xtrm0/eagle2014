@@ -1,0 +1,2 @@
+14696.000000 [kg]
+tempo [s]         x [m]         z [m]        vx [m]        vz [m]   atitude [graus]     fuel [kg]
