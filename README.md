@@ -4,71 +4,68 @@ eagle2014
 A 2d lunar landing simulator made for our programming class.
 
 =========
-Projeto realizado por:
+This project was brought to you by:
 
 Numero:_________80816; Nome:Diogo_Gonçalves; Mestrado:_MEAer;
 
 Numero:_________81861; Nome:__Afonso_Tinoco; Mestrado:_MEAer;
 
 
-Como compilar o programa:
+How to compile:
 ==========
-É possível compilar o programa de duas formas, consoante as configurações da máquina de teste:
-+ Forma recomendada - usando o utilitário make:
+There are several possible ways to compile the program:
++ By using the tool make [recomended]:
 ```
   make clean
   make all
 ```
 
-+ Forma tradicional - usando apenas o gcc:
++ Just by using gcc:
 ```
-  #Correr:
-  gcc -O2 -Wall code/main.c code/menu.c code/geometry.c code/spaceship.c code/view.c code/button.c code/grafico.c code/surface.c code/gtimer.c code/game_engine.c  code/list.c code/surface_planner.c code/fuioutil.c -lg2 -lm -lrt -o eagle2014
-
+  #just run:
+  gcc -O2 -Wall code/main.c code/menu.c code/geometry.c code/spaceship.c code/view.c code/button.c code/grafico.c code/surface.c code/gtimer.c code/game_engine.c  code/list.c code/surface_planner.c code/fuioutil.c -lg2 -lm -lrt -lX11 -o eagle2014
 ```
-ou
+or
 ```
   ./compile.sh
 ```
 
 
 
-Aspectos a ter em conta:
+Warnings:
 ================
-+Ao criarmos o trabalho, verificamos que estavamos com memory leaks gigantescas. Utilizamos a ferramenta valgrind e constatamos que a função g2_set_font_size() não liberta a memória que consome, pelo que a utilizamos apenas quando estritamente necessário e comentámos todos os locais onde tinhamos usado esta função inicialmente
-+O mesmo acontece com a função g2_open_X11 e g2_open_X11X
-+Os erros acima constatados são um bom motivo para não se utilizar o g2 e utilizar-se o X11 diretamente.
-
++During the testing phase, we verified we were having huge memory leaks. We used the tool valgrind and concluded that the function g2_set_font_size() does not free the memory it consumes. Therefore, we used it as litle as possible.
++The same happens with the functions g2_open_X11 and g2_open_X11X
 
 
 
 ================
-Metodologia do projeto
+Project metodology
 ================
-1) Verificar colisoes da nave:
-	Arranja-se um poligono que contenha a nave (wikipedia:colision shape). Esse poligono vai ser constituido por N arestas.
-	Depois, para cada aresta da superficie lunar (M) verifica se colide com alguma das arestas do poligono.
-	Pseudo-codigo:
-		De i=0 ate (N-1):
-		 		De j=0 ate (M-1):
-		 			Se interceptam(nave.arestas[i], lua.arestas(j)) {
-		 				entao a nave esta a tocar no chao
+1) Colision detection:
+	First we create a small polygon that contains the spaceship (wikipedia:colision shape). Let N be the number of edges of such polygon.
+	Then, for each edge of the moon surface(M) we check if it intercepts any of the polygon edges.
+	Pseudo-code:
+		for i=0..(N-1):
+		 		for j=0..(M-1):
+		 			if intercept(spaceship.edges[i], moon.edges[j]) {
+		 				then the spaceship has colided with the ground
 		 			} else {
-		 				nao esta a tocar no chao
+		 				the spaceship is flying
 		 			}
-	[Mais fixe:] Outra coisa que teem de ter em conta e que se a aplicacao nao atualizar suficientemente rapido, e possivel que a nave ultrapasse a superficie lunar sem colidir. Para isso, para cada arestas antes e depois de uma atualizacao da posicao cria-se um retangulo (formado pelo espaco que os vertices dessa aresta percorreram e pela antiga e nova posicao da aresta), e aplica-se o algoritmo descrito acima.
+	[Cooler Version:] Another thing to take care for, is that if the game does not update fast enough, the spaceship migth step through the moon floor without coliding. To prevent such a case we need to also check for the colision with the edges formed by the displacement of the colision shape vertexes
 
-	2) Fazer o zoom/desenhar a nave e a superficie lunar a escala. 
-       Criamos a biblioteca geometry que utilizando algebra linear nos facilida as coisas.
-		Em primeiro lugar, representamos a nave e a lua em coordenadas reais (em metros). De seguida, escolhemos um retangulo nas mesmas coordenadas (que vamos passar a chamar de camara), que representa a area que vai ser desenhada para o ecra. A camara tera coordenadas X,Y no ref. real, e comprimento e largura C, L. Depois, vamos ter a janela, com o seu proprio referencial, de coordenas (0,0) ate (W,H).
-		Para desenhar-mos uma aresta na janela, calculamos as coordenadas dos seus vertices no referencial da janela e pedimos ao g2 para desenhar a aresta.
-		A sequencia de transformacao para calcularem as coordenadas de um ponto P na janela, vao ser:
+	2) zoom: 
+        We created the camera utility in our geometry lib, that soothes the process.
+		Girst we represent the spaceship and the moon using real coordinates (in meters). Thenm we pick a rectangle in the same referential (camera), that represents the part of the real referential that is going to be draw to the screen
+		The camera will have coordinates X,Y on the real ref., and measures C by L. Then, we will have the window, with its own referential, of coordinates (0,0) to (W,H).
+		In order to draw an edge to the screen, we calculate the coordinates of its vertexes on the window referential, and then ask g2 to draw the edge.
+		The sequence of transformations to calculate the coordinates of point P on the window coordinates, given the real world coordinates are:
 			P = P - (X,Y) 
 			P = P / (C,L) = (p.x / C, p.y / L)  
 			P = P * (W,H) = (p.x * W, p.y * H) 
-			P = P + (a,b), sendo (a,b) o local no ecra onde esta a view 
+			P = P + (a,b), beeing (a,b) the point were we want our view to begin 
 		
-		O metodo descrito para calcular o retangulo da camara encontra-se no game_engine e no geometry
-
-	3) Calcular a variacao das posicoes da nave, again, existem muitas maneiras de fazer isto, a mais simples e a seguinte:
+		Further description can be found on the code in game_engine.c/h and geometry.c/h
+	3) Physical simulation. Again there are several way to do this. We used verlet integration of order 2:
 		http://en.wikipedia.org/wiki/Verlet_integration 
